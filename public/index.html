@@ -117,6 +117,23 @@ tr.clickable:hover td{background:#eef3fa}
 .imgbox .noimg{color:var(--steel);font-size:11px;text-align:center}
 .savestate{font-size:11px;color:var(--steel)}
 .savestate.err{color:var(--red);font-weight:700}
+/* ═══ روابط موافقة العميل ═══ */
+.fld textarea{min-height:84px;resize:vertical;line-height:1.8}
+.sharebox{border:1.5px dashed var(--steel);border-radius:10px;padding:12px;margin:10px 0;background:var(--pale)}
+.sharebox h4{color:var(--navy);font-size:13px;margin-bottom:8px}
+.sharebox .lnk{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sharebox .lnk input{flex:1;min-width:200px;padding:7px 9px;border:1px solid var(--silver);border-radius:6px;font-size:12px;direction:ltr;background:#fff}
+.sharebox.ok{border-color:var(--green);background:#e6f4ea}
+/* صفحة العميل العامة */
+#shareView{min-height:100vh;background:var(--pale);padding:18px 12px}
+.shcard{background:#fff;border:1px solid var(--silver);border-radius:12px;max-width:680px;margin:0 auto 14px;padding:20px;box-shadow:0 4px 18px rgba(14,35,66,.08)}
+.shhead{background:var(--navy);color:#fff;border-radius:12px;max-width:680px;margin:0 auto 14px;padding:16px 20px;text-align:center}
+.shhead .n1{font-family:'Cairo';font-weight:800;font-size:18px}
+.shhead .n2{color:var(--silver);font-size:12px;margin-top:2px}
+.shterms{border:1px solid var(--silver);border-radius:8px;background:var(--pale);padding:12px 14px;max-height:280px;overflow-y:auto;font-size:13px;line-height:2;white-space:pre-wrap;margin:8px 0 4px}
+.shok{text-align:center;padding:26px 12px}
+.shok .big{font-size:44px;margin-bottom:8px}
+.shok h3{color:var(--green);font-family:'Cairo';font-size:18px;margin-bottom:6px}
 /* ═══ الجوال: شريط علوي + قائمة جانبية منزلقة ═══ */
 #topbar{display:none}
 #backdrop{display:none}
@@ -160,7 +177,7 @@ tr.clickable:hover td{background:#eef3fa}
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, serverTimestamp,
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp,
            collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
            createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword,
@@ -302,6 +319,95 @@ tr.clickable:hover td{background:#eef3fa}
     }
   };
 
+  /* ═══ روابط موافقة العميل: مجموعة publicShares (الرمز الطويل هو السر — لا قوائم) ═══ */
+  window.shares = {
+    async create(token, data){
+      const _db = await getDb();
+      await setDoc(doc(_db, 'publicShares', token), { ...data, status:'pending', createdTs: Date.now() });
+      return true;
+    },
+    async get(token){
+      const _db = await getDb();
+      const s = await getDoc(doc(_db, 'publicShares', token));
+      return s.exists() ? s.data() : null;
+    }
+  };
+
+  /* ═══ وضع العميل: فتح الرابط العام ?share=TOKEN — بلا تسجيل دخول ═══ */
+  const shareParam = new URLSearchParams(location.search).get('share');
+
+  async function renderShareView(token){
+    const el = document.getElementById('shareView');
+    el.style.display = 'block';
+    const wrap = inner => `<div class="shcard">${inner}</div>`;
+    const escS = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    el.innerHTML = wrap('<p style="text-align:center;color:var(--steel)">جارِ تحميل المستند...</p>');
+    let d = null;
+    try{ d = await window.shares.get(token); }catch(e){}
+    if(!d){ el.innerHTML = wrap('<div class="shok"><div class="big">⚠️</div><h3 style="color:var(--red)">الرابط غير صالح</h3><p style="color:var(--steel)">تحقق من الرابط أو تواصل مع الشركة</p></div>'); return; }
+
+    const fmtN = n => (Math.round((+n||0)*100)/100).toLocaleString('en-US');
+    const head = `<div class="shhead"><div class="n1">${escS(d.company||'')}</div><div class="n2">${escS(d.label)} — ${escS(d.no)}</div></div>`;
+    const info = rows => `<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px">${
+      rows.filter(([,v])=>v).map(([k,v])=>`<tr><td style="background:var(--light);color:var(--steel);font-weight:700;padding:6px 10px;width:130px;border:1px solid #fff">${k}</td><td style="padding:6px 10px;border-bottom:1px solid var(--light);font-weight:700;color:var(--navy)">${escS(v)}</td></tr>`).join('')
+    }</table>`;
+    const linesT = (d.lines&&d.lines.length) ? `<h3 style="color:var(--navy);font-size:14px;margin:10px 0 6px">البنود</h3>
+      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr>
+      ${['#','الوصف','الكمية','السعر','الإجمالي'].map(h=>`<th style="background:var(--navy);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px">${h}</th>`).join('')}</tr></thead><tbody>
+      ${d.lines.map((l,i)=>`<tr>${[i+1,escS(l.product)+(l.brand?' — '+escS(l.brand):''),l.qty,fmtN(l.price),fmtN(l.amount)].map(c=>`<td style="padding:6px 8px;border-bottom:1px solid var(--light)">${c}</td>`).join('')}</tr>`).join('')}
+      </tbody></table></div>
+      ${d.total!=null?`<div style="background:var(--light);padding:9px 12px;border-radius:7px;margin-top:8px;font-weight:700;font-size:13.5px;color:var(--navy)">الإجمالي شامل الضريبة: <span style="color:var(--red)">${fmtN(d.total)} ريال</span></div>`:''}` : '';
+
+    if(d.status === 'accepted'){
+      el.innerHTML = head + wrap(`<div class="shok"><div class="big">✅</div><h3>تمت الموافقة على الشروط والأحكام</h3>
+        <p style="color:var(--steel);font-size:13px">${escS(d.acceptName||'')} — ${escS(d.acceptMobile||'')}<br>${escS(d.acceptedOn||'')}</p></div>`);
+      return;
+    }
+
+    el.innerHTML = head + wrap(
+      info([['المستند', d.label+' '+d.no],['التاريخ', d.date],['العميل', d.customer],
+            ['مرجع أمر البيع', d.soRef],['عنوان التسليم', d.address],
+            ['الرقم التسلسلي', d.serial],['وصف العطل', d.fault],['الأولوية', d.priority],
+            ['شروط الدفع', d.pay],['مدة التوريد', d.delivery],['الضمان', d.warranty],
+            ['صلاحية العرض', d.validity ? d.validity+' يوماً' : '']])
+      + linesT
+      + `<h3 style="color:var(--navy);font-size:14px;margin:14px 0 4px">📜 الشروط والأحكام</h3>
+         <p style="color:var(--steel);font-size:12px;margin-bottom:4px">يرجى قراءة الشروط والأحكام كاملة قبل الموافقة</p>
+         <div class="shterms">${escS(d.terms||'')}</div>`
+    ) + wrap(
+      `<h3 style="color:var(--navy);font-size:14.5px;margin-bottom:10px">إقرار الموافقة</h3>
+       <div class="fld" style="margin-bottom:10px"><label>الاسم الكامل *</label><input id="sh_name" style="font-size:16px"></div>
+       <div class="fld" style="margin-bottom:12px"><label>رقم الجوال *</label><input id="sh_mobile" type="tel" style="font-size:16px;direction:ltr;text-align:right" placeholder="05xxxxxxxx"></div>
+       <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;cursor:pointer">
+         <input type="checkbox" id="sh_agree" style="margin-top:3px;width:17px;height:17px"> قرأت الشروط والأحكام المذكورة أعلاه وأوافق عليها</label>
+       <button class="btn red" id="sh_btn" style="width:100%;font-size:15px">✔ موافقة واعتماد</button>
+       <p id="sh_err" style="color:var(--red);font-size:12.5px;margin-top:8px;min-height:15px"></p>`
+    );
+
+    document.getElementById('sh_btn').addEventListener('click', async () => {
+      const name = document.getElementById('sh_name').value.trim();
+      const mobile = document.getElementById('sh_mobile').value.trim();
+      const agree = document.getElementById('sh_agree').checked;
+      const err = document.getElementById('sh_err');
+      err.textContent = '';
+      if(name.length < 3) { err.textContent = 'يرجى إدخال الاسم الكامل'; return; }
+      if(!/^[0-9+\s-]{9,15}$/.test(mobile)) { err.textContent = 'يرجى إدخال رقم جوال صحيح'; return; }
+      if(!agree) { err.textContent = 'يجب تأكيد قراءة الشروط والأحكام والموافقة عليها'; return; }
+      const btn = document.getElementById('sh_btn');
+      btn.disabled = true; btn.textContent = 'جارِ الاعتماد...';
+      try{
+        const _db = await getDb();
+        const acceptedOn = new Date().toLocaleString('ar-SA', {dateStyle:'medium', timeStyle:'short'});
+        await updateDoc(doc(_db, 'publicShares', token),
+          { status:'accepted', acceptName:name, acceptMobile:mobile, acceptedOn, acceptedTs: Date.now() });
+        renderShareView(token);
+      }catch(e){
+        err.textContent = 'تعذّر الاعتماد — أعد المحاولة أو تواصل مع الشركة';
+        btn.disabled = false; btn.textContent = '✔ موافقة واعتماد';
+      }
+    });
+  }
+
   /* بوابة الدخول — تسجيل دخول فقط، لا تسجيل ذاتي */
   const loginOverlay = document.getElementById('loginOverlay');
   const appEl = document.getElementById('app');
@@ -311,34 +417,42 @@ tr.clickable:hover td{background:#eef3fa}
   const loginBtn = document.getElementById('li_btn');
   const signOutBtn = document.getElementById('signOutBtn');
 
-  function doLogin(){
-    errEl.textContent = '';
-    loginBtn.disabled = true; loginBtn.textContent = 'جارِ الدخول...';
-    signInWithEmailAndPassword(auth, emailEl.value.trim(), passEl.value)
-      .catch(() => { errEl.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة'; })
-      .finally(() => { loginBtn.disabled = false; loginBtn.textContent = 'دخول'; });
-  }
-  loginBtn.addEventListener('click', doLogin);
-  passEl.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
-  signOutBtn.addEventListener('click', () => signOut(auth));
-
-  onAuthStateChanged(auth, (user) => {
-    if(user){
-      window.authUser = { uid: user.uid, email: user.email };
-      loginOverlay.style.display = 'none';
-      appEl.style.display = 'flex';
-      window.dispatchEvent(new Event('erp-auth-ready'));
-    } else {
-      window.authUser = null;
-      loginOverlay.style.display = 'flex';
-      appEl.style.display = 'none';
-      passEl.value = '';
+  if(shareParam){
+    /* وضع العميل: لا لوحة تحكم ولا تسجيل دخول — صفحة الموافقة فقط */
+    loginOverlay.style.display = 'none';
+    appEl.style.display = 'none';
+    renderShareView(shareParam);
+  } else {
+    function doLogin(){
+      errEl.textContent = '';
+      loginBtn.disabled = true; loginBtn.textContent = 'جارِ الدخول...';
+      signInWithEmailAndPassword(auth, emailEl.value.trim(), passEl.value)
+        .catch(() => { errEl.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة'; })
+        .finally(() => { loginBtn.disabled = false; loginBtn.textContent = 'دخول'; });
     }
-  });
+    loginBtn.addEventListener('click', doLogin);
+    passEl.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+    signOutBtn.addEventListener('click', () => signOut(auth));
+
+    onAuthStateChanged(auth, (user) => {
+      if(user){
+        window.authUser = { uid: user.uid, email: user.email };
+        loginOverlay.style.display = 'none';
+        appEl.style.display = 'flex';
+        window.dispatchEvent(new Event('erp-auth-ready'));
+      } else {
+        window.authUser = null;
+        loginOverlay.style.display = 'flex';
+        appEl.style.display = 'none';
+        passEl.value = '';
+      }
+    });
+  }
 </script>
 
 </head>
 <body>
+<div id="shareView" style="display:none"></div>
 <div id="loginOverlay" style="position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px">
   <div style="background:#fff;color:var(--ink);padding:28px 32px;border-radius:12px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.35)">
     <h2 style="font-family:'Cairo';color:var(--navy);margin-bottom:2px;font-size:18px">تسجيل الدخول</h2>
@@ -760,10 +874,13 @@ const VIEWS = {
    {k:'customer',l:'العميل',t:'sel',o:optCustomers},{k:'serial',l:'الرقم التسلسلي',t:'text'},
    {k:'priority',l:'الأولوية',t:'sel',o:['عاجل (48 ساعة)','عادي (5 أيام)']},{k:'fault',l:'وصف العطل',t:'text'},
    {k:'tech',l:'الفني',t:'sel',o:optEmployees},{k:'fin',l:'التصنيف المالي',t:'sel',o:['ضمان','خارج الضمان']},
-   {k:'status',l:'الحالة',t:'sel',o:['مفتوح','مجدول','مغلق']},{k:'rating',l:'تقييم الخدمة /5',t:'num'},{k:'notes',l:'ملاحظات',t:'text'}],
+   {k:'status',l:'الحالة',t:'sel',o:['مفتوح','مجدول','مغلق']},{k:'rating',l:'تقييم الخدمة /5',t:'num'},{k:'notes',l:'ملاحظات',t:'text'},
+   {k:'terms',l:'الشروط والأحكام (لرابط موافقة العميل)',t:'ta',ph:'مثال: تشمل الصيانة الأعطال المشمولة بالضمان فقط؛ سوء الاستخدام والقطع الاستهلاكية غير مشمولة؛ يلتزم العميل بتوفير الوصول للمعدة...'}],
+  share:1,
   cols:[{k:'no',l:'الرقم'},{k:'date',l:'البلاغ'},{k:'customer',l:'العميل'},{k:'serial',l:'التسلسلي'},
    {k:'_w',l:'حالة الضمان (تلقائي)',f:(v,r)=>{const w=warrantyStatus(r.serial,r.date);return `<span class="tag ${w.cls}">${w.t}</span>`;}},
-   {k:'priority',l:'الأولوية'},{k:'status',l:'الحالة',f:tagStatus}],
+   {k:'priority',l:'الأولوية'},{k:'status',l:'الحالة',f:tagStatus},
+   {k:'_sh',l:'موافقة العميل',f:(v,r)=>shareStateTag(r)}],
   note:'حالة الضمان تُكشف تلقائياً من الرقم التسلسلي عبر محاضر التشغيل QLT-001.'},
 
  evals:{icon:'⭐',title:'تقييم الموردين PUR-003',code:'PUR-003',ent:'evals',
@@ -1022,6 +1139,7 @@ function fieldInput(f, val){
     const plusBtn = f.plus ? `<button type="button" class="btn sm ghost" style="margin-top:4px" onclick="addCategory('f_${f.k}')">+ إضافة فئة جديدة</button>` : '';
     return `<select id="f_${f.k}" ${f.onchange?`onchange="${f.onchange}"`:''}><option value=""></option>${opts}</select>${plusBtn}`;
   }
+  if(f.t==='ta') return `<textarea id="f_${f.k}" placeholder="${esc(f.ph||'')}">${esc(v)}</textarea>`;
   if(f.t==='date') return `<input type="date" id="f_${f.k}" value="${esc(v)}">`;
   if(f.t==='num') return `<input type="number" step="any" id="f_${f.k}" value="${esc(v)}" placeholder="${esc(f.ph||'')}">`;
   if(f.t==='img'){
@@ -1056,6 +1174,99 @@ window.addCategory = selId => {
   const sel = document.getElementById(selId);
   if(sel){ const o=document.createElement('option'); o.textContent=name; o.selected=true; sel.appendChild(o); }
 };
+/* ═══════════════ روابط موافقة العميل (عرض سعر / إذن تسليم / صيانة الضمان) ═══════════════ */
+const SHARE_CONF = {
+  quotes: { label:'عرض سعر', snap(r){ return {
+    kind:'quote', label:'عرض سعر', no:r.no, date:r.date, customer:r.customer,
+    company:(S.company||{}).name||'', terms:r.terms||'',
+    pay:r.pay||'', delivery:r.delivery||'', warranty:r.warranty||'', validity:r.validity||'',
+    total:+r.total||0,
+    lines: quoteLines(r.no).map(l=>{ const pr=+(l.override||l.defPrice)||0; return {product:l.product, brand:l.brand||'', qty:+l.qty, price:pr, amount:pr*(+l.qty||0)}; })
+  }; } },
+  dos: { label:'إذن تسليم', snap(r){ return {
+    kind:'do', label:'إذن تسليم', no:r.no, date:r.date, customer:r.customer,
+    company:(S.company||{}).name||'', terms:r.terms||'', soRef:r.soRef||'', address:r.address||''
+  }; } },
+  srv: { label:'طلب صيانة (ضمان)', snap(r){ return {
+    kind:'srv', label:'طلب صيانة', no:r.no, date:r.date, customer:r.customer||'',
+    company:(S.company||{}).name||'', terms:r.terms||'', serial:r.serial||'', fault:r.fault||'', priority:r.priority||''
+  }; } }
+};
+function makeToken(){
+  if(typeof crypto!=='undefined' && crypto.getRandomValues){
+    const a = new Uint8Array(24); crypto.getRandomValues(a);
+    return Array.from(a).map(b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  return 'tk' + Date.now().toString(36) + Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
+}
+function shareUrl(token){
+  const base = (typeof location!=='undefined') ? location.origin + location.pathname : '';
+  return base + '?share=' + token;
+}
+async function shareDoc(ent, id){
+  const conf = SHARE_CONF[ent]; if(!conf) return;
+  const r = S[ent].find(x=>x.id===id); if(!r) return;
+  if(!String(r.terms||'').trim()){ alert('⚠ يجب تعبئة خانة «الشروط والأحكام» وحفظ المستند قبل إنشاء رابط الموافقة'); return; }
+  if(r.shareToken){ render(); return; }
+  try{
+    const token = makeToken();
+    await window.shares.create(token, conf.snap(r));
+    r.shareToken = token; r._u = today();
+    logAudit('إنشاء رابط موافقة', conf.label, r.no, '');
+    persist(); render();
+  }catch(e){ alert('تعذّر إنشاء الرابط: ' + ((e&&e.message)||e)); }
+}
+window.shareDoc = shareDoc;
+function copyShare(token){
+  const url = shareUrl(token);
+  if(typeof navigator!=='undefined' && navigator.clipboard && navigator.clipboard.writeText)
+    navigator.clipboard.writeText(url).then(()=>alert('تم نسخ الرابط ✓'), ()=>prompt('انسخ الرابط:', url));
+  else prompt('انسخ الرابط:', url);
+}
+window.copyShare = copyShare;
+function shareBoxHTML(ent, r){
+  const conf = SHARE_CONF[ent]; if(!conf) return '';
+  if(r.clientAccept){
+    return `<div class="sharebox ok no-print"><h4>✅ وافق العميل على الشروط والأحكام</h4>
+      <div style="font-size:13px;font-weight:700;color:var(--navy)">${esc(r.clientAccept.name)} — <span dir="ltr">${esc(r.clientAccept.mobile)}</span></div>
+      <div style="font-size:12px;color:var(--steel);margin-top:2px">${esc(r.clientAccept.at||'')}</div></div>`;
+  }
+  if(r.shareToken){
+    const url = shareUrl(r.shareToken);
+    const wa = 'https://wa.me/?text=' + encodeURIComponent(conf.label + ' ' + r.no + '\n' + url);
+    return `<div class="sharebox no-print"><h4>🔗 رابط موافقة العميل <span class="tag mid">بانتظار الموافقة</span></h4>
+      <div class="lnk"><input readonly value="${esc(url)}" onclick="this.select()">
+      <button type="button" class="btn sm" onclick="copyShare('${esc(r.shareToken)}')">📋 نسخ</button>
+      <a class="btn sm" style="background:var(--green);text-decoration:none" target="_blank" href="${wa}">🟢 واتساب</a>
+      <button type="button" class="btn sm ghost" onclick="checkShares('${ent}', true)">🔄 تحقق من الموافقة</button></div></div>`;
+  }
+  return `<div class="sharebox no-print"><h4>🔗 موافقة العميل الإلكترونية</h4>
+    <p style="font-size:12px;color:var(--steel);margin-bottom:8px">أنشئ رابطاً عاماً يعرض للعميل ملخص المستند والشروط والأحكام ليوافق عليها باسمه وجواله. <b>يُشترط تعبئة خانة الشروط والأحكام وحفظ المستند أولاً.</b></p>
+    <button type="button" class="btn sm" onclick="shareDoc('${ent}','${r.id}')">إنشاء الرابط</button></div>`;
+}
+async function checkShares(ent, manual){
+  if(!window.shares || !window.shares.get) return;
+  const conf = SHARE_CONF[ent]; if(!conf) return;
+  const pend = (S[ent]||[]).filter(r=>r.shareToken && !r.clientAccept);
+  if(!pend.length) return;
+  let changed = false;
+  for(const r of pend.slice(0,25)){
+    try{
+      const d = await window.shares.get(r.shareToken);
+      if(d && d.status==='accepted'){
+        r.clientAccept = { name:d.acceptName||'', mobile:d.acceptMobile||'', at:d.acceptedOn||'' };
+        if(ent==='quotes' && r.status!=='مقبول') r.status = 'مقبول';
+        logAudit('موافقة عميل إلكترونية', conf.label, r.no, r.clientAccept.name + ' — ' + r.clientAccept.mobile);
+        changed = true;
+      }
+    }catch(e){}
+  }
+  if(changed){ persist(); render(); }
+  else if(manual) alert('لم يوافق العميل بعد');
+}
+window.checkShares = checkShares;
+const shareStateTag = r => r.clientAccept ? '<span class="tag ok">✓ وافق</span>' : (r.shareToken ? '<span class="tag mid">بانتظار</span>' : '—');
+
 function renderRegister(key){
   const V = VIEWS[key], rows = S[V.ent];
   const row = editId ? rows.find(r=>r.id===editId) : null;
@@ -1076,11 +1287,13 @@ function renderRegister(key){
     ${V.note?`<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">ℹ ${V.note}</div>`:''}
     ${(V.approvals && row)?approvalsBox(key, row):''}
     ${(V.attach && row)?attBox(V.ent, row):''}
+    ${(V.share && row)?shareBoxHTML(V.ent, row):''}
     <div class="btnrow"><button class="btn" onclick="saveRegister('${key}')">${row?'حفظ التعديل':'إضافة السجل'}</button>
     ${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>` :
     `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">👁 لديك صلاحية استعراض فقط لهذه الشاشة.</div>`}
    <div class="card"><h3>السجلات (${rows.length})</h3>
     <div style="overflow-x:auto"><table><thead><tr>${V.cols.map(c=>`<th>${c.l}</th>`).join('')}<th class="no-print"></th></tr></thead><tbody>${tableRows}</tbody></table></div></div>`;
+  if(V.share) checkShares(V.ent);
 }
 window.editRow = (key,id) => { editId=id; render(); window.scrollTo(0,0); };
 window.delRow = (key,id) => {
@@ -1206,21 +1419,24 @@ function renderQuotes(){
      <div class="fld"><label>مدة التوريد</label><input id="f_delivery" value="${esc(f('delivery'))}"></div>
      <div class="fld"><label>الضمان</label><input id="f_warranty" value="${esc(f('warranty','12 شهراً'))}"></div>
      <div class="fld"><label>الحالة</label><select id="f_status">${['مفتوح','مرسل','مقبول','مرفوض','ملغي'].map(s=>`<option ${s===f('status','مفتوح')?'selected':''}>${s}</option>`).join('')}</select></div>
+     <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة)</label><textarea id="f_terms" placeholder="مثال: الأسعار شاملة ضريبة القيمة المضافة؛ الدفعة المقدمة غير مستردة بعد بدء التنفيذ؛ مدة التوريد تبدأ من تاريخ سداد الدفعة؛ الضمان وفق شروط الشركة القياسية...">${esc(f('terms'))}</textarea></div>
     </div>
     <h3>بنود العرض</h3><div id="linesbox">${linesHTML('price')}</div>
     <div class="totrow"><span>المجموع: <b id="t_gross">0</b></span><span>الخصم: <b id="t_disc">0</b></span><span>الصافي: <b id="t_net">0</b></span><span>الضريبة 15%: <b id="t_vat">0</b></span><span>الإجمالي: <b id="t_total" style="color:var(--red)">0</b></span></div>
     <div id="docalert" class="alertbox" data-limit="q" style="display:none"></div>
     ${row?approvalsBox('quotes', row):''}
+    ${row?shareBoxHTML('quotes', row):''}
     <div class="btnrow"><button class="btn" onclick="saveQuote()">${row?'حفظ التعديل':'حفظ العرض'}</button>
     ${row?`<button class="btn ghost" onclick="editId=null;tmpLines=[];render()">إلغاء</button>`:''}</div></div>
    <div class="card"><h3>سجل العروض (${S.quotes.length})</h3><div style="overflow-x:auto"><table><thead><tr>
-    <th>الرقم</th><th>التاريخ</th><th>العميل</th><th>الإجمالي</th><th>تنبيه</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>
+    <th>الرقم</th><th>التاريخ</th><th>العميل</th><th>الإجمالي</th><th>تنبيه</th><th>الحالة</th><th>موافقة العميل</th><th class="no-print"></th></tr></thead><tbody>
     ${S.quotes.length?[...S.quotes].reverse().map(q=>{
       const al = (q.total>20000||+q.disc>5) ? '<span class="tag warn">⚠ اعتماد م.ع</span>':'';
-      return `<tr class="clickable" onclick="editId='${q.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(q.no)}</b></td><td>${esc(q.date)}</td><td>${esc(q.customer)}</td><td>${fmt(q.total)}</td><td>${al}</td><td>${tagStatus(q.status)}</td>
+      return `<tr class="clickable" onclick="editId='${q.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(q.no)}</b></td><td>${esc(q.date)}</td><td>${esc(q.customer)}</td><td>${fmt(q.total)}</td><td>${al}</td><td>${tagStatus(q.status)}</td><td>${shareStateTag(q)}</td>
       <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('quote','${q.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();delQuote('${q.id}')">حذف</button></td></tr>`;
-    }).join(''):`<tr><td colspan="7" class="empty">لا عروض بعد</td></tr>`}</tbody></table></div></div>`;
+    }).join(''):`<tr><td colspan="8" class="empty">لا عروض بعد</td></tr>`}</tbody></table></div></div>`;
   setTimeout(recalcDoc, 0);
+  checkShares('quotes');
 }
 window.saveQuote = () => {
   const g = id => document.getElementById(id).value;
@@ -1231,7 +1447,7 @@ window.saveQuote = () => {
   const t = recalcDoc();
   const row = editId ? {...S.quotes.find(q=>q.id===editId)} : {id:uid(), no: nextNo('QUO')};
   Object.assign(row, {date:g('f_date'),customer:g('f_customer'),rep:g('f_rep'),validity:g('f_validity'),disc:g('f_disc'),
-    pay:g('f_pay'),delivery:g('f_delivery'),warranty:g('f_warranty'),status:g('f_status'),
+    pay:g('f_pay'),delivery:g('f_delivery'),warranty:g('f_warranty'),status:g('f_status'),terms:g('f_terms'),
     gross:t.g, net:t.net, vat:t.vat, total:t.tot});
   S.lines = S.lines.filter(l=>l.docNo!==row.no).concat(valid.map(l=>({id:l.id||uid(),docType:'SLS-001',docNo:row.no,product:l.product,brand:l.brand,qty:+l.qty,defPrice:l.defPrice,override:l.override||'',supplyType:l.supplyType||'من المخزون',extStatus:l.extStatus||''})));
   if(editId){const i=S.quotes.findIndex(q=>q.id===editId);S.quotes[i]=row;}else S.quotes.push(row);
@@ -1299,11 +1515,14 @@ function renderDOs(){
     <div class="fld"><label>جواله</label><input id="f_mob" value="${esc(f('mob'))}"></div>
     <div class="fld"><label>حالة التسليم</label><select id="f_status">${['سليم كامل','مع ملاحظات'].map(s=>`<option ${s===f('status','سليم كامل')?'selected':''}>${s}</option>`).join('')}</select></div>
     <div class="fld"><label>مرجع إذن الصرف</label><input id="f_rel" value="${esc(f('rel'))}"></div>
+    <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة)</label><textarea id="f_terms" placeholder="مثال: استلم العميل الأصناف كاملة وبحالة سليمة؛ أي ملاحظات تُسجَّل وقت الاستلام فقط؛ للمعدات المركّبة يبدأ الضمان بمحضر التشغيل...">${esc(f('terms'))}</textarea></div>
    </div><div id="doalert" class="alertbox" style="display:none">⚠ لا يُسمح بالتسليم النهائي قبل تأشيرة السداد الكامل</div>
+   ${row?shareBoxHTML('dos', row):''}
    <div class="btnrow"><button class="btn" onclick="saveDO()">${row?'حفظ':'إضافة'}</button>${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>
-   <div class="card"><h3>سجل الإذون (${S.dos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>أمر البيع</th><th>العميل</th><th>سداد كامل</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>
-   ${S.dos.length?[...S.dos].reverse().map(o=>`<tr class="clickable" onclick="editId='${o.id}';render();scrollTo(0,0)"><td><b>${esc(o.no)}</b></td><td>${esc(o.date)}</td><td>${esc(o.soRef)}</td><td>${esc(o.customer)}</td><td>${o.full==='نعم'?'<span class="tag ok">نعم</span>':'<span class="tag warn">'+esc(o.full||'—')+'</span>'}</td><td>${tagStatus(o.status)}</td>
-   <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('do','${o.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();S.dos=S.dos.filter(x=>x.id!=='${o.id}');persist();render()">حذف</button></td></tr>`).join(''):`<tr><td colspan="7" class="empty">لا إذون بعد</td></tr>`}</tbody></table></div></div>`;
+   <div class="card"><h3>سجل الإذون (${S.dos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>أمر البيع</th><th>العميل</th><th>سداد كامل</th><th>الحالة</th><th>موافقة العميل</th><th class="no-print"></th></tr></thead><tbody>
+   ${S.dos.length?[...S.dos].reverse().map(o=>`<tr class="clickable" onclick="editId='${o.id}';render();scrollTo(0,0)"><td><b>${esc(o.no)}</b></td><td>${esc(o.date)}</td><td>${esc(o.soRef)}</td><td>${esc(o.customer)}</td><td>${o.full==='نعم'?'<span class="tag ok">نعم</span>':'<span class="tag warn">'+esc(o.full||'—')+'</span>'}</td><td>${tagStatus(o.status)}</td><td>${shareStateTag(o)}</td>
+   <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('do','${o.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();S.dos=S.dos.filter(x=>x.id!=='${o.id}');persist();render()">حذف</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">لا إذون بعد</td></tr>`}</tbody></table></div></div>`;
+  checkShares('dos');
 }
 window.doPull = () => {
   const o = S.sos.find(x=>x.no===document.getElementById('f_soRef').value);
@@ -1319,7 +1538,7 @@ window.saveDO = () => {
   const c = S.customers.find(x=>x.name===o.customer);
   const row = editId ? {...S.dos.find(x=>x.id===editId)} : {id:uid(), no: nextNo('SLS3')};
   Object.assign(row,{date:g('f_date'),soRef:g('f_soRef'),customer:o.customer,address:c?buildAddr(c):'',full:g('f_full'),
-    recv:g('f_recv'),mob:g('f_mob'),status:g('f_status'),rel:g('f_rel')});
+    recv:g('f_recv'),mob:g('f_mob'),status:g('f_status'),rel:g('f_rel'),terms:g('f_terms')});
   if(editId){const i=S.dos.findIndex(x=>x.id===editId);S.dos[i]=row;}else S.dos.push(row);
   row._u=today(); logAudit(editId?'تعديل':'إضافة','إذن تسليم',row.no,'');
   editId=null; persist(); render();
@@ -1491,6 +1710,9 @@ function pApprovals(rec){
   return `<div class="sigs">${cell('اعتماد المندوب', a.rep)}${cell('اعتماد المدير', a.manager)}</div>`;
 }
 const pFoot = () => `<div class="pfoot">س.ت: ${esc((S.company||{}).cr)||'............'} — الرقم الضريبي: ${esc((S.company||{}).vat)||'............'} — ${esc((S.company||{}).phone)||'الرياض'}</div>`;
+const pClientAccept = r => r.clientAccept ? `<div class="psec">موافقة العميل الإلكترونية</div>
+  <div style="font-size:12px;padding:8px 4px;line-height:2">✔ وافق العميل على الشروط والأحكام إلكترونياً عبر الرابط الموثّق —
+  <b style="color:var(--navy)">${esc(r.clientAccept.name)}</b> — <span dir="ltr">${esc(r.clientAccept.mobile)}</span> — ${esc(r.clientAccept.at||'')}</div>` : '';
 function buildDoc(t, no){
   if(t==='quote'){
     const q = S.quotes.find(x=>x.no===no); if(!q) return '';
@@ -1508,9 +1730,11 @@ function buildDoc(t, no){
      + pTotals([['المجموع',q.gross],['الخصم '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة',q.net],['ضريبة القيمة المضافة 15%',q.vat],['الإجمالي شامل الضريبة',q.total]])
      + alert
      + `<div class="psec">الشروط العامة</div>` + pGrid([['شروط الدفع',q.pay],['مدة التوريد',q.delivery],['الضمان العام',q.warranty],['المندوب',q.rep]])
+     + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
      + wsec
      + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(q)
-     + pSigs(['موافقة العميل']) + pFoot();
+     + pClientAccept(q)
+     + (q.clientAccept?'':pSigs(['موافقة العميل'])) + pFoot();
   }
   if(t==='so'){
     const o = S.sos.find(x=>x.no===no); if(!o) return '';
@@ -1528,7 +1752,9 @@ function buildDoc(t, no){
      + pGrid([['مرجع أمر البيع',o.soRef],['العميل',o.customer],['العنوان',o.address],['المستلم',o.recv],['جواله',o.mob],['سداد كامل',o.full]])
      + `<div class="psec">الأصناف المسلَّمة</div>` + pLines(so.quoteRef,'سعر الوحدة')
      + `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">للمعدات المركّبة يبدأ الضمان بمحضر التشغيل QLT-001 لا بهذا الإذن</div>`
-     + pSigs(['مندوب الشركة / السائق','توقيع العميل + التاريخ + الوقت']) + pFoot();
+     + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
+     + pClientAccept(o)
+     + pSigs(['مندوب الشركة / السائق'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت'])) + pFoot();
   }
   if(t==='po'){
     const p = S.pos.find(x=>x.no===no); if(!p) return '';
