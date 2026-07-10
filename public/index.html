@@ -76,10 +76,10 @@ tr.clickable:hover td{background:#eef3fa}
 .pline{height:3px;background:var(--red);margin:10px 0}
 .ptitle{text-align:center;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;margin-bottom:12px}
 .psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));border:1px solid var(--light)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
 .pgrid .pi{display:flex;border:1px solid var(--light)}
-.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:11px;padding:6px 8px;min-width:105px}
-.pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12.5px;flex:1}
+.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:10.5px;padding:6px 8px;min-width:135px;line-height:1.4}
+.pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12px;flex:1}
 #printdoc table,.pdblock table{margin-top:0}
 #printdoc th,.pdblock th{background:var(--steel)}
 .sigs{display:flex;gap:0;margin-top:18px}
@@ -357,8 +357,8 @@ tr.clickable:hover td{background:#eef3fa}
     el.innerHTML = printBtn + docBlock + wrap(
       `<h3 style="color:var(--navy);font-size:14.5px;margin-bottom:6px">إقرار الموافقة</h3>
        <p style="font-size:12px;color:var(--steel);margin-bottom:10px">بالضغط على «موافقة واعتماد» فإنك تقر بأنك قرأت المستند أعلاه بكامل بنوده وشروطه وأحكامه وتوافق عليه.</p>
-       <div class="fld" style="margin-bottom:10px"><label>الاسم الكامل *</label><input id="sh_name" style="font-size:16px"></div>
-       <div class="fld" style="margin-bottom:12px"><label>رقم الجوال *</label><input id="sh_mobile" type="tel" style="font-size:16px;direction:ltr;text-align:right" placeholder="05xxxxxxxx"></div>
+       <div class="fld" style="margin-bottom:10px"><label>الاسم الكامل — Full Name *</label><input id="sh_name" style="font-size:16px"></div>
+       <div class="fld" style="margin-bottom:12px"><label>رقم الجوال — Mobile Number *</label><input id="sh_mobile" type="tel" style="font-size:16px;direction:ltr;text-align:right" placeholder="05xxxxxxxx"></div>
        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;cursor:pointer">
          <input type="checkbox" id="sh_agree" style="margin-top:3px;width:17px;height:17px"> قرأت جميع بنود المستند أعلاه، بما في ذلك الشروط والأحكام، وأوافق عليها</label>
        <button class="btn red" id="sh_btn" style="width:100%;font-size:15px">✔ موافقة واعتماد</button>
@@ -444,8 +444,8 @@ tr.clickable:hover td{background:#eef3fa}
   <div style="background:#fff;color:var(--ink);padding:28px 32px;border-radius:12px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.35)">
     <h2 style="font-family:'Cairo';color:var(--navy);margin-bottom:2px;font-size:18px">تسجيل الدخول</h2>
     <p id="li_sysname" style="color:var(--steel);font-size:12px;margin-bottom:16px">نظام تشغيل الأعمال</p>
-    <div class="fld" style="margin-bottom:10px"><label>البريد الإلكتروني</label><input id="li_email" type="email" autocomplete="username"></div>
-    <div class="fld" style="margin-bottom:12px"><label>كلمة المرور</label><input id="li_pass" type="password" autocomplete="current-password"></div>
+    <div class="fld" style="margin-bottom:10px"><label>البريد الإلكتروني — Email</label><input id="li_email" type="email" autocomplete="username"></div>
+    <div class="fld" style="margin-bottom:12px"><label>كلمة المرور — Password</label><input id="li_pass" type="password" autocomplete="current-password"></div>
     <button id="li_btn" class="btn" style="width:100%">دخول</button>
     <p id="li_err" style="color:var(--red);font-size:12px;margin-top:10px;min-height:14px"></p>
   </div>
@@ -470,8 +470,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.3';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً */
+const SYS_VERSION = 'V1.4';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -768,292 +768,292 @@ const optSupOK = () => supOK().map(s=>s.name);
 const optSupAll = () => S.suppliers.map(s=>s.name);
 
 const VIEWS = {
- products:{icon:'📦',title:'المنتجات',code:'MD-PRD',ent:'products',autoCode:'PRD',
+ products:{icon:'📦',title:'المنتجات — Products',code:'MD-PRD',ent:'products',autoCode:'PRD',
   fields:[
-   {k:'img',l:'صورة المنتج',t:'img'},
-   {k:'code',l:'الرمز',t:'ro'},{k:'nameAr',l:'اسم المنتج (عربي)',t:'text',req:1},{k:'nameEn',l:'الاسم (إنجليزي)',t:'text'},
-   {k:'cat',l:'الفئة',t:'sel',o:()=>S.categories,plus:true},
-   {k:'brand',l:'الماركة/المنشأ',t:'text'},{k:'unit',l:'الوحدة',t:'sel',o:['قطعة','طقم','متر','لتر']},
-   {k:'cost',l:'سعر التكلفة',t:'num'},{k:'price',l:'سعر البيع',t:'num'},
-   {k:'min',l:'الحد الأدنى للمخزون',t:'num'},{k:'supplier',l:'المورد الرئيسي',t:'sel',o:optSupAll},
-   {k:'warranty',l:'الضمان (أشهر)',t:'num'},
-   {k:'wterms',l:'شروط الضمان وتفاصيله',t:'text',ph:'مثال: يشمل الأجزاء الميكانيكية والكهربائية والحساسات؛ لا يشمل سوء الاستخدام أو الفلاتر الاستهلاكية؛ يبدأ من محضر التشغيل'},
-   {k:'notes',l:'ملاحظات',t:'text'}],
+   {k:'img',l:'صورة المنتج — Product Image',t:'img'},
+   {k:'code',l:'الرمز — Code',t:'ro'},{k:'nameAr',l:'اسم المنتج (عربي) — Product Name (Arabic)',t:'text',req:1},{k:'nameEn',l:'الاسم (إنجليزي) — Name (English)',t:'text'},
+   {k:'cat',l:'الفئة — Category',t:'sel',o:()=>S.categories,plus:true},
+   {k:'brand',l:'الماركة/المنشأ — Brand/Origin',t:'text'},{k:'unit',l:'الوحدة — Unit',t:'sel',o:['قطعة','طقم','متر','لتر']},
+   {k:'cost',l:'سعر التكلفة — Cost Price',t:'num'},{k:'price',l:'سعر البيع — Selling Price',t:'num'},
+   {k:'min',l:'الحد الأدنى للمخزون — Minimum Stock Level',t:'num'},{k:'supplier',l:'المورد الرئيسي — Main Supplier',t:'sel',o:optSupAll},
+   {k:'warranty',l:'الضمان (أشهر) — Warranty (months)',t:'num'},
+   {k:'wterms',l:'شروط الضمان وتفاصيله — Warranty Terms & Details',t:'text',ph:'مثال: يشمل الأجزاء الميكانيكية والكهربائية والحساسات؛ لا يشمل سوء الاستخدام أو الفلاتر الاستهلاكية؛ يبدأ من محضر التشغيل'},
+   {k:'notes',l:'ملاحظات — Notes',t:'text'}],
   attach:true,
   cols:[
-   {k:'img',l:'الصورة',f:(v)=>imgTag(v,140)},
-   {k:'code',l:'الرمز'},{k:'nameAr',l:'المنتج',f:(v,r)=>`<span dir="auto">${esc(prodLabel(r))}</span>`},{k:'cat',l:'الفئة'},
-   {k:'cost',l:'التكلفة',f:fmt},{k:'price',l:'البيع',f:fmt},
-   {k:'_margin',l:'الهامش',f:(v,r)=> r.cost>0? ((r.price-r.cost)/r.cost*100).toFixed(0)+'%':'—'},
-   {k:'_stock',l:'الرصيد',f:(v,r)=>fmt(stockQty(r.nameAr))},
-   {k:'_alert',l:'التنبيه',f:(v,r)=>{const q=stockQty(r.nameAr); return (r.min!==''&&q<=+r.min)?'<span class="tag warn">⚠ منخفض</span>':'<span class="tag ok">جيد</span>';}}]},
+   {k:'img',l:'الصورة — Image',f:(v)=>imgTag(v,140)},
+   {k:'code',l:'الرمز — Code'},{k:'nameAr',l:'المنتج — Product',f:(v,r)=>`<span dir="auto">${esc(prodLabel(r))}</span>`},{k:'cat',l:'الفئة — Category'},
+   {k:'cost',l:'التكلفة — Cost',f:fmt},{k:'price',l:'البيع — Sale',f:fmt},
+   {k:'_margin',l:'الهامش — Margin',f:(v,r)=> r.cost>0? ((r.price-r.cost)/r.cost*100).toFixed(0)+'%':'—'},
+   {k:'_stock',l:'الرصيد — Balance',f:(v,r)=>fmt(stockQty(r.nameAr))},
+   {k:'_alert',l:'التنبيه — Alert',f:(v,r)=>{const q=stockQty(r.nameAr); return (r.min!==''&&q<=+r.min)?'<span class="tag warn">⚠ منخفض</span>':'<span class="tag ok">جيد</span>';}}]},
 
- customers:{icon:'👥',title:'العملاء',code:'MD-CUS',ent:'customers',autoCode:'CUS',
-  fields:[{k:'code',l:'الرمز',t:'ro'},{k:'name',l:'الاسم التجاري',t:'text',req:1},{k:'cr',l:'السجل التجاري',t:'text'},{k:'vat',l:'الرقم الضريبي',t:'text'},
-   {k:'industrial',l:'اسم الصناعية',t:'text',ph:'مثال: الصناعية القديمة / صناعية السلي'},
-   {k:'specialty',l:'اختصاص الورشة',t:'sel',o:['سمكرة ودهان','ميكانيكا','كهرباء سيارات','إطارات','زينة وعناية','مغسلة','تغيير زيوت','مركز خدمة شامل','دهان أخشاب','أخرى']},
-   {k:'contact',l:'الشخص المسؤول',t:'text'},{k:'mobile',l:'الجوال',t:'text'},{k:'email',l:'البريد',t:'text'},
-   {k:'bldg',l:'رقم المبنى (4 أرقام)',t:'text',ph:'0000'},{k:'street',l:'اسم الشارع',t:'text'},
-   {k:'district',l:'الحي',t:'text'},{k:'city',l:'المدينة',t:'text'},
-   {k:'postal',l:'الرمز البريدي (5 خانات)',t:'text',ph:'00000'},{k:'addl',l:'الرقم الإضافي (4 أرقام)',t:'text',ph:'0000'},
-   {k:'unit',l:'رقم الوحدة',t:'text'},
-   {k:'cls',l:'التصنيف',t:'sel',o:['عميل حالي','عميل محتمل','موزع','شريك','جديد','دائم','كبير']},
-   {k:'sector',l:'القطاع',t:'sel',o:['ورش سيارات','مراكز خدمة','مغاسل','وكالات','محطات وقود','صناعي عام','أخرى']},
-   {k:'size',l:'حجم المنشأة',t:'sel',o:['صغيرة','متوسطة','كبيرة']},
+ customers:{icon:'👥',title:'العملاء — Customers',code:'MD-CUS',ent:'customers',autoCode:'CUS',
+  fields:[{k:'code',l:'الرمز — Code',t:'ro'},{k:'name',l:'الاسم التجاري — Trade Name',t:'text',req:1},{k:'cr',l:'السجل التجاري — Commercial Registration',t:'text'},{k:'vat',l:'الرقم الضريبي — Tax Number',t:'text'},
+   {k:'industrial',l:'اسم الصناعية — Industrial Area Name',t:'text',ph:'مثال: الصناعية القديمة / صناعية السلي'},
+   {k:'specialty',l:'اختصاص الورشة — Workshop Specialty',t:'sel',o:['سمكرة ودهان','ميكانيكا','كهرباء سيارات','إطارات','زينة وعناية','مغسلة','تغيير زيوت','مركز خدمة شامل','دهان أخشاب','أخرى']},
+   {k:'contact',l:'الشخص المسؤول — Contact Person',t:'text'},{k:'mobile',l:'الجوال — Mobile',t:'text'},{k:'email',l:'البريد — Email',t:'text'},
+   {k:'bldg',l:'رقم المبنى (4 أرقام) — Building No. (4 digits)',t:'text',ph:'0000'},{k:'street',l:'اسم الشارع — Street Name',t:'text'},
+   {k:'district',l:'الحي — District',t:'text'},{k:'city',l:'المدينة — City',t:'text'},
+   {k:'postal',l:'الرمز البريدي (5 خانات) — Postal Code (5 digits)',t:'text',ph:'00000'},{k:'addl',l:'الرقم الإضافي (4 أرقام) — Additional No. (4 digits)',t:'text',ph:'0000'},
+   {k:'unit',l:'رقم الوحدة — Unit No.',t:'text'},
+   {k:'cls',l:'التصنيف — Classification',t:'sel',o:['عميل حالي','عميل محتمل','موزع','شريك','جديد','دائم','كبير']},
+   {k:'sector',l:'القطاع — Sector',t:'sel',o:['ورش سيارات','مراكز خدمة','مغاسل','وكالات','محطات وقود','صناعي عام','أخرى']},
+   {k:'size',l:'حجم المنشأة — Business Size',t:'sel',o:['صغيرة','متوسطة','كبيرة']},
    {k:'tags',l:'علامات (Tags)',t:'multi',o:['VIP','متعثر السداد','فرصة توسع','عميل استراتيجي','حساس للسعر']},
-   {k:'notes',l:'ملاحظات',t:'text'}],
+   {k:'notes',l:'ملاحظات — Notes',t:'text'}],
   attach:true,
-  cols:[{k:'code',l:'الرمز'},{k:'name',l:'الاسم التجاري'},
-   {k:'tags',l:'علامات',f:v=>String(v||'').split('|').filter(Boolean).map(t=>`<span class="tag ${t==='متعثر السداد'?'warn':t==='VIP'||t==='عميل استراتيجي'?'ok':'info'}">${esc(t)}</span>`).join(' ')||'—'},
-   {k:'industrial',l:'الصناعية'},{k:'specialty',l:'الاختصاص'},{k:'mobile',l:'الجوال'},
-   {k:'_sales',l:'إجمالي المبيعات',f:(v,r)=>fmt(S.sos.filter(o=>o.customer===r.name&&o.status!=='ملغي').reduce((a,o)=>a+(+o.total||0),0))},
-   {k:'_due',l:'ذمم متبقية',f:(v,r)=>{const rem=receivableQuotes().filter(q=>q.customer===r.name).reduce((a,q)=>a+quoteRemaining(q),0);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:'<span class="tag ok">0</span>';}},
+  cols:[{k:'code',l:'الرمز — Code'},{k:'name',l:'الاسم التجاري — Trade Name'},
+   {k:'tags',l:'علامات — Tags',f:v=>String(v||'').split('|').filter(Boolean).map(t=>`<span class="tag ${t==='متعثر السداد'?'warn':t==='VIP'||t==='عميل استراتيجي'?'ok':'info'}">${esc(t)}</span>`).join(' ')||'—'},
+   {k:'industrial',l:'الصناعية — Industrial Area'},{k:'specialty',l:'الاختصاص — Specialty'},{k:'mobile',l:'الجوال — Mobile'},
+   {k:'_sales',l:'إجمالي المبيعات — Total Sales',f:(v,r)=>fmt(S.sos.filter(o=>o.customer===r.name&&o.status!=='ملغي').reduce((a,o)=>a+(+o.total||0),0))},
+   {k:'_due',l:'ذمم متبقية — Remaining Receivables',f:(v,r)=>{const rem=receivableQuotes().filter(q=>q.customer===r.name).reduce((a,q)=>a+quoteRemaining(q),0);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:'<span class="tag ok">0</span>';}},
    {k:'_360',l:'',f:(v,r)=>`<button class="btn sm ghost" onclick="event.stopPropagation();openCust360('${r.id}')">👁 ملف كامل</button>`}],
   note:'العنوان الوطني السعودي: رقم المبنى (4) + الشارع + الحي + المدينة + الرمز البريدي (5) + الرقم الإضافي (4) + رقم الوحدة.'},
 
- suppliers:{icon:'🏭',title:'الموردون',code:'MD-SUP',ent:'suppliers',autoCode:'SUP',
-  fields:[{k:'code',l:'الرمز',t:'ro'},{k:'name',l:'الاسم',t:'text',req:1},{k:'country',l:'الدولة',t:'text'},{k:'products',l:'المنتجات المورَّدة',t:'text'},{k:'contact',l:'جهة الاتصال',t:'text'},{k:'email',l:'البريد',t:'text'},{k:'phone',l:'الهاتف',t:'text'},{k:'terms',l:'شروط الدفع',t:'text'},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'code',l:'الرمز'},{k:'name',l:'المورد'},{k:'country',l:'الدولة'},{k:'terms',l:'شروط الدفع'},
-   {k:'_eval',l:'آخر تقييم',f:(v,r)=>{const e=supLastEval(r.name);return e?e.total+'/30':'—';}},
-   {k:'_cls',l:'التصنيف',f:(v,r)=>{const c=supClass(r.name);return `<span class="tag ${c.cls}">${c.t}</span>`;}}],
+ suppliers:{icon:'🏭',title:'الموردون — Suppliers',code:'MD-SUP',ent:'suppliers',autoCode:'SUP',
+  fields:[{k:'code',l:'الرمز — Code',t:'ro'},{k:'name',l:'الاسم — Name',t:'text',req:1},{k:'country',l:'الدولة — Country',t:'text'},{k:'products',l:'المنتجات المورَّدة — Supplied Products',t:'text'},{k:'contact',l:'جهة الاتصال — Contact',t:'text'},{k:'email',l:'البريد — Email',t:'text'},{k:'phone',l:'الهاتف — Phone',t:'text'},{k:'terms',l:'شروط الدفع — Payment Terms',t:'text'},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'code',l:'الرمز — Code'},{k:'name',l:'المورد — Supplier'},{k:'country',l:'الدولة — Country'},{k:'terms',l:'شروط الدفع — Payment Terms'},
+   {k:'_eval',l:'آخر تقييم — Last Evaluation',f:(v,r)=>{const e=supLastEval(r.name);return e?e.total+'/30':'—';}},
+   {k:'_cls',l:'التصنيف — Classification',f:(v,r)=>{const c=supClass(r.name);return `<span class="tag ${c.cls}">${c.t}</span>`;}}],
   note:'المورد «الموقوف» يُستبعد تلقائياً من قوائم الاختيار في طلبات وأوامر الشراء.'},
 
- employees:{icon:'🪪',title:'الموظفون',code:'MD-EMP',ent:'employees',autoCode:'EMP',
-  fields:[{k:'code',l:'الرقم الوظيفي',t:'ro'},{k:'name',l:'الاسم',t:'text',req:1},{k:'dept',l:'القسم',t:'sel',o:['الإدارة','المبيعات','المشتريات','المستودع','الفني','فريق التركيب','المالية']},{k:'mobile',l:'الجوال',t:'text'},
-   {k:'installTeam',l:'ضمن فريق التركيب؟',t:'sel',o:['نعم','لا']},
-   {k:'salary',l:'الراتب الشهري',t:'num'},
-   {k:'auth',l:'صلاحية الاعتماد',t:'sel',o:['توقيع الشريكين','المدير العام','مشرف العمليات','لا يوجد']}],
-  cols:[{k:'code',l:'الرقم'},{k:'name',l:'الاسم'},{k:'dept',l:'القسم'},{k:'installTeam',l:'فريق تركيب',f:v=>v==='نعم'?'<span class="tag ok">نعم</span>':'—'},{k:'salary',l:'الراتب',f:fmt},{k:'auth',l:'الصلاحية'}]},
+ employees:{icon:'🪪',title:'الموظفون — Employees',code:'MD-EMP',ent:'employees',autoCode:'EMP',
+  fields:[{k:'code',l:'الرقم الوظيفي — Employee ID',t:'ro'},{k:'name',l:'الاسم — Name',t:'text',req:1},{k:'dept',l:'القسم — Department',t:'sel',o:['الإدارة','المبيعات','المشتريات','المستودع','الفني','فريق التركيب','المالية']},{k:'mobile',l:'الجوال — Mobile',t:'text'},
+   {k:'installTeam',l:'ضمن فريق التركيب؟ — Part of Installation Team?',t:'sel',o:['نعم','لا']},
+   {k:'salary',l:'الراتب الشهري — Monthly Salary',t:'num'},
+   {k:'auth',l:'صلاحية الاعتماد — Approval Validity',t:'sel',o:['توقيع الشريكين','المدير العام','مشرف العمليات','لا يوجد']}],
+  cols:[{k:'code',l:'الرقم — Number'},{k:'name',l:'الاسم — Name'},{k:'dept',l:'القسم — Department'},{k:'installTeam',l:'فريق تركيب — Installation Team',f:v=>v==='نعم'?'<span class="tag ok">نعم</span>':'—'},{k:'salary',l:'الراتب — Salary',f:fmt},{k:'auth',l:'الصلاحية — Validity'}]},
 
- prs:{icon:'📝',title:'طلبات الشراء PUR-001',code:'PUR-001',ent:'prs',docCode:'PUR1',
-  fields:[{k:'no',l:'رقم الطلب',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},{k:'requester',l:'الطالب',t:'sel',o:optEmployees},
-   {k:'reason',l:'السبب',t:'sel',o:['أمر بيع','تجديد مخزون','تشغيلي']},{k:'soRef',l:'مرجع أمر البيع',t:'sel',o:()=>S.sos.map(o=>o.no)},
-   {k:'desc',l:'وصف الاحتياج',t:'text'},{k:'est',l:'التكلفة التقديرية',t:'num'},
-   {k:'supplier',l:'المورد المقترح',t:'sel',o:optSupOK},{k:'status',l:'الحالة',t:'sel',o:['قيد المراجعة','معتمد','مرفوض','ملغي']},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'requester',l:'الطالب'},{k:'desc',l:'الوصف'},{k:'est',l:'التقدير',f:fmt},
-   {k:'_a',l:'تنبيه',f:(v,r)=> +r.est>5000?'<span class="tag warn">⚠ توقيع الشريكين</span>':''},
-   {k:'_ap',l:'الاعتماد',f:(v,r)=>apprBadge(r)},
-   {k:'status',l:'الحالة',f:v=>tagStatus(v)}],
+ prs:{icon:'📝',title:'طلبات الشراء — Purchase Requisitions PUR-001',code:'PUR-001',ent:'prs',docCode:'PUR1',
+  fields:[{k:'no',l:'رقم الطلب — Request No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'requester',l:'الطالب — Requester',t:'sel',o:optEmployees},
+   {k:'reason',l:'السبب — Reason',t:'sel',o:['أمر بيع','تجديد مخزون','تشغيلي']},{k:'soRef',l:'مرجع أمر البيع — Sales Order Reference',t:'sel',o:()=>S.sos.map(o=>o.no)},
+   {k:'desc',l:'وصف الاحتياج — Requirement Description',t:'text'},{k:'est',l:'التكلفة التقديرية — Estimated Cost',t:'num'},
+   {k:'supplier',l:'المورد المقترح — Suggested Supplier',t:'sel',o:optSupOK},{k:'status',l:'الحالة — Status',t:'sel',o:['قيد المراجعة','معتمد','مرفوض','ملغي']},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'requester',l:'الطالب — Requester'},{k:'desc',l:'الوصف — Description'},{k:'est',l:'التقدير — Estimate',f:fmt},
+   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> +r.est>5000?'<span class="tag warn">⚠ توقيع الشريكين</span>':''},
+   {k:'_ap',l:'الاعتماد — Approval',f:(v,r)=>apprBadge(r)},
+   {k:'status',l:'الحالة — Status',f:v=>tagStatus(v)}],
   approvals:true, docType:'pr',
   note:'أي طلب يتجاوز 5,000 ريال يتطلب توقيع الشريكين. أمر الشراء لا يُنشأ إلا من طلب «معتمد». الاعتماد إلكتروني: المندوب ثم المدير.'},
 
- stock:{icon:'🏗️',title:'حركات المخزون WHS',code:'WHS-001/002',ent:'stock',
-  fields:[{k:'no',l:'رقم الإذن',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'type',l:'نوع الحركة',t:'sel',o:['وارد','صرف'],req:1},{k:'product',l:'المنتج',t:'sel',o:optProducts,req:1},
-   {k:'qty',l:'الكمية',t:'num',req:1},{k:'serial',l:'الرقم التسلسلي',t:'text'},{k:'ref',l:'المرجع (PO/SO)',t:'text'},
-   {k:'finance',l:'تأشيرة سداد (للصرف النهائي)',t:'sel',o:['نعم','لا','لا ينطبق']},{k:'by',l:'المسلِّم/المستلم',t:'sel',o:optEmployees},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'no',l:'الإذن'},{k:'date',l:'التاريخ'},{k:'type',l:'الحركة',f:v=>v==='وارد'?'<span class="tag ok">وارد ▼</span>':'<span class="tag warn">صرف ▲</span>'},{k:'product',l:'المنتج'},{k:'qty',l:'الكمية',f:fmt},{k:'ref',l:'المرجع'},
-   {k:'_bal',l:'رصيد المنتج',f:(v,r)=>fmt(stockQty(r.product))}],
+ stock:{icon:'🏗️',title:'حركات المخزون — Stock Movements WHS',code:'WHS-001/002',ent:'stock',
+  fields:[{k:'no',l:'رقم الإذن — Order No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'type',l:'نوع الحركة — Movement Type',t:'sel',o:['وارد','صرف'],req:1},{k:'product',l:'المنتج — Product',t:'sel',o:optProducts,req:1},
+   {k:'qty',l:'الكمية — Quantity',t:'num',req:1},{k:'serial',l:'الرقم التسلسلي — Serial Number',t:'text'},{k:'ref',l:'المرجع (PO/SO) — Reference (PO/SO)',t:'text'},
+   {k:'finance',l:'تأشيرة سداد (للصرف النهائي) — Payment Sign-off (for Final Disbursement)',t:'sel',o:['نعم','لا','لا ينطبق']},{k:'by',l:'المسلِّم/المستلم — Delivered By/Received By',t:'sel',o:optEmployees},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'no',l:'الإذن — Order No.'},{k:'date',l:'التاريخ — Date'},{k:'type',l:'الحركة — Movement',f:v=>v==='وارد'?'<span class="tag ok">وارد ▼</span>':'<span class="tag warn">صرف ▲</span>'},{k:'product',l:'المنتج — Product'},{k:'qty',l:'الكمية — Quantity',f:fmt},{k:'ref',l:'المرجع — Reference'},
+   {k:'_bal',l:'رصيد المنتج — Product Balance',f:(v,r)=>fmt(stockQty(r.product))}],
   numFn:r=> nextNo(r.type==='وارد'?'WHS1':'WHS2'),
   note:'الوارد يضيف للرصيد والصرف يخصم تلقائياً — الرصيد يظهر فوراً في ورقة المنتجات ولوحة التحكم.'},
 
- qc:{icon:'🔍',title:'الفحص الفني QLT-001',code:'QLT-001',ent:'qc',docCode:'QLT1',
-  fields:[{k:'no',l:'رقم المحضر',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'type',l:'النوع',t:'sel',o:['فحص وارد','تشغيل وتسليم']},{k:'ref',l:'المرجع (WHS/DO)',t:'text'},
-   {k:'product',l:'المعدة',t:'sel',o:optProducts},{k:'serial',l:'الرقم التسلسلي',t:'text'},
-   {k:'customer',l:'العميل (للتشغيل)',t:'sel',o:optCustomers},
-   {k:'result',l:'النتيجة',t:'sel',o:['مقبول','مرفوض','مقبول بشرط']},
-   {k:'wstart',l:'بدء الضمان',t:'date'},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'no',l:'المحضر'},{k:'date',l:'التاريخ'},{k:'type',l:'النوع'},{k:'product',l:'المعدة'},{k:'serial',l:'التسلسلي'},
-   {k:'result',l:'النتيجة',f:tagStatus},{k:'wstart',l:'بدء الضمان'},
-   {k:'_wend',l:'انتهاء الضمان (تلقائي)',f:(v,r)=>warrantyEnd(r)||'—'}],
+ qc:{icon:'🔍',title:'الفحص الفني — Technical Inspection QLT-001',code:'QLT-001',ent:'qc',docCode:'QLT1',
+  fields:[{k:'no',l:'رقم المحضر — Record No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'type',l:'النوع — Type',t:'sel',o:['فحص وارد','تشغيل وتسليم']},{k:'ref',l:'المرجع (WHS/DO)',t:'text'},
+   {k:'product',l:'المعدة — Equipment',t:'sel',o:optProducts},{k:'serial',l:'الرقم التسلسلي — Serial Number',t:'text'},
+   {k:'customer',l:'العميل (للتشغيل) — Customer (for Commissioning)',t:'sel',o:optCustomers},
+   {k:'result',l:'النتيجة — Result',t:'sel',o:['مقبول','مرفوض','مقبول بشرط']},
+   {k:'wstart',l:'بدء الضمان — Warranty Start',t:'date'},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'no',l:'المحضر — Record No.'},{k:'date',l:'التاريخ — Date'},{k:'type',l:'النوع — Type'},{k:'product',l:'المعدة — Equipment'},{k:'serial',l:'التسلسلي — Serial No.'},
+   {k:'result',l:'النتيجة — Result',f:tagStatus},{k:'wstart',l:'بدء الضمان — Warranty Start'},
+   {k:'_wend',l:'انتهاء الضمان (تلقائي) — Warranty End (Auto)',f:(v,r)=>warrantyEnd(r)||'—'}],
   note:'انتهاء الضمان يُحسب تلقائياً من مدة ضمان المنتج. محضر «تشغيل وتسليم» هو نقطة بدء الضمان الرسمية.'},
 
- srv:{icon:'🔧',title:'الصيانة والضمان SRV-001',code:'SRV-001',ent:'srv',docCode:'SRV1',docType:'srv',
-  fields:[{k:'no',l:'رقم الطلب',t:'ro'},{k:'date',l:'تاريخ البلاغ',t:'date',req:1},
-   {k:'customer',l:'العميل',t:'sel',o:optCustomers},{k:'serial',l:'الرقم التسلسلي',t:'text'},
-   {k:'priority',l:'الأولوية',t:'sel',o:['عاجل (48 ساعة)','عادي (5 أيام)']},{k:'fault',l:'وصف العطل',t:'text'},
-   {k:'tech',l:'الفني',t:'sel',o:optEmployees},{k:'fin',l:'التصنيف المالي',t:'sel',o:['ضمان','خارج الضمان']},
-   {k:'status',l:'الحالة',t:'sel',o:['مفتوح','مجدول','مغلق']},{k:'rating',l:'تقييم الخدمة /5',t:'num'},{k:'notes',l:'ملاحظات',t:'text'},
-   {k:'terms',l:'الشروط والأحكام (لرابط موافقة العميل)',t:'ta',ph:'مثال: تشمل الصيانة الأعطال المشمولة بالضمان فقط؛ سوء الاستخدام والقطع الاستهلاكية غير مشمولة؛ يلتزم العميل بتوفير الوصول للمعدة...'}],
+ srv:{icon:'🔧',title:'الصيانة والضمان — Maintenance & Warranty SRV-001',code:'SRV-001',ent:'srv',docCode:'SRV1',docType:'srv',
+  fields:[{k:'no',l:'رقم الطلب — Request No.',t:'ro'},{k:'date',l:'تاريخ البلاغ — Report Date',t:'date',req:1},
+   {k:'customer',l:'العميل — Customer',t:'sel',o:optCustomers},{k:'serial',l:'الرقم التسلسلي — Serial Number',t:'text'},
+   {k:'priority',l:'الأولوية — Priority',t:'sel',o:['عاجل (48 ساعة)','عادي (5 أيام)']},{k:'fault',l:'وصف العطل — Fault Description',t:'text'},
+   {k:'tech',l:'الفني — Technician',t:'sel',o:optEmployees},{k:'fin',l:'التصنيف المالي — Financial Classification',t:'sel',o:['ضمان','خارج الضمان']},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['مفتوح','مجدول','مغلق']},{k:'rating',l:'تقييم الخدمة /5 — Service Rating /5',t:'num'},{k:'notes',l:'ملاحظات — Notes',t:'text'},
+   {k:'terms',l:'الشروط والأحكام (لرابط موافقة العميل) — Terms & Conditions (for customer approval link)',t:'ta',ph:'مثال: تشمل الصيانة الأعطال المشمولة بالضمان فقط؛ سوء الاستخدام والقطع الاستهلاكية غير مشمولة؛ يلتزم العميل بتوفير الوصول للمعدة...'}],
   share:1,
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'البلاغ'},{k:'customer',l:'العميل'},{k:'serial',l:'التسلسلي'},
-   {k:'_w',l:'حالة الضمان (تلقائي)',f:(v,r)=>{const w=warrantyStatus(r.serial,r.date);return `<span class="tag ${w.cls}">${w.t}</span>`;}},
-   {k:'priority',l:'الأولوية'},{k:'status',l:'الحالة',f:tagStatus},
-   {k:'_sh',l:'موافقة العميل',f:(v,r)=>shareStateTag(r)}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'البلاغ — Report Date'},{k:'customer',l:'العميل — Customer'},{k:'serial',l:'التسلسلي — Serial No.'},
+   {k:'_w',l:'حالة الضمان (تلقائي) — Warranty Status (Auto)',f:(v,r)=>{const w=warrantyStatus(r.serial,r.date);return `<span class="tag ${w.cls}">${w.t}</span>`;}},
+   {k:'priority',l:'الأولوية — Priority'},{k:'status',l:'الحالة — Status',f:tagStatus},
+   {k:'_sh',l:'موافقة العميل — Customer Approval',f:(v,r)=>shareStateTag(r)}],
   note:'حالة الضمان تُكشف تلقائياً من الرقم التسلسلي عبر محاضر التشغيل QLT-001.'},
 
- evals:{icon:'⭐',title:'تقييم الموردين PUR-003',code:'PUR-003',ent:'evals',
-  fields:[{k:'date',l:'التاريخ',t:'date',req:1},{k:'supplier',l:'المورد',t:'sel',o:optSupAll,req:1},{k:'ref',l:'مرجع الشحنة',t:'text'},
-   {k:'q1',l:'الجودة /5',t:'num'},{k:'q2',l:'المواعيد /5',t:'num'},{k:'q3',l:'المطابقة /5',t:'num'},
-   {k:'q4',l:'السعر /5',t:'num'},{k:'q5',l:'الاستجابة /5',t:'num'},{k:'q6',l:'التغليف /5',t:'num'},
-   {k:'by',l:'المقيّم',t:'sel',o:optEmployees},{k:'notes',l:'ملاحظات',t:'text'}],
+ evals:{icon:'⭐',title:'تقييم الموردين — Supplier Evaluation PUR-003',code:'PUR-003',ent:'evals',
+  fields:[{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'supplier',l:'المورد — Supplier',t:'sel',o:optSupAll,req:1},{k:'ref',l:'مرجع الشحنة — Shipment Reference',t:'text'},
+   {k:'q1',l:'الجودة /5 — Quality /5',t:'num'},{k:'q2',l:'المواعيد /5 — Timeliness /5',t:'num'},{k:'q3',l:'المطابقة /5 — Compliance /5',t:'num'},
+   {k:'q4',l:'السعر /5 — Price /5',t:'num'},{k:'q5',l:'الاستجابة /5 — Responsiveness /5',t:'num'},{k:'q6',l:'التغليف /5 — Packaging /5',t:'num'},
+   {k:'by',l:'المقيّم — Evaluator',t:'sel',o:optEmployees},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
   beforeSave:r=>{ r.total = ['q1','q2','q3','q4','q5','q6'].reduce((a,k)=>a+(+r[k]||0),0); },
-  cols:[{k:'date',l:'التاريخ'},{k:'supplier',l:'المورد'},{k:'total',l:'المجموع /30',f:v=>`<b>${v}</b>`},
-   {k:'_cls',l:'التصنيف الناتج',f:(v,r)=>{const s=+r.total;const c=s>=24?['معتمد','ok']:s>=18?['معتمد بشروط','mid']:['موقوف','warn'];return `<span class="tag ${c[1]}">${c[0]}</span>`;}}],
+  cols:[{k:'date',l:'التاريخ — Date'},{k:'supplier',l:'المورد — Supplier'},{k:'total',l:'المجموع /30 — Total /30',f:v=>`<b>${v}</b>`},
+   {k:'_cls',l:'التصنيف الناتج — Resulting Classification',f:(v,r)=>{const s=+r.total;const c=s>=24?['معتمد','ok']:s>=18?['معتمد بشروط','mid']:['موقوف','warn'];return `<span class="tag ${c[1]}">${c[0]}</span>`;}}],
   note:'آخر تقييم يحدّث تصنيف المورد فوراً في ورقة الموردين وفي قوائم الاختيار.'},
 
- complaints:{icon:'📮',title:'الشكاوى QLT-002',code:'QLT-002',ent:'complaints',docCode:'QLT2',
-  fields:[{k:'no',l:'رقم الشكوى',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},{k:'customer',l:'العميل',t:'sel',o:optCustomers},
-   {k:'cat',l:'التصنيف',t:'sel',o:['جودة منتج','تأخير توريد','تركيب','فوترة','سلوك خدمة','أخرى']},
-   {k:'sev',l:'الخطورة',t:'sel',o:['منخفض','متوسط','مرتفع']},{k:'summary',l:'ملخص الشكوى',t:'text'},
-   {k:'root',l:'السبب الجذري',t:'text'},{k:'action',l:'الإجراء التصحيحي',t:'text'},
-   {k:'owner',l:'المسؤول',t:'sel',o:optEmployees},{k:'sat',l:'العميل راضٍ؟',t:'sel',o:['نعم','لا','لم يُتواصل']},
-   {k:'status',l:'الحالة',t:'sel',o:['مفتوحة','قيد المعالجة','مغلقة']}],
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'customer',l:'العميل'},{k:'cat',l:'التصنيف'},
-   {k:'sev',l:'الخطورة',f:v=>`<span class="tag ${v==='مرتفع'?'warn':v==='متوسط'?'mid':'info'}">${v||'—'}</span>`},
-   {k:'status',l:'الحالة',f:tagStatus}],
+ complaints:{icon:'📮',title:'الشكاوى — Complaints QLT-002',code:'QLT-002',ent:'complaints',docCode:'QLT2',
+  fields:[{k:'no',l:'رقم الشكوى — Complaint No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'customer',l:'العميل — Customer',t:'sel',o:optCustomers},
+   {k:'cat',l:'التصنيف — Classification',t:'sel',o:['جودة منتج','تأخير توريد','تركيب','فوترة','سلوك خدمة','أخرى']},
+   {k:'sev',l:'الخطورة — Severity',t:'sel',o:['منخفض','متوسط','مرتفع']},{k:'summary',l:'ملخص الشكوى — Complaint Summary',t:'text'},
+   {k:'root',l:'السبب الجذري — Root Cause',t:'text'},{k:'action',l:'الإجراء التصحيحي — Corrective Action',t:'text'},
+   {k:'owner',l:'المسؤول — Contact',t:'sel',o:optEmployees},{k:'sat',l:'العميل راضٍ؟ — Customer Satisfied?',t:'sel',o:['نعم','لا','لم يُتواصل']},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['مفتوحة','قيد المعالجة','مغلقة']}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'customer',l:'العميل — Customer'},{k:'cat',l:'التصنيف — Classification'},
+   {k:'sev',l:'الخطورة — Severity',f:v=>`<span class="tag ${v==='مرتفع'?'warn':v==='متوسط'?'mid':'info'}">${v||'—'}</span>`},
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   note:'شكاوى «مرتفع» لا تُغلق إلا باطلاع المدير العام.'},
 
- shipments:{icon:'🚢',title:'الشحنات LOG-001',code:'LOG-001',ent:'shipments',docCode:'LOG1',
-  fields:[{k:'no',l:'رقم السجل',t:'ro'},{k:'date',l:'تاريخ الفتح',t:'date',req:1},
-   {k:'poRef',l:'مرجع أمر الشراء',t:'sel',o:()=>S.pos.map(p=>p.no)},
-   {k:'goods',l:'قيمة البضاعة',t:'num'},{k:'freight',l:'الشحن+التأمين',t:'num'},{k:'clr',l:'تخليص ونقل داخلي',t:'num'},
-   {k:'status',l:'الحالة',t:'sel',o:['في التصنيع','في البحر','في الميناء','مفسوحة','مستلمة']},{k:'notes',l:'ملاحظات'}],
-  cols:[{k:'no',l:'السجل'},{k:'poRef',l:'أمر الشراء'},
-   {k:'_sup',l:'المورد (تلقائي)',f:(v,r)=>{const p=S.pos.find(x=>x.no===r.poRef);return p?p.supplier:'—';}},
-   {k:'goods',l:'البضاعة',f:fmt},
-   {k:'_duty',l:'جمارك 5%',f:(v,r)=>fmt(((+r.goods||0)+(+r.freight||0))*0.05)},
-   {k:'_vat',l:'ضريبة 15%',f:(v,r)=>{const b=(+r.goods||0)+(+r.freight||0);return fmt((b+b*0.05)*0.15);}},
+ shipments:{icon:'🚢',title:'الشحنات — Shipments LOG-001',code:'LOG-001',ent:'shipments',docCode:'LOG1',
+  fields:[{k:'no',l:'رقم السجل — Record No.',t:'ro'},{k:'date',l:'تاريخ الفتح — Opening Date',t:'date',req:1},
+   {k:'poRef',l:'مرجع أمر الشراء — Purchase Order Reference',t:'sel',o:()=>S.pos.map(p=>p.no)},
+   {k:'goods',l:'قيمة البضاعة — Goods Value',t:'num'},{k:'freight',l:'الشحن+التأمين — Freight+Insurance',t:'num'},{k:'clr',l:'تخليص ونقل داخلي — Clearance & Local Transport',t:'num'},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['في التصنيع','في البحر','في الميناء','مفسوحة','مستلمة']},{k:'notes',l:'ملاحظات — Notes'}],
+  cols:[{k:'no',l:'السجل — Record'},{k:'poRef',l:'أمر الشراء — Purchase Order'},
+   {k:'_sup',l:'المورد (تلقائي) — Supplier (Auto)',f:(v,r)=>{const p=S.pos.find(x=>x.no===r.poRef);return p?p.supplier:'—';}},
+   {k:'goods',l:'البضاعة — Goods',f:fmt},
+   {k:'_duty',l:'جمارك 5% — Customs 5%',f:(v,r)=>fmt(((+r.goods||0)+(+r.freight||0))*0.05)},
+   {k:'_vat',l:'ضريبة 15% — Tax 15%',f:(v,r)=>{const b=(+r.goods||0)+(+r.freight||0);return fmt((b+b*0.05)*0.15);}},
    {k:'_landed',l:'الإجمالي Landed',f:(v,r)=>{const b=(+r.goods||0)+(+r.freight||0);const d=b*0.05;return `<b>${fmt(b+d+(b+d)*0.15+(+r.clr||0))}</b>`;}},
-   {k:'status',l:'الحالة',f:tagStatus}],
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   note:'الجمارك 5% والضريبة 15% والتكلفة النهائية Landed Cost تُحسب تلقائياً.'},
 
- petty:{icon:'💵',title:'العهد النقدية FIN-001',code:'FIN-001',ent:'petty',docCode:'FIN1',
-  fields:[{k:'no',l:'رقم الإذن',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},{k:'to',l:'المستلم',t:'sel',o:optEmployees,req:1},
-   {k:'amount',l:'مبلغ العهدة',t:'num',req:1},{k:'purpose',l:'الغرض',t:'text'},{k:'ref',l:'المرجع المرتبط',t:'text'},
-   {k:'status',l:'الحالة',t:'sel',o:['معلقة','مسوّاة']}],
-  cols:[{k:'no',l:'الإذن'},{k:'date',l:'التاريخ'},{k:'to',l:'المستلم'},{k:'amount',l:'العهدة',f:fmt},
-   {k:'_a',l:'تنبيه',f:(v,r)=> +r.amount>1000?'<span class="tag warn">⚠ يتجاوز السقف → PUR-001</span>':''},
-   {k:'_spent',l:'فواتير مقدمة',f:(v,r)=>fmt(pettySpent(r.no))},
-   {k:'_vat',l:'ضرائب مدفوعة ضمنها',f:(v,r)=>fmt(pettyVatPaid(r.no))},
-   {k:'_rem',l:'متبقٍ في ذمته',f:(v,r)=>{const rem=(+r.amount||0)-pettySpent(r.no);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:rem<0?`<span class="tag mid">له ${fmt(-rem)}</span>`:'<span class="tag ok">صفر ✓</span>';}},
-   {k:'status',l:'الحالة',f:tagStatus}],
+ petty:{icon:'💵',title:'العهد النقدية — Petty Cash FIN-001',code:'FIN-001',ent:'petty',docCode:'FIN1',
+  fields:[{k:'no',l:'رقم الإذن — Order No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'to',l:'المستلم — Recipient',t:'sel',o:optEmployees,req:1},
+   {k:'amount',l:'مبلغ العهدة — Custody Amount',t:'num',req:1},{k:'purpose',l:'الغرض — Purpose',t:'text'},{k:'ref',l:'المرجع المرتبط — Related Reference',t:'text'},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['معلقة','مسوّاة']}],
+  cols:[{k:'no',l:'الإذن — Order No.'},{k:'date',l:'التاريخ — Date'},{k:'to',l:'المستلم — Recipient'},{k:'amount',l:'العهدة — Custody',f:fmt},
+   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> +r.amount>1000?'<span class="tag warn">⚠ يتجاوز السقف → PUR-001</span>':''},
+   {k:'_spent',l:'فواتير مقدمة — Invoices Submitted',f:(v,r)=>fmt(pettySpent(r.no))},
+   {k:'_vat',l:'ضرائب مدفوعة ضمنها — Taxes Included',f:(v,r)=>fmt(pettyVatPaid(r.no))},
+   {k:'_rem',l:'متبقٍ في ذمته — Outstanding on Account',f:(v,r)=>{const rem=(+r.amount||0)-pettySpent(r.no);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:rem<0?`<span class="tag mid">له ${fmt(-rem)}</span>`:'<span class="tag ok">صفر ✓</span>';}},
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   note:'فواتير العهدة تُسجل في شاشة «المصروفات» مرتبطة برقم العهدة — الخصم والمتبقي في الذمة والضرائب المدفوعة تُحسب هنا تلقائياً. السقف 1,000 ريال للإذن.'},
 
- expenses:{icon:'💸',title:'المصروفات',code:'EXP',ent:'expenses',docCode:'EXP',
-  fields:[{k:'no',l:'رقم القيد',t:'ro'},{k:'date',l:'تاريخ الفاتورة',t:'date',req:1},
-   {k:'cat',l:'التصنيف',t:'sel',o:['بنزين ووقود','تنقل ومواصلات','مصاريف تركيب','مصاريف مكتب','مستودع','مستلزمات وعدد','ضيافة','اتصالات','أخرى'],req:1},
-   {k:'vendor',l:'الجهة/المحل',t:'text'},{k:'desc',l:'البيان',t:'text'},
-   {k:'invNo',l:'رقم الفاتورة',t:'text'},
-   {k:'amount',l:'مبلغ الفاتورة (شامل الضريبة)',t:'num',req:1},
-   {k:'hasVat',l:'فاتورة ضريبية؟',t:'sel',o:['نعم','لا'],req:1},
-   {k:'pettyRef',l:'تُخصم من العهدة',t:'sel',o:()=>['دفع مباشر (بدون عهدة)'].concat(S.petty.map(p=>p.no+' — '+p.to).map(x=>x)).map(x=>x), req:1},
-   {k:'notes',l:'ملاحظات',t:'text'}],
+ expenses:{icon:'💸',title:'المصروفات — Expenses',code:'EXP',ent:'expenses',docCode:'EXP',
+  fields:[{k:'no',l:'رقم القيد — Entry No.',t:'ro'},{k:'date',l:'تاريخ الفاتورة — Invoice Date',t:'date',req:1},
+   {k:'cat',l:'التصنيف — Classification',t:'sel',o:['بنزين ووقود','تنقل ومواصلات','مصاريف تركيب','مصاريف مكتب','مستودع','مستلزمات وعدد','ضيافة','اتصالات','أخرى'],req:1},
+   {k:'vendor',l:'الجهة/المحل — Entity/Location',t:'text'},{k:'desc',l:'البيان — Description',t:'text'},
+   {k:'invNo',l:'رقم الفاتورة — Invoice No.',t:'text'},
+   {k:'amount',l:'مبلغ الفاتورة (شامل الضريبة) — Invoice Amount (Incl. Tax)',t:'num',req:1},
+   {k:'hasVat',l:'فاتورة ضريبية؟ — Tax Invoice?',t:'sel',o:['نعم','لا'],req:1},
+   {k:'pettyRef',l:'تُخصم من العهدة — Deducted from Custody',t:'sel',o:()=>['دفع مباشر (بدون عهدة)'].concat(S.petty.map(p=>p.no+' — '+p.to).map(x=>x)).map(x=>x), req:1},
+   {k:'notes',l:'ملاحظات — Notes',t:'text'}],
   beforeSave:r=>{ if(r.pettyRef && r.pettyRef.includes(' — ')) r.pettyRef = r.pettyRef.split(' — ')[0]; },
-  cols:[{k:'no',l:'القيد'},{k:'date',l:'التاريخ'},{k:'cat',l:'التصنيف'},{k:'vendor',l:'الجهة'},{k:'invNo',l:'رقم الفاتورة'},
-   {k:'amount',l:'الإجمالي',f:fmt},
-   {k:'_net',l:'الصافي قبل الضريبة',f:(v,r)=>fmt(expNet(r))},
-   {k:'_vat',l:'ضريبة المدخلات 15%',f:(v,r)=> r.hasVat==='نعم'?`<b>${fmt(expVat(r))}</b>`:'<span class="tag info">بلا ضريبة</span>'},
-   {k:'pettyRef',l:'العهدة',f:v=> v&&v!=='دفع مباشر (بدون عهدة)'?`<span class="tag info">${esc(v)}</span>`:'دفع مباشر'}],
+  cols:[{k:'no',l:'القيد — Entry'},{k:'date',l:'التاريخ — Date'},{k:'cat',l:'التصنيف — Classification'},{k:'vendor',l:'الجهة — Entity'},{k:'invNo',l:'رقم الفاتورة — Invoice No.'},
+   {k:'amount',l:'الإجمالي — Total',f:fmt},
+   {k:'_net',l:'الصافي قبل الضريبة — Net Before Tax',f:(v,r)=>fmt(expNet(r))},
+   {k:'_vat',l:'ضريبة المدخلات 15% — Input Tax 15%',f:(v,r)=> r.hasVat==='نعم'?`<b>${fmt(expVat(r))}</b>`:'<span class="tag info">بلا ضريبة</span>'},
+   {k:'pettyRef',l:'العهدة — Custody',f:v=> v&&v!=='دفع مباشر (بدون عهدة)'?`<span class="tag info">${esc(v)}</span>`:'دفع مباشر'}],
   note:'الفاتورة الشاملة تُفصل تلقائياً (صافي + ضريبة 15%). ما ارتبط بعهدة يُخصم منها فوراً، وضريبة المدخلات تُخصم من المحصلة في تقرير الضريبة الربعي.'},
 
- custody:{icon:'🔑',title:'العهد الداخلية ADM-001',code:'ADM-001',ent:'custody',docCode:'ADM1',
-  fields:[{k:'no',l:'رقم المحضر',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'from',l:'المسلِّم',t:'sel',o:optEmployees},{k:'to',l:'المستلم',t:'sel',o:optEmployees},
-   {k:'desc',l:'الوصف',t:'text'},{k:'value',l:'القيمة التقديرية',t:'num'},
-   {k:'dur',l:'المدة',t:'sel',o:['دائمة','مؤقتة']},{k:'until',l:'حتى تاريخ',t:'date'},{k:'status',l:'الحالة',t:'sel',o:['قائمة','مرجعة']}],
-  cols:[{k:'no',l:'المحضر'},{k:'date',l:'التاريخ'},{k:'from',l:'من'},{k:'to',l:'إلى'},{k:'desc',l:'الوصف'},{k:'value',l:'القيمة',f:fmt},
-   {k:'_a',l:'تنبيه',f:(v,r)=> +r.value>10000?'<span class="tag warn">⚠ يتطلب شاهداً</span>':''},
-   {k:'status',l:'الحالة',f:tagStatus}]},
+ custody:{icon:'🔑',title:'العهد الداخلية — Internal Custody ADM-001',code:'ADM-001',ent:'custody',docCode:'ADM1',
+  fields:[{k:'no',l:'رقم المحضر — Record No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'from',l:'المسلِّم — Delivered By',t:'sel',o:optEmployees},{k:'to',l:'المستلم — Recipient',t:'sel',o:optEmployees},
+   {k:'desc',l:'الوصف — Description',t:'text'},{k:'value',l:'القيمة التقديرية — Estimated Value',t:'num'},
+   {k:'dur',l:'المدة — Duration',t:'sel',o:['دائمة','مؤقتة']},{k:'until',l:'حتى تاريخ — Until Date',t:'date'},{k:'status',l:'الحالة — Status',t:'sel',o:['قائمة','مرجعة']}],
+  cols:[{k:'no',l:'المحضر — Record No.'},{k:'date',l:'التاريخ — Date'},{k:'from',l:'من — From'},{k:'to',l:'إلى — To'},{k:'desc',l:'الوصف — Description'},{k:'value',l:'القيمة — Value',f:fmt},
+   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> +r.value>10000?'<span class="tag warn">⚠ يتطلب شاهداً</span>':''},
+   {k:'status',l:'الحالة — Status',f:tagStatus}]},
 
- installjobs:{icon:'🧰',title:'حسابات فريق التركيب INS-001',code:'INS-001',ent:'installjobs',docCode:'INS1',
-  fields:[{k:'no',l:'رقم المهمة',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'refType',l:'نوع المرجع',t:'sel',o:['أمر شراء PUR-002','طلب صيانة SRV-001','أمر بيع SLS-002','أخرى']},
-   {k:'ref',l:'رقم المرجع',t:'sel',o:()=>S.pos.map(p=>p.no).concat(S.srv.map(s=>s.no)).concat(S.sos.map(o=>o.no))},
-   {k:'desc',l:'وصف المهمة',t:'text',req:1},
-   {k:'crew',l:'فريق التركيب المكلَّف',t:'multi',o:()=>S.employees.filter(e=>e.installTeam==='نعم').map(e=>e.name)},
-   {k:'crewCount',l:'عدد المطلوبين للمهمة',t:'sel',o:['1','2','3']},
-   {k:'amount',l:'المبلغ المقبوض من العميل',t:'num'},
-   {k:'custodyRef',l:'عهدة مرتبطة (تصفية)',t:'sel',o:()=>S.petty.map(p=>p.no+' — '+p.to)},
-   {k:'settled',l:'حالة التصفية',t:'sel',o:['غير مصفّى','مصفّى']},
-   {k:'status',l:'حالة المهمة',t:'sel',o:['مجدولة','قيد التنفيذ','منجزة']},{k:'notes',l:'ملاحظات',t:'text'}],
+ installjobs:{icon:'🧰',title:'حسابات فريق التركيب — Installation Team Accounts INS-001',code:'INS-001',ent:'installjobs',docCode:'INS1',
+  fields:[{k:'no',l:'رقم المهمة — Task No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'refType',l:'نوع المرجع — Reference Type',t:'sel',o:['أمر شراء PUR-002','طلب صيانة SRV-001','أمر بيع SLS-002','أخرى']},
+   {k:'ref',l:'رقم المرجع — Reference No.',t:'sel',o:()=>S.pos.map(p=>p.no).concat(S.srv.map(s=>s.no)).concat(S.sos.map(o=>o.no))},
+   {k:'desc',l:'وصف المهمة — Task Description',t:'text',req:1},
+   {k:'crew',l:'فريق التركيب المكلَّف — Assigned Installation Team',t:'multi',o:()=>S.employees.filter(e=>e.installTeam==='نعم').map(e=>e.name)},
+   {k:'crewCount',l:'عدد المطلوبين للمهمة — Number Required for Task',t:'sel',o:['1','2','3']},
+   {k:'amount',l:'المبلغ المقبوض من العميل — Amount Received from Customer',t:'num'},
+   {k:'custodyRef',l:'عهدة مرتبطة (تصفية) — Related Custody (Settlement)',t:'sel',o:()=>S.petty.map(p=>p.no+' — '+p.to)},
+   {k:'settled',l:'حالة التصفية — Settlement Status',t:'sel',o:['غير مصفّى','مصفّى']},
+   {k:'status',l:'حالة المهمة — Task Status',t:'sel',o:['مجدولة','قيد التنفيذ','منجزة']},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
   beforeSave:r=>{ if(r.custodyRef && r.custodyRef.includes(' — ')) r.custodyRef = r.custodyRef.split(' — ')[0]; },
-  cols:[{k:'no',l:'المهمة'},{k:'date',l:'التاريخ'},{k:'refType',l:'المرجع'},{k:'ref',l:'الرقم'},{k:'desc',l:'الوصف'},
-   {k:'crew',l:'الفريق',f:v=>showMulti(v)},
-   {k:'_cnt',l:'العدد',f:(v,r)=>{const n=String(r.crew||'').split('|').filter(Boolean).length; const req=+r.crewCount||0; return req&&n!==req?`<span class="tag warn">${n}/${req}</span>`:`<span class="tag ok">${n}${req?'/'+req:''}</span>`;}},
-   {k:'amount',l:'المقبوض',f:fmt},
-   {k:'settled',l:'التصفية',f:v=>v==='مصفّى'?'<span class="tag ok">مصفّى</span>':'<span class="tag warn">غير مصفّى</span>'},
-   {k:'status',l:'الحالة',f:tagStatus}],
+  cols:[{k:'no',l:'المهمة — Task'},{k:'date',l:'التاريخ — Date'},{k:'refType',l:'المرجع — Reference'},{k:'ref',l:'الرقم — Number'},{k:'desc',l:'الوصف — Description'},
+   {k:'crew',l:'الفريق — Team',f:v=>showMulti(v)},
+   {k:'_cnt',l:'العدد — Count',f:(v,r)=>{const n=String(r.crew||'').split('|').filter(Boolean).length; const req=+r.crewCount||0; return req&&n!==req?`<span class="tag warn">${n}/${req}</span>`:`<span class="tag ok">${n}${req?'/'+req:''}</span>`;}},
+   {k:'amount',l:'المقبوض — Amount Received',f:fmt},
+   {k:'settled',l:'التصفية — Settlement',f:v=>v==='مصفّى'?'<span class="tag ok">مصفّى</span>':'<span class="tag warn">غير مصفّى</span>'},
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   docType:'ins',
   note:'كل مهمة تُربط بأمر شراء أو طلب صيانة أو أمر بيع سابق. يُحدَّد فريق التركيب المكلَّف (شخص أو أكثر حسب المهمة) ويُصفّى ما يقبضونه مقابل العهدة المرتبطة.'},
 
- payroll:{icon:'💰',title:'الرواتب FIN-002',code:'FIN-002',ent:'payroll',docCode:'FIN2',
-  fields:[{k:'no',l:'رقم أمر الصرف',t:'ro'},{k:'date',l:'تاريخ الصرف',t:'date',req:1},
-   {k:'employee',l:'الموظف',t:'sel',o:optEmployees,req:1},
-   {k:'month',l:'الشهر',t:'text',ph:'YYYY-MM'},
-   {k:'base',l:'الراتب الأساسي (تلقائي)',t:'num'},
-   {k:'additions',l:'إضافات/بدلات',t:'num'},{k:'deductions',l:'خصومات',t:'num'},
-   {k:'method',l:'طريقة الصرف',t:'sel',o:['تحويل بنكي','نقداً','شيك']},
-   {k:'status',l:'الحالة',t:'sel',o:['مصروف','معلّق']},{k:'notes',l:'ملاحظات',t:'text'}],
+ payroll:{icon:'💰',title:'الرواتب — Payroll FIN-002',code:'FIN-002',ent:'payroll',docCode:'FIN2',
+  fields:[{k:'no',l:'رقم أمر الصرف — Disbursement Order No.',t:'ro'},{k:'date',l:'تاريخ الصرف — Disbursement Date',t:'date',req:1},
+   {k:'employee',l:'الموظف — Employee',t:'sel',o:optEmployees,req:1},
+   {k:'month',l:'الشهر — Month',t:'text',ph:'YYYY-MM'},
+   {k:'base',l:'الراتب الأساسي (تلقائي) — Basic Salary (Auto)',t:'num'},
+   {k:'additions',l:'إضافات/بدلات — Additions/Allowances',t:'num'},{k:'deductions',l:'خصومات — Deductions',t:'num'},
+   {k:'method',l:'طريقة الصرف — Disbursement Method',t:'sel',o:['تحويل بنكي','نقداً','شيك']},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['مصروف','معلّق']},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
   beforeSave:r=>{ const e=S.employees.find(x=>x.name===r.employee); if(e && (r.base===''||r.base==null)) r.base=+e.salary||0; r.net=(+r.base||0)+(+r.additions||0)-(+r.deductions||0); },
-  cols:[{k:'no',l:'أمر الصرف'},{k:'date',l:'التاريخ'},{k:'employee',l:'الموظف'},{k:'month',l:'الشهر'},
-   {k:'base',l:'الأساسي',f:fmt},{k:'additions',l:'إضافات',f:fmt},{k:'deductions',l:'خصومات',f:fmt},
-   {k:'net',l:'الصافي',f:(v,r)=>`<b>${fmt(r.net!=null?r.net:((+r.base||0)+(+r.additions||0)-(+r.deductions||0)))}</b>`},
-   {k:'status',l:'الحالة',f:tagStatus}],
+  cols:[{k:'no',l:'أمر الصرف — Disbursement Order'},{k:'date',l:'التاريخ — Date'},{k:'employee',l:'الموظف — Employee'},{k:'month',l:'الشهر — Month'},
+   {k:'base',l:'الأساسي — Basic',f:fmt},{k:'additions',l:'إضافات — Additions',f:fmt},{k:'deductions',l:'خصومات — Deductions',f:fmt},
+   {k:'net',l:'الصافي — Net',f:(v,r)=>`<b>${fmt(r.net!=null?r.net:((+r.base||0)+(+r.additions||0)-(+r.deductions||0)))}</b>`},
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   docType:'pay',
   note:'الراتب الأساسي يُسحب تلقائياً من بطاقة الموظف عند الحفظ إن تُرك فارغاً. الصافي = الأساسي + الإضافات − الخصومات. لطباعة تقرير الرواتب استخدم زر التقرير أعلى الصفحة.'},
 
  /* ═══ وحدات CRM ═══ */
- leads:{icon:'🎯',title:'العملاء المحتملون Leads',code:'LEAD',ent:'leads',docCode:'LEAD',attach:true,
-  fields:[{k:'no',l:'الرقم',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'name',l:'اسم الشخص',t:'text',req:1},{k:'companyName',l:'الشركة/الورشة',t:'text'},
-   {k:'mobile',l:'الجوال',t:'text'},{k:'email',l:'البريد',t:'text'},
-   {k:'source',l:'المصدر',t:'sel',o:['معرض صناعي','موقع إلكتروني','إحالة','اتصال بارد','إعلان','بريد جماعي','أخرى']},
-   {k:'campaign',l:'الحملة',t:'sel',o:()=>S.campaigns.map(c=>c.name)},
-   {k:'city',l:'المدينة',t:'text'},{k:'activity',l:'النشاط',t:'text'},
-   {k:'status',l:'الحالة',t:'sel',o:['جديد','تم التواصل','مؤهل','غير مؤهل','مؤجل','محوَّل']},
-   {k:'owner',l:'المسؤول',t:'sel',o:optEmployees},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'name',l:'الاسم'},{k:'companyName',l:'الشركة'},{k:'mobile',l:'الجوال'},
-   {k:'source',l:'المصدر'},{k:'status',l:'الحالة',f:tagStatus},
+ leads:{icon:'🎯',title:'العملاء المحتملون — Leads',code:'LEAD',ent:'leads',docCode:'LEAD',attach:true,
+  fields:[{k:'no',l:'الرقم — Number',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'name',l:'اسم الشخص — Contact Name',t:'text',req:1},{k:'companyName',l:'الشركة/الورشة — Company/Workshop',t:'text'},
+   {k:'mobile',l:'الجوال — Mobile',t:'text'},{k:'email',l:'البريد — Email',t:'text'},
+   {k:'source',l:'المصدر — Source',t:'sel',o:['معرض صناعي','موقع إلكتروني','إحالة','اتصال بارد','إعلان','بريد جماعي','أخرى']},
+   {k:'campaign',l:'الحملة — Campaign',t:'sel',o:()=>S.campaigns.map(c=>c.name)},
+   {k:'city',l:'المدينة — City',t:'text'},{k:'activity',l:'النشاط — Activity',t:'text'},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['جديد','تم التواصل','مؤهل','غير مؤهل','مؤجل','محوَّل']},
+   {k:'owner',l:'المسؤول — Contact',t:'sel',o:optEmployees},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'name',l:'الاسم — Name'},{k:'companyName',l:'الشركة — Company'},{k:'mobile',l:'الجوال — Mobile'},
+   {k:'source',l:'المصدر — Source'},{k:'status',l:'الحالة — Status',f:tagStatus},
    {k:'_cv',l:'',f:(v,r)=> r.status==='مؤهل'?`<button class="btn sm" onclick="event.stopPropagation();convertLead('${r.id}')">تحويل ← عميل + صفقة</button>`:''}],
   note:'العميل المحتمل «المؤهل» يُحوَّل بزر واحد إلى حساب عميل + صفقة في خط المبيعات.'},
 
- contacts:{icon:'👔',title:'جهات الاتصال Contacts',code:'MD-CNT',ent:'contacts',autoCode:'CNT',
-  fields:[{k:'code',l:'الرمز',t:'ro'},{k:'name',l:'الاسم',t:'text',req:1},
-   {k:'account',l:'الشركة (الحساب)',t:'sel',o:optCustomers,req:1},
-   {k:'title',l:'المنصب',t:'text'},{k:'dept',l:'القسم',t:'text'},
-   {k:'mobile',l:'الجوال',t:'text'},{k:'email',l:'البريد',t:'text'},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'code',l:'الرمز'},{k:'name',l:'الاسم'},{k:'account',l:'الشركة'},{k:'title',l:'المنصب'},{k:'mobile',l:'الجوال'},{k:'email',l:'البريد'}],
+ contacts:{icon:'👔',title:'جهات الاتصال — Contacts',code:'MD-CNT',ent:'contacts',autoCode:'CNT',
+  fields:[{k:'code',l:'الرمز — Code',t:'ro'},{k:'name',l:'الاسم — Name',t:'text',req:1},
+   {k:'account',l:'الشركة (الحساب) — Company (Account)',t:'sel',o:optCustomers,req:1},
+   {k:'title',l:'المنصب — Position',t:'text'},{k:'dept',l:'القسم — Department',t:'text'},
+   {k:'mobile',l:'الجوال — Mobile',t:'text'},{k:'email',l:'البريد — Email',t:'text'},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'code',l:'الرمز — Code'},{k:'name',l:'الاسم — Name'},{k:'account',l:'الشركة — Company'},{k:'title',l:'المنصب — Position'},{k:'mobile',l:'الجوال — Mobile'},{k:'email',l:'البريد — Email'}],
   note:'أكثر من جهة اتصال لنفس الشركة — مرتبطة مباشرة بحساب العميل.'},
 
- activities:{icon:'📅',title:'الأنشطة والمهام Activities',code:'ACT',ent:'activities',docCode:'ACT',
-  fields:[{k:'no',l:'الرقم',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'type',l:'النوع',t:'sel',o:['مكالمة','اجتماع','رسالة','ملاحظة','متابعة','مهمة'],req:1},
-   {k:'subject',l:'الموضوع',t:'text',req:1},
-   {k:'account',l:'العميل/الحساب',t:'sel',o:optCustomers},
-   {k:'contact',l:'جهة الاتصال',t:'sel',o:()=>S.contacts.map(c=>c.name)},
-   {k:'oppRef',l:'الصفقة المرتبطة',t:'sel',o:()=>S.opps.map(o=>o.no)},
-   {k:'due',l:'تاريخ الاستحقاق',t:'date'},
-   {k:'owner',l:'المسؤول',t:'sel',o:optEmployees},
-   {k:'status',l:'الحالة',t:'sel',o:['مجدول','منجز','ملغي']},{k:'notes',l:'التفاصيل',t:'text'}],
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'type',l:'النوع'},{k:'subject',l:'الموضوع'},{k:'account',l:'العميل'},
-   {k:'due',l:'الاستحقاق',f:(v,r)=> v ? (v<today()&&r.status!=='منجز'?`<span class="tag warn">${v} ⚠ متأخر</span>`:v) : '—'},
-   {k:'status',l:'الحالة',f:tagStatus}],
+ activities:{icon:'📅',title:'الأنشطة والمهام — Activities & Tasks',code:'ACT',ent:'activities',docCode:'ACT',
+  fields:[{k:'no',l:'الرقم — Number',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'type',l:'النوع — Type',t:'sel',o:['مكالمة','اجتماع','رسالة','ملاحظة','متابعة','مهمة'],req:1},
+   {k:'subject',l:'الموضوع — Subject',t:'text',req:1},
+   {k:'account',l:'العميل/الحساب — Customer/Account',t:'sel',o:optCustomers},
+   {k:'contact',l:'جهة الاتصال — Contact',t:'sel',o:()=>S.contacts.map(c=>c.name)},
+   {k:'oppRef',l:'الصفقة المرتبطة — Related Deal',t:'sel',o:()=>S.opps.map(o=>o.no)},
+   {k:'due',l:'تاريخ الاستحقاق — Due Date',t:'date'},
+   {k:'owner',l:'المسؤول — Contact',t:'sel',o:optEmployees},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['مجدول','منجز','ملغي']},{k:'notes',l:'التفاصيل — Details',t:'text'}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'type',l:'النوع — Type'},{k:'subject',l:'الموضوع — Subject'},{k:'account',l:'العميل — Customer'},
+   {k:'due',l:'الاستحقاق — Due Date',f:(v,r)=> v ? (v<today()&&r.status!=='منجز'?`<span class="tag warn">${v} ⚠ متأخر</span>`:v) : '—'},
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   note:'المهام المتأخرة تظهر تلقائياً في مركز الإشعارات وفي لوحة CRM.'},
 
- campaigns:{icon:'📣',title:'الحملات Campaigns',code:'CAM',ent:'campaigns',docCode:'CAM',
-  fields:[{k:'no',l:'الرقم',t:'ro'},{k:'name',l:'اسم الحملة',t:'text',req:1},
-   {k:'type',l:'النوع',t:'sel',o:['معرض','إعلان','بريد جماعي','موقع إلكتروني','زيارات ميدانية','أخرى']},
-   {k:'start',l:'البداية',t:'date'},{k:'end',l:'النهاية',t:'date'},
-   {k:'cost',l:'التكلفة',t:'num'},{k:'status',l:'الحالة',t:'sel',o:['مخططة','جارية','منتهية']},{k:'notes',l:'ملاحظات',t:'text'}],
-  cols:[{k:'no',l:'الرقم'},{k:'name',l:'الحملة'},{k:'type',l:'النوع'},{k:'cost',l:'التكلفة',f:fmt},
-   {k:'_leads',l:'عملاء محتملون',f:(v,r)=>S.leads.filter(l=>l.campaign===r.name).length},
-   {k:'_won',l:'قيمة الصفقات الرابحة',f:(v,r)=>fmt(S.opps.filter(o=>o.campaign===r.name&&o.stage==='رابحة').reduce((a,o)=>a+(+o.value||0),0))},
-   {k:'_roi',l:'عائد تقريبي',f:(v,r)=>{const w=S.opps.filter(o=>o.campaign===r.name&&o.stage==='رابحة').reduce((a,o)=>a+(+o.value||0),0);const c=+r.cost||0;return c>0?((w-c)/c*100).toFixed(0)+'%':'—';}},
-   {k:'status',l:'الحالة',f:tagStatus}],
+ campaigns:{icon:'📣',title:'الحملات — Campaigns',code:'CAM',ent:'campaigns',docCode:'CAM',
+  fields:[{k:'no',l:'الرقم — Number',t:'ro'},{k:'name',l:'اسم الحملة — Campaign Name',t:'text',req:1},
+   {k:'type',l:'النوع — Type',t:'sel',o:['معرض','إعلان','بريد جماعي','موقع إلكتروني','زيارات ميدانية','أخرى']},
+   {k:'start',l:'البداية — Start',t:'date'},{k:'end',l:'النهاية — End',t:'date'},
+   {k:'cost',l:'التكلفة — Cost',t:'num'},{k:'status',l:'الحالة — Status',t:'sel',o:['مخططة','جارية','منتهية']},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'name',l:'الحملة — Campaign'},{k:'type',l:'النوع — Type'},{k:'cost',l:'التكلفة — Cost',f:fmt},
+   {k:'_leads',l:'عملاء محتملون — Leads',f:(v,r)=>S.leads.filter(l=>l.campaign===r.name).length},
+   {k:'_won',l:'قيمة الصفقات الرابحة — Value of Won Deals',f:(v,r)=>fmt(S.opps.filter(o=>o.campaign===r.name&&o.stage==='رابحة').reduce((a,o)=>a+(+o.value||0),0))},
+   {k:'_roi',l:'عائد تقريبي — Approx. Yield',f:(v,r)=>{const w=S.opps.filter(o=>o.campaign===r.name&&o.stage==='رابحة').reduce((a,o)=>a+(+o.value||0),0);const c=+r.cost||0;return c>0?((w-c)/c*100).toFixed(0)+'%':'—';}},
+   {k:'status',l:'الحالة — Status',f:tagStatus}],
   note:'العائد = (قيمة الصفقات الرابحة المرتبطة − التكلفة) ÷ التكلفة.'},
 
- tickets:{icon:'🎫',title:'تذاكر الدعم Cases',code:'TKT',ent:'tickets',docCode:'TKT',attach:true,
-  fields:[{k:'no',l:'رقم التذكرة',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'account',l:'العميل',t:'sel',o:optCustomers,req:1},
-   {k:'type',l:'النوع',t:'sel',o:['استفسار','شكوى خدمة','ضمان','صيانة','طلب قطع غيار','أخرى']},
-   {k:'product',l:'المنتج المرتبط',t:'sel',o:optProducts},
-   {k:'priority',l:'الأولوية',t:'sel',o:['منخفضة','متوسطة','عالية','حرجة']},
-   {k:'subject',l:'الموضوع',t:'text',req:1},{k:'owner',l:'المسؤول',t:'sel',o:optEmployees},
-   {k:'resolvedAt',l:'تاريخ الحل',t:'date'},
-   {k:'status',l:'الحالة',t:'sel',o:['مفتوحة','قيد المعالجة','بانتظار العميل','محلولة','مغلقة']},{k:'notes',l:'التفاصيل',t:'text'}],
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'account',l:'العميل'},{k:'type',l:'النوع'},{k:'subject',l:'الموضوع'},
-   {k:'priority',l:'الأولوية',f:v=>`<span class="tag ${v==='حرجة'||v==='عالية'?'warn':v==='متوسطة'?'mid':'info'}">${esc(v||'—')}</span>`},
-   {k:'status',l:'الحالة',f:tagStatus}]},
+ tickets:{icon:'🎫',title:'تذاكر الدعم — Support Tickets',code:'TKT',ent:'tickets',docCode:'TKT',attach:true,
+  fields:[{k:'no',l:'رقم التذكرة — Ticket No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'account',l:'العميل — Customer',t:'sel',o:optCustomers,req:1},
+   {k:'type',l:'النوع — Type',t:'sel',o:['استفسار','شكوى خدمة','ضمان','صيانة','طلب قطع غيار','أخرى']},
+   {k:'product',l:'المنتج المرتبط — Related Product',t:'sel',o:optProducts},
+   {k:'priority',l:'الأولوية — Priority',t:'sel',o:['منخفضة','متوسطة','عالية','حرجة']},
+   {k:'subject',l:'الموضوع — Subject',t:'text',req:1},{k:'owner',l:'المسؤول — Contact',t:'sel',o:optEmployees},
+   {k:'resolvedAt',l:'تاريخ الحل — Resolution Date',t:'date'},
+   {k:'status',l:'الحالة — Status',t:'sel',o:['مفتوحة','قيد المعالجة','بانتظار العميل','محلولة','مغلقة']},{k:'notes',l:'التفاصيل — Details',t:'text'}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'account',l:'العميل — Customer'},{k:'type',l:'النوع — Type'},{k:'subject',l:'الموضوع — Subject'},
+   {k:'priority',l:'الأولوية — Priority',f:v=>`<span class="tag ${v==='حرجة'||v==='عالية'?'warn':v==='متوسطة'?'mid':'info'}">${esc(v||'—')}</span>`},
+   {k:'status',l:'الحالة — Status',f:tagStatus}]},
 
- payments:{icon:'💳',title:'الدفعات Payments',code:'PAY',ent:'payments',docCode:'PAY',attach:true,
-  fields:[{k:'no',l:'رقم الدفعة',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
-   {k:'customer',l:'العميل',t:'sel',o:optCustomers,req:1,onchange:'payCustChanged(this.value)'},
-   {k:'quoteRef',l:'عرض السعر المرتبط',t:'sel',o:()=>(payCust?custQuotes(payCust):S.quotes).map(q=>`${q.no}`),req:1},
-   {k:'amount',l:'المبلغ',t:'num',req:1},
-   {k:'method',l:'طريقة الدفع',t:'sel',o:['نقدي','تحويل بنكي','شيك','أخرى'],req:1},
-   {k:'ref',l:'رقم المرجع/الشيك',t:'text'},{k:'notes',l:'ملاحظات',t:'text'}],
+ payments:{icon:'💳',title:'الدفعات — Payments',code:'PAY',ent:'payments',docCode:'PAY',attach:true,
+  fields:[{k:'no',l:'رقم الدفعة — Payment No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},
+   {k:'customer',l:'العميل — Customer',t:'sel',o:optCustomers,req:1,onchange:'payCustChanged(this.value)'},
+   {k:'quoteRef',l:'عرض السعر المرتبط — Related Quotation',t:'sel',o:()=>(payCust?custQuotes(payCust):S.quotes).map(q=>`${q.no}`),req:1},
+   {k:'amount',l:'المبلغ — Amount',t:'num',req:1},
+   {k:'method',l:'طريقة الدفع — Payment Method',t:'sel',o:['نقدي','تحويل بنكي','شيك','أخرى'],req:1},
+   {k:'ref',l:'رقم المرجع/الشيك — Reference/Cheque No.',t:'text'},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
   validate:r=>{
     if(+r.amount<=0) return ['amount','المبلغ يجب أن يكون أكبر من صفر'];
     const q = S.quotes.find(x=>x.no===r.quoteRef);
@@ -1061,9 +1061,9 @@ const VIEWS = {
     if(q.customer!==r.customer) return ['quoteRef','هذا العرض يخص عميلاً آخر ('+q.customer+')'];
     return null;
   },
-  cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'customer',l:'العميل'},{k:'quoteRef',l:'عرض السعر'},
-   {k:'amount',l:'المبلغ',f:fmt},{k:'method',l:'الطريقة'},{k:'ref',l:'المرجع'},
-   {k:'_rem',l:'المتبقي على العرض',f:(v,r)=>{const q=S.quotes.find(x=>x.no===r.quoteRef);if(!q)return '—';const rem=quoteRemaining(q);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:'<span class="tag ok">مسدَّد ✓</span>';}}],
+  cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'customer',l:'العميل — Customer'},{k:'quoteRef',l:'عرض السعر — Quotation'},
+   {k:'amount',l:'المبلغ — Amount',f:fmt},{k:'method',l:'الطريقة — Method'},{k:'ref',l:'المرجع — Reference'},
+   {k:'_rem',l:'المتبقي على العرض — Remaining on Quote',f:(v,r)=>{const q=S.quotes.find(x=>x.no===r.quoteRef);if(!q)return '—';const rem=quoteRemaining(q);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:'<span class="tag ok">مسدَّد ✓</span>';}}],
   docType:'payv',
   note:'كل دفعة مرتبطة بالعميل وعرض السعر — المتبقي يُحسب فوراً ويظهر في سجل العميل المالي وتقرير الذمم. القائمة تُقيَّد بعروض العميل المختار.'},
 };
@@ -1077,17 +1077,17 @@ function tagStatus(v){
 
 /* ═══════════════ التنقل ═══════════════ */
 const NAVDEF = [
- ['', [['dash','📊 لوحة التحكم'],['notifs','🔔 الإشعارات'],['search','🔎 بحث موحّد']]],
- ['CRM — إدارة العملاء', [['crmdash','📈 لوحة CRM'],['leads','🎯 العملاء المحتملون'],['opps','🗂 خط المبيعات (صفقات)'],['contacts','👔 جهات الاتصال'],['activities','📅 الأنشطة والمهام'],['campaigns','📣 الحملات'],['tickets','🎫 تذاكر الدعم']]],
- ['قواعد البيانات', [['products','📦 المنتجات'],['customers','👥 العملاء (الحسابات)'],['suppliers','🏭 الموردون'],['employees','🪪 الموظفون']]],
- ['دورة المبيعات', [['quotes','📄 عروض الأسعار'],['sos','🧾 أوامر البيع SLS-002'],['dos','🚚 إذون التسليم SLS-003']]],
- ['المشتريات والمخزون', [['prs','📝 طلبات الشراء PUR-001'],['pos','🛒 أوامر الشراء'],['stock','🏗️ حركات المخزون WHS'],['inventory','📋 جرد المخزون'],['external','🌐 الطلبات الخارجية'],['shipments','🚢 الشحنات LOG-001'],['evals','⭐ تقييم الموردين PUR-003']]],
- ['الجودة والخدمة', [['qc','🔍 الفحص الفني QLT-001'],['srv','🔧 الصيانة SRV-001'],['complaints','📮 الشكاوى QLT-002']]],
- ['التركيب والرواتب', [['installjobs','🧰 حسابات فريق التركيب'],['payroll','💰 الرواتب FIN-002']]],
- ['المالية والإدارة', [['payments','💳 الدفعات'],['ar','📕 الذمم المدينة'],['petty','💵 العهد النقدية FIN-001'],['expenses','💸 المصروفات'],['vat','🧾 تقرير الضريبة'],['custody','🔑 العهد الداخلية ADM-001']]],
- ['التقارير', [['reports','📊 مركز التقارير'],['audit','🕵️ سجل التدقيق']]],
- ['الإعدادات', [['company','⚙️ بيانات الشركة'],['users','👤 المستخدمون والصلاحيات'],['account','🔑 حسابي']]],
- ['المخرجات', [['print','🖨️ طباعة المستندات']]],
+ ['', [['dash','📊 لوحة التحكم — Dashboard'],['notifs','🔔 الإشعارات — Notifications'],['search','🔎 بحث موحّد — Search']]],
+ ['CRM — إدارة العملاء', [['crmdash','📈 لوحة CRM — CRM Dashboard'],['leads','🎯 العملاء المحتملون — Leads'],['opps','🗂 خط المبيعات — Sales Pipeline'],['contacts','👔 جهات الاتصال — Contacts'],['activities','📅 الأنشطة والمهام — Activities & Tasks'],['campaigns','📣 الحملات — Campaigns'],['tickets','🎫 تذاكر الدعم — Support Tickets']]],
+ ['قواعد البيانات', [['products','📦 المنتجات — Products'],['customers','👥 العملاء — Customers'],['suppliers','🏭 الموردون — Suppliers'],['employees','🪪 الموظفون — Employees']]],
+ ['دورة المبيعات', [['quotes','📄 عروض الأسعار — Quotations'],['sos','🧾 أوامر البيع — Sales Orders SLS-002'],['dos','🚚 إذون التسليم — Delivery Orders SLS-003']]],
+ ['المشتريات والمخزون', [['prs','📝 طلبات الشراء — Purchase Requisitions PUR-001'],['pos','🛒 أوامر الشراء — Purchase Orders'],['stock','🏗️ حركات المخزون — Stock Movements WHS'],['inventory','📋 جرد المخزون — Inventory Count'],['external','🌐 الطلبات الخارجية — External Orders'],['shipments','🚢 الشحنات — Shipments LOG-001'],['evals','⭐ تقييم الموردين — Supplier Evaluation PUR-003']]],
+ ['الجودة والخدمة', [['qc','🔍 الفحص الفني — Technical Inspection QLT-001'],['srv','🔧 الصيانة — Maintenance SRV-001'],['complaints','📮 الشكاوى — Complaints QLT-002']]],
+ ['التركيب والرواتب', [['installjobs','🧰 حسابات فريق التركيب — Installation Team Accounts'],['payroll','💰 الرواتب — Payroll FIN-002']]],
+ ['المالية والإدارة', [['payments','💳 الدفعات — Payments'],['ar','📕 الذمم المدينة — Accounts Receivable'],['petty','💵 العهد النقدية — Petty Cash FIN-001'],['expenses','💸 المصروفات — Expenses'],['vat','🧾 تقرير الضريبة — VAT Report'],['custody','🔑 العهد الداخلية — Internal Custody ADM-001']]],
+ ['التقارير', [['reports','📊 مركز التقارير — Reports Center'],['audit','🕵️ سجل التدقيق — Audit Log']]],
+ ['الإعدادات', [['company','⚙️ بيانات الشركة — Company Profile'],['users','👤 المستخدمون والصلاحيات — Users & Permissions'],['account','🔑 حسابي — My Account']]],
+ ['المخرجات', [['print','🖨️ طباعة المستندات — Print Documents']]],
 ];
 const ADMIN_ONLY_VIEWS = ['users','company','audit'];
 // اسم النظام = اسم الشركة المسجَّلة (يتحدّث فور تعديل بيانات الشركة) — نص افتراضي قبل تعبئتها
@@ -1363,7 +1363,7 @@ function linesHTML(priceMode){
       ${['من المخزون','طلب خارجي'].map(s=>`<option ${s===(l.supplyType||'من المخزون')?'selected':''}>${s}</option>`).join('')}</select></td>`:''}
     <td id="lt_${i}" style="width:100px;font-weight:700">${fmt(lineTotal(l))}</td>
     <td class="no-print" style="width:30px"><button class="btn sm red" onclick="tmpLines.splice(${i},1);drawLines('${priceMode}')">✕</button></td></tr>`;}).join('');
-  return `<div style="overflow-x:auto"><table class="linestable"><thead><tr><th>#</th><th>المنتج</th><th>الماركة</th><th>الكمية</th><th>سعر افتراضي</th><th>سعر معتمد</th>${isQuote?'<th>التوريد</th>':''}<th>الإجمالي</th><th class="no-print"></th></tr></thead><tbody>${rows}</tbody></table></div>
+  return `<div style="overflow-x:auto"><table class="linestable"><thead><tr><th>#</th><th>المنتج — Product</th><th>الماركة — Brand</th><th>الكمية — Quantity</th><th>سعر افتراضي — Default Price</th><th>سعر معتمد — Approved Price</th>${isQuote?'<th>التوريد — Supply Time</th>':''}<th>الإجمالي — Total</th><th class="no-print"></th></tr></thead><tbody>${rows}</tbody></table></div>
   <div class="btnrow"><button class="btn ghost sm" onclick="tmpLines.push({});drawLines('${priceMode}')">+ إضافة بند</button></div>`;
 }
 window.drawLines = pm => { document.getElementById('linesbox').innerHTML = linesHTML(pm); recalcDoc(pm); };
@@ -1395,7 +1395,7 @@ function recalcDoc(){
   const al = document.getElementById('docalert');
   if(al){
     const limit = al.dataset.limit==='po' ? tot>50000 : (tot>20000 || disc>5);
-    const msg = al.dataset.limit==='po' ? '⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً' : '⚠ يتطلب اعتماد المدير العام (الإجمالي > 20,000 أو الخصم > 5%)';
+    const msg = al.dataset.limit==='po' ? '⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR 50,000: requires signatures from both partners' : '⚠ يتطلب اعتماد المدير العام (الإجمالي > 20,000 أو الخصم > 5%)';
     al.style.display = limit?'block':'none'; al.textContent = msg;
   }
   return {g,d,net,vat,tot};
@@ -1408,20 +1408,20 @@ function renderQuotes(){
   if(row && !tmpLines.length) tmpLines = quoteLines(row.no).map(l=>({...l}));
   const f = (k,def='') => row ? (row[k]??'') : def;
   document.getElementById('main').innerHTML = `
-   ${headHtml('📄 عروض الأسعار SLS-001','اختر العميل والمنتجات — الأسعار والإجماليات والضريبة تلقائية', row?`<button class="btn red sm no-print" onclick="goPrint('quote','${row.no}')">🖨 طباعة العرض</button>`:'')}
+   ${headHtml('📄 عروض الأسعار — Quotations SLS-001','اختر العميل والمنتجات — الأسعار والإجماليات والضريبة تلقائية / Select customer & products — prices, totals and tax calculated automatically', row?`<button class="btn red sm no-print" onclick="goPrint('quote','${row.no}')">🖨 طباعة العرض</button>`:'')}
    <div class="card"><h3>${row?'تعديل العرض '+esc(row.no):'عرض سعر جديد'}</h3>
     <div class="formgrid">
-     <div class="fld"><label>رقم العرض</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
-     <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
-     <div class="fld"><label>العميل *</label><select id="f_customer"><option value=""></option>${optCustomers().map(c=>`<option ${c===f('customer')?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
-     <div class="fld"><label>المندوب</label><select id="f_rep"><option value=""></option>${optEmployees().map(e=>`<option ${e===f('rep')?'selected':''}>${esc(e)}</option>`).join('')}</select></div>
-     <div class="fld"><label>الصلاحية (يوم)</label><input type="number" id="f_validity" value="${esc(f('validity',15))}"></div>
-     <div class="fld"><label>الخصم %</label><input type="number" step="any" id="f_disc" value="${esc(f('disc',0))}" oninput="recalcDoc()"></div>
-     <div class="fld"><label>شروط الدفع</label><input id="f_pay" value="${esc(f('pay','50% مقدم / 50% قبل التسليم'))}"></div>
-     <div class="fld"><label>مدة التوريد</label><input id="f_delivery" value="${esc(f('delivery'))}"></div>
-     <div class="fld"><label>الضمان</label><input id="f_warranty" value="${esc(f('warranty','12 شهراً'))}"></div>
-     <div class="fld"><label>الحالة</label><select id="f_status">${['مفتوح','مرسل','مقبول','مرفوض','ملغي'].map(s=>`<option ${s===f('status','مفتوح')?'selected':''}>${s}</option>`).join('')}</select></div>
-     <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة)</label><textarea id="f_terms" placeholder="مثال: الأسعار شاملة ضريبة القيمة المضافة؛ الدفعة المقدمة غير مستردة بعد بدء التنفيذ؛ مدة التوريد تبدأ من تاريخ سداد الدفعة؛ الضمان وفق شروط الشركة القياسية...">${esc(f('terms'))}</textarea></div>
+     <div class="fld"><label>رقم العرض — Quote No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
+     <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
+     <div class="fld"><label>العميل — Customer *</label><select id="f_customer"><option value=""></option>${optCustomers().map(c=>`<option ${c===f('customer')?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+     <div class="fld"><label>المندوب — Representative</label><select id="f_rep"><option value=""></option>${optEmployees().map(e=>`<option ${e===f('rep')?'selected':''}>${esc(e)}</option>`).join('')}</select></div>
+     <div class="fld"><label>الصلاحية (يوم) — Validity (days)</label><input type="number" id="f_validity" value="${esc(f('validity',15))}"></div>
+     <div class="fld"><label>الخصم % — Discount %</label><input type="number" step="any" id="f_disc" value="${esc(f('disc',0))}" oninput="recalcDoc()"></div>
+     <div class="fld"><label>شروط الدفع — Payment Terms</label><input id="f_pay" value="${esc(f('pay','50% مقدم / 50% قبل التسليم'))}"></div>
+     <div class="fld"><label>مدة التوريد — Supply Duration</label><input id="f_delivery" value="${esc(f('delivery'))}"></div>
+     <div class="fld"><label>الضمان — Warranty</label><input id="f_warranty" value="${esc(f('warranty','12 شهراً'))}"></div>
+     <div class="fld"><label>الحالة — Status</label><select id="f_status">${['مفتوح','مرسل','مقبول','مرفوض','ملغي'].map(s=>`<option ${s===f('status','مفتوح')?'selected':''}>${s}</option>`).join('')}</select></div>
+     <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة) — Terms & Conditions (shown to customer in approval link)</label><textarea id="f_terms" placeholder="مثال: الأسعار شاملة ضريبة القيمة المضافة؛ الدفعة المقدمة غير مستردة بعد بدء التنفيذ؛ مدة التوريد تبدأ من تاريخ سداد الدفعة؛ الضمان وفق شروط الشركة القياسية...">${esc(f('terms'))}</textarea></div>
     </div>
     <h3>بنود العرض</h3><div id="linesbox">${linesHTML('price')}</div>
     <div class="totrow"><span>المجموع: <b id="t_gross">0</b></span><span>الخصم: <b id="t_disc">0</b></span><span>الصافي: <b id="t_net">0</b></span><span>الضريبة 15%: <b id="t_vat">0</b></span><span>الإجمالي: <b id="t_total" style="color:var(--red)">0</b></span></div>
@@ -1431,7 +1431,7 @@ function renderQuotes(){
     <div class="btnrow"><button class="btn" onclick="saveQuote()">${row?'حفظ التعديل':'حفظ العرض'}</button>
     ${row?`<button class="btn ghost" onclick="editId=null;tmpLines=[];render()">إلغاء</button>`:''}</div></div>
    <div class="card"><h3>سجل العروض (${S.quotes.length})</h3><div style="overflow-x:auto"><table><thead><tr>
-    <th>الرقم</th><th>التاريخ</th><th>العميل</th><th>الإجمالي</th><th>تنبيه</th><th>الحالة</th><th>موافقة العميل</th><th class="no-print"></th></tr></thead><tbody>
+    <th>الرقم — Number</th><th>التاريخ — Date</th><th>العميل — Customer</th><th>الإجمالي — Total</th><th>تنبيه — Alert</th><th>الحالة — Status</th><th>موافقة العميل — Customer Approval</th><th class="no-print"></th></tr></thead><tbody>
     ${S.quotes.length?[...S.quotes].reverse().map(q=>{
       const al = (q.total>20000||+q.disc>5) ? '<span class="tag warn">⚠ اعتماد م.ع</span>':'';
       return `<tr class="clickable" onclick="editId='${q.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(q.no)}</b></td><td>${esc(q.date)}</td><td>${esc(q.customer)}</td><td>${fmt(q.total)}</td><td>${al}</td><td>${tagStatus(q.status)}</td><td>${shareStateTag(q)}</td>
@@ -1465,21 +1465,21 @@ function renderSOs(){
   const f=(k,d='')=>row?(row[k]??''):d;
   const qopts = S.quotes.filter(q=>['مقبول','مرسل','مفتوح'].includes(q.status)||q.no===f('quoteRef'));
   document.getElementById('main').innerHTML = `
-   ${headHtml('🧾 أوامر البيع SLS-002','اختر مرجع العرض — العميل والإجمالي والدفعة المقدمة تلقائية', row?`<button class="btn red sm no-print" onclick="goPrint('so','${row.no}')">🖨 طباعة الأمر</button>`:'')}
+   ${headHtml('🧾 أوامر البيع — Sales Orders SLS-002','اختر مرجع العرض — العميل والإجمالي والدفعة المقدمة تلقائية / Select quote reference — customer, total and down payment are automatic', row?`<button class="btn red sm no-print" onclick="goPrint('so','${row.no}')">🖨 طباعة الأمر</button>`:'')}
    <div class="card"><h3>${row?'تعديل الأمر '+esc(row.no):'أمر بيع جديد'}</h3><div class="formgrid">
-    <div class="fld"><label>رقم الأمر</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
-    <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
-    <div class="fld"><label>مرجع العرض *</label><select id="f_quoteRef" onchange="soPull()"><option value=""></option>${qopts.map(q=>`<option ${q.no===f('quoteRef')?'selected':''}>${esc(q.no)}</option>`).join('')}</select></div>
-    <div class="fld"><label>العميل (تلقائي)</label><input readonly id="so_cust" value="${esc(f('customer'))}"></div>
-    <div class="fld"><label>الإجمالي (تلقائي)</label><input readonly id="so_total" value="${fmt(f('total'))}"></div>
-    <div class="fld"><label>الدفعة المقدمة 50% (تلقائي)</label><input readonly id="so_adv" value="${fmt(f('advance'))}"></div>
-    <div class="fld"><label>مرجع سداد الدفعة</label><input id="f_payRef" value="${esc(f('payRef'))}"></div>
-    <div class="fld"><label>تأشيرة المالية</label><select id="f_fin">${['','نعم','لا'].map(s=>`<option ${s===f('fin')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>مصدر التوفير</label><select id="f_src">${['','من المخزون','استيراد'].map(s=>`<option ${s===f('src')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>مرجع التوفير</label><input id="f_srcRef" value="${esc(f('srcRef'))}"></div>
-    <div class="fld"><label>الحالة</label><select id="f_status">${['مؤكد','قيد التوريد','جاهز للتسليم','مسلَّم','ملغي'].map(s=>`<option ${s===f('status','مؤكد')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>رقم الأمر — Order No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
+    <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
+    <div class="fld"><label>مرجع العرض — Quote Reference *</label><select id="f_quoteRef" onchange="soPull()"><option value=""></option>${qopts.map(q=>`<option ${q.no===f('quoteRef')?'selected':''}>${esc(q.no)}</option>`).join('')}</select></div>
+    <div class="fld"><label>العميل (تلقائي) — Customer (Auto)</label><input readonly id="so_cust" value="${esc(f('customer'))}"></div>
+    <div class="fld"><label>الإجمالي (تلقائي) — Total (Auto)</label><input readonly id="so_total" value="${fmt(f('total'))}"></div>
+    <div class="fld"><label>الدفعة المقدمة 50% (تلقائي) — 50% Down Payment (Auto)</label><input readonly id="so_adv" value="${fmt(f('advance'))}"></div>
+    <div class="fld"><label>مرجع سداد الدفعة — Payment Settlement Reference</label><input id="f_payRef" value="${esc(f('payRef'))}"></div>
+    <div class="fld"><label>تأشيرة المالية — Finance Sign-off</label><select id="f_fin">${['','نعم','لا'].map(s=>`<option ${s===f('fin')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>مصدر التوفير — Sourcing Method</label><select id="f_src">${['','من المخزون','استيراد'].map(s=>`<option ${s===f('src')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>مرجع التوفير — Sourcing Reference</label><input id="f_srcRef" value="${esc(f('srcRef'))}"></div>
+    <div class="fld"><label>الحالة — Status</label><select id="f_status">${['مؤكد','قيد التوريد','جاهز للتسليم','مسلَّم','ملغي'].map(s=>`<option ${s===f('status','مؤكد')?'selected':''}>${s}</option>`).join('')}</select></div>
    </div><div class="btnrow"><button class="btn" onclick="saveSO()">${row?'حفظ':'إضافة'}</button>${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>
-   <div class="card"><h3>سجل أوامر البيع (${S.sos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>مرجع العرض</th><th>العميل</th><th>الإجمالي</th><th>الدفعة</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>
+   <div class="card"><h3>سجل أوامر البيع (${S.sos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>مرجع العرض — Quote Reference</th><th>العميل — Customer</th><th>الإجمالي — Total</th><th>الدفعة — Payment</th><th>الحالة — Status</th><th class="no-print"></th></tr></thead><tbody>
    ${S.sos.length?[...S.sos].reverse().map(o=>`<tr class="clickable" onclick="editId='${o.id}';render();scrollTo(0,0)"><td><b>${esc(o.no)}</b></td><td>${esc(o.date)}</td><td>${esc(o.quoteRef)}</td><td>${esc(o.customer)}</td><td>${fmt(o.total)}</td><td>${fmt(o.advance)}</td><td>${tagStatus(o.status)}</td>
    <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('so','${o.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();S.sos=S.sos.filter(x=>x.id!=='${o.id}');persist();render()">حذف</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">لا أوامر بعد</td></tr>`}</tbody></table></div></div>`;
 }
@@ -1505,23 +1505,23 @@ function renderDOs(){
   const row = editId ? S.dos.find(o=>o.id===editId) : null;
   const f=(k,d='')=>row?(row[k]??''):d;
   document.getElementById('main').innerHTML = `
-   ${headHtml('🚚 إذون التسليم SLS-003','لا يخرج تسليم نهائي قبل تأشيرة سداد كامل المستحقات', row?`<button class="btn red sm no-print" onclick="goPrint('do','${row.no}')">🖨 طباعة الإذن</button>`:'')}
+   ${headHtml('🚚 إذون التسليم — Delivery Orders SLS-003','لا يخرج تسليم نهائي قبل تأشيرة سداد كامل المستحقات / No final delivery without full-payment sign-off', row?`<button class="btn red sm no-print" onclick="goPrint('do','${row.no}')">🖨 طباعة الإذن</button>`:'')}
    <div class="card"><h3>${row?'تعديل '+esc(row.no):'إذن تسليم جديد'}</h3><div class="formgrid">
-    <div class="fld"><label>رقم الإذن</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
-    <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
-    <div class="fld"><label>مرجع أمر البيع *</label><select id="f_soRef" onchange="doPull()"><option value=""></option>${S.sos.map(o=>`<option ${o.no===f('soRef')?'selected':''}>${esc(o.no)}</option>`).join('')}</select></div>
-    <div class="fld"><label>العميل (تلقائي)</label><input readonly id="do_cust" value="${esc(f('customer'))}"></div>
-    <div class="fld"><label>العنوان (تلقائي)</label><input readonly id="do_addr" value="${esc(f('address'))}"></div>
-    <div class="fld"><label>تأشيرة سداد كامل *</label><select id="f_full">${['','نعم','لا'].map(s=>`<option ${s===f('full')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>مستلم العميل</label><input id="f_recv" value="${esc(f('recv'))}"></div>
-    <div class="fld"><label>جواله</label><input id="f_mob" value="${esc(f('mob'))}"></div>
-    <div class="fld"><label>حالة التسليم</label><select id="f_status">${['سليم كامل','مع ملاحظات'].map(s=>`<option ${s===f('status','سليم كامل')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>مرجع إذن الصرف</label><input id="f_rel" value="${esc(f('rel'))}"></div>
-    <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة)</label><textarea id="f_terms" placeholder="مثال: استلم العميل الأصناف كاملة وبحالة سليمة؛ أي ملاحظات تُسجَّل وقت الاستلام فقط؛ للمعدات المركّبة يبدأ الضمان بمحضر التشغيل...">${esc(f('terms'))}</textarea></div>
+    <div class="fld"><label>رقم الإذن — Order No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
+    <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
+    <div class="fld"><label>مرجع أمر البيع — Sales Order Reference *</label><select id="f_soRef" onchange="doPull()"><option value=""></option>${S.sos.map(o=>`<option ${o.no===f('soRef')?'selected':''}>${esc(o.no)}</option>`).join('')}</select></div>
+    <div class="fld"><label>العميل (تلقائي) — Customer (Auto)</label><input readonly id="do_cust" value="${esc(f('customer'))}"></div>
+    <div class="fld"><label>العنوان (تلقائي) — Address (Auto)</label><input readonly id="do_addr" value="${esc(f('address'))}"></div>
+    <div class="fld"><label>تأشيرة سداد كامل — Full Payment Sign-off *</label><select id="f_full">${['','نعم','لا'].map(s=>`<option ${s===f('full')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>مستلم العميل — Received By (Customer)</label><input id="f_recv" value="${esc(f('recv'))}"></div>
+    <div class="fld"><label>جواله — Mobile No.</label><input id="f_mob" value="${esc(f('mob'))}"></div>
+    <div class="fld"><label>حالة التسليم — Delivery Status</label><select id="f_status">${['سليم كامل','مع ملاحظات'].map(s=>`<option ${s===f('status','سليم كامل')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>مرجع إذن الصرف — Disbursement Order Reference</label><input id="f_rel" value="${esc(f('rel'))}"></div>
+    <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة) — Terms & Conditions (shown to customer in approval link)</label><textarea id="f_terms" placeholder="مثال: استلم العميل الأصناف كاملة وبحالة سليمة؛ أي ملاحظات تُسجَّل وقت الاستلام فقط؛ للمعدات المركّبة يبدأ الضمان بمحضر التشغيل...">${esc(f('terms'))}</textarea></div>
    </div><div id="doalert" class="alertbox" style="display:none">⚠ لا يُسمح بالتسليم النهائي قبل تأشيرة السداد الكامل</div>
    ${row?shareBoxHTML('dos', row):''}
    <div class="btnrow"><button class="btn" onclick="saveDO()">${row?'حفظ':'إضافة'}</button>${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>
-   <div class="card"><h3>سجل الإذون (${S.dos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>أمر البيع</th><th>العميل</th><th>سداد كامل</th><th>الحالة</th><th>موافقة العميل</th><th class="no-print"></th></tr></thead><tbody>
+   <div class="card"><h3>سجل الإذون (${S.dos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>أمر البيع — Sales Order</th><th>العميل — Customer</th><th>سداد كامل — Full Payment</th><th>الحالة — Status</th><th>موافقة العميل — Customer Approval</th><th class="no-print"></th></tr></thead><tbody>
    ${S.dos.length?[...S.dos].reverse().map(o=>`<tr class="clickable" onclick="editId='${o.id}';render();scrollTo(0,0)"><td><b>${esc(o.no)}</b></td><td>${esc(o.date)}</td><td>${esc(o.soRef)}</td><td>${esc(o.customer)}</td><td>${o.full==='نعم'?'<span class="tag ok">نعم</span>':'<span class="tag warn">'+esc(o.full||'—')+'</span>'}</td><td>${tagStatus(o.status)}</td><td>${shareStateTag(o)}</td>
    <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('do','${o.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();S.dos=S.dos.filter(x=>x.id!=='${o.id}');persist();render()">حذف</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">لا إذون بعد</td></tr>`}</tbody></table></div></div>`;
   checkShares('dos');
@@ -1553,22 +1553,22 @@ function renderPOs(){
   const f=(k,d='')=>row?(row[k]??''):d;
   const prOK = S.prs.filter(p=>p.status==='معتمد');
   document.getElementById('main').innerHTML = `
-   ${headHtml('🛒 أوامر الشراء PUR-002','ينشأ من طلب شراء معتمد فقط — الموردون الموقوفون مستبعدون — البنود بسعر التكلفة', row?`<button class="btn red sm no-print" onclick="goPrint('po','${row.no}')">🖨 طباعة الأمر</button>`:'')}
+   ${headHtml('🛒 أوامر الشراء — Purchase Orders PUR-002','ينشأ من طلب شراء معتمد فقط — الموردون الموقوفون مستبعدون — البنود بسعر التكلفة / Created from an approved requisition only — suspended suppliers excluded — items at cost price', row?`<button class="btn red sm no-print" onclick="goPrint('po','${row.no}')">🖨 طباعة الأمر</button>`:'')}
    <div class="card"><h3>${row?'تعديل '+esc(row.no):'أمر شراء جديد'}</h3><div class="formgrid">
-    <div class="fld"><label>رقم الأمر</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
-    <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
-    <div class="fld"><label>مرجع طلب الشراء (معتمد) *</label><select id="f_prRef"><option value=""></option>${prOK.map(p=>`<option ${p.no===f('prRef')?'selected':''}>${esc(p.no)}</option>`).join('')}</select></div>
-    <div class="fld"><label>المورد *</label><select id="f_supplier"><option value=""></option>${optSupOK().map(s=>`<option ${s===f('supplier')?'selected':''}>${esc(s)}</option>`).join('')}</select></div>
-    <div class="fld"><label>العملة</label><select id="f_cur">${['SAR','USD','EUR','CNY','TRY'].map(s=>`<option ${s===f('cur','SAR')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>رقم الأمر — Order No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
+    <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
+    <div class="fld"><label>مرجع طلب الشراء (معتمد) — Purchase Requisition Reference (Approved) *</label><select id="f_prRef"><option value=""></option>${prOK.map(p=>`<option ${p.no===f('prRef')?'selected':''}>${esc(p.no)}</option>`).join('')}</select></div>
+    <div class="fld"><label>المورد — Supplier *</label><select id="f_supplier"><option value=""></option>${optSupOK().map(s=>`<option ${s===f('supplier')?'selected':''}>${esc(s)}</option>`).join('')}</select></div>
+    <div class="fld"><label>العملة — Currency</label><select id="f_cur">${['SAR','USD','EUR','CNY','TRY'].map(s=>`<option ${s===f('cur','SAR')?'selected':''}>${s}</option>`).join('')}</select></div>
     <div class="fld"><label>Incoterms</label><select id="f_inc">${['','EXW','FOB','CIF','CFR','DAP'].map(s=>`<option ${s===f('inc')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>الحالة</label><select id="f_status">${['مرسل','مؤكد PI','قيد التصنيع','مشحون','مستلم','ملغي'].map(s=>`<option ${s===f('status','مرسل')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>الحالة — Status</label><select id="f_status">${['مرسل','مؤكد PI','قيد التصنيع','مشحون','مستلم','ملغي'].map(s=>`<option ${s===f('status','مرسل')?'selected':''}>${s}</option>`).join('')}</select></div>
    </div>
    <h3>بنود الأمر (بسعر التكلفة)</h3><div id="linesbox">${linesHTML('cost')}</div>
    <div class="totrow"><span>الإجمالي: <b id="t_total" style="color:var(--red)">0</b></span><span style="display:none"><b id="t_gross"></b><b id="t_disc"></b><b id="t_net"></b><b id="t_vat"></b></span></div>
    <div id="docalert" class="alertbox" data-limit="po" style="display:none"></div>
    ${row?approvalsBox('pos', row):''}
    <div class="btnrow"><button class="btn" onclick="savePO()">${row?'حفظ':'حفظ الأمر'}</button>${row?`<button class="btn ghost" onclick="editId=null;tmpLines=[];render()">إلغاء</button>`:''}</div></div>
-   <div class="card"><h3>سجل أوامر الشراء (${S.pos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>طلب الشراء</th><th>المورد</th><th>الإجمالي</th><th>تنبيه</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>
+   <div class="card"><h3>سجل أوامر الشراء (${S.pos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>طلب الشراء — Purchase Requisition</th><th>المورد — Supplier</th><th>الإجمالي — Total</th><th>تنبيه — Alert</th><th>الحالة — Status</th><th class="no-print"></th></tr></thead><tbody>
    ${S.pos.length?[...S.pos].reverse().map(p=>`<tr class="clickable" onclick="editId='${p.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(p.no)}</b></td><td>${esc(p.date)}</td><td>${esc(p.prRef)}</td><td>${esc(p.supplier)}</td><td>${fmt(p.total)}</td><td>${p.total>50000?'<span class="tag warn">⚠ الشريكان</span>':''}</td><td>${tagStatus(p.status)}</td>
    <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('po','${p.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();delPO('${p.id}')">حذف</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">لا أوامر بعد — يتطلب طلب شراء «معتمد» أولاً</td></tr>`}</tbody></table></div></div>`;
   setTimeout(recalcDoc, 0);
@@ -1618,26 +1618,26 @@ function renderDash(){
   });
   const top5 = Object.entries(sold).sort((a,b)=>b[1]-a[1]).slice(0,5);
   document.getElementById('main').innerHTML = `
-   ${headHtml('📊 لوحة التحكم','كل الأرقام محسوبة لحظياً من السجلات')}
+   ${headHtml('📊 لوحة التحكم — Dashboard','كل الأرقام محسوبة لحظياً من السجلات / All figures are calculated live from the records')}
    <div class="kpis">
-    <div class="kpi"><div class="lbl">مبيعات الشهر الحالي</div><div class="val">${fmt(mSales)}</div></div>
-    <div class="kpi"><div class="lbl">مبيعات السنة</div><div class="val">${fmt(ySales)}</div></div>
-    <div class="kpi"><div class="lbl">عروض مفتوحة/مرسلة</div><div class="val">${qOpen}</div></div>
-    <div class="kpi good"><div class="lbl">عروض مقبولة</div><div class="val">${qAcc}</div></div>
-    <div class="kpi ${low.length?'warn':''}"><div class="lbl">منتجات تحت الحد الأدنى</div><div class="val">${low.length}</div></div>
-    <div class="kpi ${cOpen?'warn':''}"><div class="lbl">شكاوى غير مغلقة</div><div class="val">${cOpen}</div></div>
-    <div class="kpi ${sSusp?'warn':''}"><div class="lbl">موردون موقوفون</div><div class="val">${sSusp}</div></div>
-    <div class="kpi"><div class="lbl">طلبات صيانة مفتوحة</div><div class="val">${svOpen}</div></div>
-    <div class="kpi"><div class="lbl">قيمة المخزون بالتكلفة</div><div class="val">${fmt(invValue)}</div></div>
-    <div class="kpi"><div class="lbl">مصروفات الشهر</div><div class="val">${fmt(mExp)}</div></div>
-    <div class="kpi ${pettyDue?'warn':''}"><div class="lbl">ذمم عهد قائمة (متبقٍ بلا فواتير)</div><div class="val">${fmt(pettyDue)}</div></div>
-    <div class="kpi"><div class="lbl">صافي ضريبة الربع ${qOf(today())} (محصلة − مدخلات)</div><div class="val" style="cursor:pointer" onclick="setView('vat')">${fmt(qOut-qIn)}</div></div>
+    <div class="kpi"><div class="lbl">مبيعات الشهر الحالي — Current Month Sales</div><div class="val">${fmt(mSales)}</div></div>
+    <div class="kpi"><div class="lbl">مبيعات السنة — Yearly Sales</div><div class="val">${fmt(ySales)}</div></div>
+    <div class="kpi"><div class="lbl">عروض مفتوحة/مرسلة — Open/Sent Quotes</div><div class="val">${qOpen}</div></div>
+    <div class="kpi good"><div class="lbl">عروض مقبولة — Accepted Quotes</div><div class="val">${qAcc}</div></div>
+    <div class="kpi ${low.length?'warn':''}"><div class="lbl">منتجات تحت الحد الأدنى — Products Below Minimum</div><div class="val">${low.length}</div></div>
+    <div class="kpi ${cOpen?'warn':''}"><div class="lbl">شكاوى غير مغلقة — Unclosed Complaints</div><div class="val">${cOpen}</div></div>
+    <div class="kpi ${sSusp?'warn':''}"><div class="lbl">موردون موقوفون — Suspended Suppliers</div><div class="val">${sSusp}</div></div>
+    <div class="kpi"><div class="lbl">طلبات صيانة مفتوحة — Open Maintenance Requests</div><div class="val">${svOpen}</div></div>
+    <div class="kpi"><div class="lbl">قيمة المخزون بالتكلفة — Inventory Value at Cost</div><div class="val">${fmt(invValue)}</div></div>
+    <div class="kpi"><div class="lbl">مصروفات الشهر — Monthly Expenses</div><div class="val">${fmt(mExp)}</div></div>
+    <div class="kpi ${pettyDue?'warn':''}"><div class="lbl">ذمم عهد قائمة (متبقٍ بلا فواتير) — Outstanding Custody Receivables (No Invoices)</div><div class="val">${fmt(pettyDue)}</div></div>
+    <div class="kpi"><div class="lbl">صافي ضريبة الربع — Net Quarter Tax ${qOf(today())} (محصلة − مدخلات — collected − input)</div><div class="val" style="cursor:pointer" onclick="setView('vat')">${fmt(qOut-qIn)}</div></div>
    </div>
    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px">
     <div class="card"><h3>🏆 أكثر 5 منتجات مبيعاً (كمية — من العروض المؤكدة بأوامر بيع)</h3>
-     ${top5.length?`<table><thead><tr><th>المنتج</th><th>الكمية</th></tr></thead><tbody>${top5.map(([p,q])=>`<tr><td>${esc(p)}</td><td><b>${q}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا مبيعات مؤكدة بعد</div>'}</div>
+     ${top5.length?`<table><thead><tr><th>المنتج — Product</th><th>الكمية — Quantity</th></tr></thead><tbody>${top5.map(([p,q])=>`<tr><td>${esc(p)}</td><td><b>${q}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا مبيعات مؤكدة بعد</div>'}</div>
     <div class="card"><h3>⚠ حالة المخزون الحرجة</h3>
-     ${low.length?`<table><thead><tr><th>المنتج</th><th>الرصيد</th><th>الحد الأدنى</th></tr></thead><tbody>${low.map(p=>`<tr><td>${esc(p.nameAr)}</td><td><span class="tag warn">${stockQty(p.nameAr)}</span></td><td>${p.min}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا منتجات تحت الحد الأدنى</div>'}</div>
+     ${low.length?`<table><thead><tr><th>المنتج — Product</th><th>الرصيد — Balance</th><th>الحد الأدنى — Minimum</th></tr></thead><tbody>${low.map(p=>`<tr><td>${esc(p.nameAr)}</td><td><span class="tag warn">${stockQty(p.nameAr)}</span></td><td>${p.min}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا منتجات تحت الحد الأدنى</div>'}</div>
     <div class="card"><h3>⚙️ بيانات الشركة</h3>
      <div style="display:flex;align-items:center;gap:12px">${imgTag(S.company&&S.company.logo,52)}
       <div><div style="font-weight:700;color:var(--navy)">${esc((S.company&&S.company.name)||'— لم تُحدَّد بعد —')}</div>
@@ -1674,12 +1674,12 @@ window.importBackup = inp => {
 let printType='quote', printNo='';
 window.goPrint = (t,no) => { printType=t; printNo=no; setView('print'); };
 function renderPrint(){
-  const types = {quote:['عرض سعر SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم SLS-003',S.dos.map(o=>o.no)], srv:['طلب صيانة SRV-001',S.srv.map(j=>j.no)], po:['أمر شراء PUR-002',S.pos.map(p=>p.no)], pr:['طلب شراء PUR-001',S.prs.map(p=>p.no)], ins:['مهمة تركيب INS-001',S.installjobs.map(j=>j.no)], pay:['أمر صرف راتب FIN-002',S.payroll.map(p=>p.no)], payv:['سند قبض دفعة PAY',S.payments.map(p=>p.no)]};
+  const types = {quote:['عرض سعر — Quotation SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع — Sales Order SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم — Delivery Order SLS-003',S.dos.map(o=>o.no)], srv:['طلب صيانة — Maintenance Request SRV-001',S.srv.map(j=>j.no)], po:['أمر شراء — Purchase Order PUR-002',S.pos.map(p=>p.no)], pr:['طلب شراء — Purchase Requisition PUR-001',S.prs.map(p=>p.no)], ins:['مهمة تركيب — Installation Job INS-001',S.installjobs.map(j=>j.no)], pay:['أمر صرف راتب — Payroll Voucher FIN-002',S.payroll.map(p=>p.no)], payv:['سند قبض دفعة — Payment Receipt Voucher PAY',S.payments.map(p=>p.no)]};
   document.getElementById('main').innerHTML = `
-   ${headHtml('🖨️ طباعة المستندات','اختر النوع والرقم — ثم اطبع أو احفظ PDF من نافذة الطباعة')}
+   ${headHtml('🖨️ طباعة المستندات — Print Documents','اختر النوع والرقم — ثم اطبع أو احفظ PDF من نافذة الطباعة / Select the type and number — then print or save as PDF')}
    <div class="card no-print"><div class="formgrid">
-    <div class="fld"><label>نوع المستند</label><select id="p_type" onchange="printType=this.value;printNo='';renderPrint()">${Object.entries(types).map(([k,[l]])=>`<option value="${k}" ${k===printType?'selected':''}>${l}</option>`).join('')}</select></div>
-    <div class="fld"><label>رقم المستند</label><select id="p_no" onchange="printNo=this.value;renderPrint()"><option value=""></option>${types[printType][1].map(n=>`<option ${n===printNo?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
+    <div class="fld"><label>نوع المستند — Document Type</label><select id="p_type" onchange="printType=this.value;printNo='';renderPrint()">${Object.entries(types).map(([k,[l]])=>`<option value="${k}" ${k===printType?'selected':''}>${l}</option>`).join('')}</select></div>
+    <div class="fld"><label>رقم المستند — Document No.</label><select id="p_no" onchange="printNo=this.value;renderPrint()"><option value=""></option>${types[printType][1].map(n=>`<option ${n===printNo?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
     <div class="fld"><label>&nbsp;</label><button class="btn red" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div>
    </div></div>
    <div id="printdoc">${printNo ? buildDoc(printType, printNo) : '<div class="empty">اختر مستنداً لعرضه</div>'}</div>`;
@@ -1691,126 +1691,126 @@ function pHead(code, title, no, date){
                        : `<div class="logo">الشعار<br>LOGO</div>`;
   return `<div class="ph">${logoBox}
    <div class="co"><div class="n1">${esc(co.name)||'شركة .................................'}</div><div class="n2">${esc(co.nameEn)||'.................... Co. Ltd.'}</div></div>
-   <div class="meta">رمز النموذج: <b>${code}</b><br>رقم السجل: <b>${esc(no)}</b><br>التاريخ: ${esc(date)} — ${SYS_VERSION}</div></div>
+   <div class="meta">رمز النموذج — Form Code: <b>${code}</b><br>رقم السجل — Record No.: <b>${esc(no)}</b><br>التاريخ — Date: ${esc(date)} — ${SYS_VERSION}</div></div>
    <div class="pline"></div><div class="ptitle">${title}</div>`;
 }
 const pGrid = pairs => `<div class="pgrid">${pairs.map(([k,v])=>`<div class="pi"><div class="k">${k}</div><div class="v">${esc(v)||'—'}</div></div>`).join('')}</div>`;
 function pLines(no, priceLabel){
   const ls = S.lines.filter(l=>l.docNo===no);
-  return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة</th><th>الوصف</th><th>الماركة</th><th>الكمية</th><th>${priceLabel}</th><th>الإجمالي</th></tr></thead><tbody>
+  return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الماركة — Brand</th><th>الكمية — Quantity</th><th>${priceLabel}</th><th>الإجمالي — Total</th></tr></thead><tbody>
    ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
 const pTotals = rows => `<table style="margin-top:0"><tbody>${rows.map(([k,v])=>`<tr><td style="background:var(--light);font-weight:700;color:var(--navy);width:70%">${k}</td><td><b>${fmt(v)}</b></td></tr>`).join('')}</tbody></table>`;
-const pSigs = roles => `<div class="sigs">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم: ...............<br>التوقيع: ...............<br>التاريخ: ...............</div></div>`).join('')}</div>`;
+const pSigs = roles => `<div class="sigs">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم — Name: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............</div></div>`).join('')}</div>`;
 // اعتمادات إلكترونية في المستند المطبوع: تعرض المعتمد ووقته بدل التوقيع اليدوي
 function pApprovals(rec){
   const a = rec.approvals || {};
   const cell = (title, ap) => `<div class="sig"><div class="h">${title}</div><div class="b">${
-    ap && ap.by ? `✔ اعتُمد إلكترونياً<br><b style="color:var(--navy)">${esc(ap.by)}</b><br>${esc(ap.at||'')}` : 'بانتظار الاعتماد<br>الاسم: ...........<br>التاريخ: ..........'
+    ap && ap.by ? `✔ اعتُمد إلكترونياً — Approved electronically<br><b style="color:var(--navy)">${esc(ap.by)}</b><br>${esc(ap.at||'')}` : 'بانتظار الاعتماد — Pending Approval<br>الاسم — Name: ...........<br>التاريخ — Date: ..........'
   }</div></div>`;
-  return `<div class="sigs">${cell('اعتماد المندوب', a.rep)}${cell('اعتماد المدير', a.manager)}</div>`;
+  return `<div class="sigs">${cell('اعتماد المندوب — Representative Approval', a.rep)}${cell('اعتماد المدير — Manager Approval', a.manager)}</div>`;
 }
-const pFoot = () => `<div class="pfoot">س.ت: ${esc((S.company||{}).cr)||'............'} — الرقم الضريبي: ${esc((S.company||{}).vat)||'............'} — ${esc((S.company||{}).phone)||'الرياض'}</div>`;
-const pClientAccept = r => r.clientAccept ? `<div class="psec">موافقة العميل الإلكترونية</div>
+const pFoot = () => `<div class="pfoot">س.ت — CR No.: ${esc((S.company||{}).cr)||'............'} — الرقم الضريبي — Tax No.: ${esc((S.company||{}).vat)||'............'} — ${esc((S.company||{}).phone)||'الرياض'}</div>`;
+const pClientAccept = r => r.clientAccept ? `<div class="psec">موافقة العميل الإلكترونية — Electronic Customer Approval</div>
   <div style="font-size:12px;padding:8px 4px;line-height:2">✔ وافق العميل على الشروط والأحكام إلكترونياً عبر الرابط الموثّق —
   <b style="color:var(--navy)">${esc(r.clientAccept.name)}</b> — <span dir="ltr">${esc(r.clientAccept.mobile)}</span> — ${esc(r.clientAccept.at||'')}</div>` : '';
 function buildDoc(t, no){
   if(t==='quote'){
     const q = S.quotes.find(x=>x.no===no); if(!q) return '';
     const c = S.customers.find(x=>x.name===q.customer)||{};
-    const alert = (q.total>20000||+q.disc>5)?`<div class="alertbox">⚠ هذا العرض يتطلب اعتماد المدير العام قبل الإرسال</div>`:'';
+    const alert = (q.total>20000||+q.disc>5)?`<div class="alertbox">⚠ هذا العرض يتطلب اعتماد المدير العام قبل الإرسال — This quote requires General Manager approval before sending</div>`:'';
     const ls = S.lines.filter(l=>l.docNo===no);
-    const wsec = ls.length ? `<div class="psec">شروط ضمان المنتجات</div>` + ls.map((l,i)=>{
+    const wsec = ls.length ? `<div class="psec">شروط ضمان المنتجات — Product Warranty Terms</div>` + ls.map((l,i)=>{
       const p = S.products.find(x=>x.nameAr===l.product);
       const t2 = p ? (p.wterms || `ضمان ${p.warranty||12} شهراً وفق الشروط القياسية للشركة، يبدأ من محضر التشغيل والتسليم الفني`) : '';
       return `<div style="font-size:11.5px;padding:6px 4px;border-bottom:1px solid var(--light);line-height:1.7"><b style="color:var(--navy)">${i+1}. ${esc(l.product)}:</b> ${esc(t2)}</div>`;
     }).join('') : '';
     return pHead('SLS-001','عرض سعر — Quotation',no,q.date)
-     + `<div class="psec">بيانات العميل</div>` + pGrid([['العميل',q.customer],['الرقم الضريبي',c.vat],['المسؤول',c.contact],['الجوال',c.mobile],['الصناعية',c.industrial],['اختصاص الورشة',c.specialty],['العنوان الوطني',buildAddr(c)],['الصلاحية',(q.validity||'')+' يوماً']])
-     + `<div class="psec">البنود</div>` + pLines(no,'سعر الوحدة')
-     + pTotals([['المجموع',q.gross],['الخصم '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة',q.net],['ضريبة القيمة المضافة 15%',q.vat],['الإجمالي شامل الضريبة',q.total]])
+     + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['الصناعية — Industrial Area',c.industrial],['اختصاص الورشة — Workshop Specialty',c.specialty],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
+     + `<div class="psec">البنود — Line Items</div>` + pLines(no,'سعر الوحدة — Unit Price')
+     + pTotals([['المجموع — Subtotal',q.gross],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total]])
      + alert
-     + `<div class="psec">الشروط العامة</div>` + pGrid([['شروط الدفع',q.pay],['مدة التوريد',q.delivery],['الضمان العام',q.warranty],['المندوب',q.rep]])
-     + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
+     + `<div class="psec">الشروط العامة — General Terms</div>` + pGrid([['شروط الدفع — Payment Terms',q.pay],['مدة التوريد — Supply Duration',q.delivery],['الضمان العام — General Warranty',q.warranty],['المندوب — Representative',q.rep]])
+     + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
      + wsec
-     + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(q)
+     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(q)
      + pClientAccept(q)
-     + (q.clientAccept?'':pSigs(['موافقة العميل'])) + pFoot();
+     + (q.clientAccept?'':pSigs(['موافقة العميل — Customer Approval'])) + pFoot();
   }
   if(t==='so'){
     const o = S.sos.find(x=>x.no===no); if(!o) return '';
     return pHead('SLS-002','أمر بيع / فاتورة مبدئية — Sales Order',no,o.date)
-     + pGrid([['مرجع العرض',o.quoteRef],['العميل',o.customer],['الحالة',o.status]])
-     + `<div class="psec">البنود المؤكدة (من مرجع العرض)</div>` + pLines(o.quoteRef,'سعر الوحدة')
-     + pTotals([['الإجمالي شامل الضريبة',o.total],['الدفعة المقدمة 50%',o.advance]])
-     + pGrid([['مرجع السداد',o.payRef],['تأشيرة المالية',o.fin],['مصدر التوفير',o.src],['مرجع التوفير',o.srcRef]])
-     + pSigs(['مندوب المبيعات','المالية','المدير العام','إقرار العميل']) + pFoot();
+     + pGrid([['مرجع العرض — Quote Reference',o.quoteRef],['العميل — Customer',o.customer],['الحالة — Status',o.status]])
+     + `<div class="psec">البنود المؤكدة (من مرجع العرض) — Confirmed Items (from Quote Reference)</div>` + pLines(o.quoteRef,'سعر الوحدة — Unit Price')
+     + pTotals([['الإجمالي شامل الضريبة — Total Incl. Tax',o.total],['الدفعة المقدمة 50% — 50% Down Payment',o.advance]])
+     + pGrid([['مرجع السداد — Payment Reference',o.payRef],['تأشيرة المالية — Finance Sign-off',o.fin],['مصدر التوفير — Sourcing Method',o.src],['مرجع التوفير — Sourcing Reference',o.srcRef]])
+     + pSigs(['مندوب المبيعات — Sales Representative','المالية — Finance','المدير العام — General Manager','إقرار العميل — Customer Acknowledgement']) + pFoot();
   }
   if(t==='do'){
     const o = S.dos.find(x=>x.no===no); if(!o) return '';
     const so = S.sos.find(x=>x.no===o.soRef)||{};
     return pHead('SLS-003','إذن تسليم — Delivery Order',no,o.date)
-     + pGrid([['مرجع أمر البيع',o.soRef],['العميل',o.customer],['العنوان',o.address],['المستلم',o.recv],['جواله',o.mob],['سداد كامل',o.full]])
-     + `<div class="psec">الأصناف المسلَّمة</div>` + pLines(so.quoteRef,'سعر الوحدة')
-     + `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">للمعدات المركّبة يبدأ الضمان بمحضر التشغيل QLT-001 لا بهذا الإذن</div>`
-     + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
+     + pGrid([['مرجع أمر البيع — Sales Order Reference',o.soRef],['العميل — Customer',o.customer],['العنوان — Address',o.address],['المستلم — Recipient',o.recv],['جواله — Mobile No.',o.mob],['سداد كامل — Full Payment',o.full]])
+     + `<div class="psec">الأصناف المسلَّمة — Delivered Items</div>` + pLines(so.quoteRef,'سعر الوحدة — Unit Price')
+     + `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">للمعدات المركّبة يبدأ الضمان بمحضر التشغيل QLT-001 لا بهذا الإذن — For installed equipment, the warranty starts from the QLT-001 commissioning report, not this delivery order</div>`
+     + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
      + pClientAccept(o)
-     + pSigs(['مندوب الشركة / السائق'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت'])) + pFoot();
+     + pSigs(['مندوب الشركة / السائق — Company Representative / Driver'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot();
   }
   if(t==='srv'){
     const j = S.srv.find(x=>x.no===no); if(!j) return '';
     const w = warrantyStatus(j.serial, j.date);
     return pHead('SRV-001','طلب صيانة وضمان — Maintenance & Warranty Request',no,j.date)
-     + `<div class="psec">بيانات الطلب</div>` + pGrid([['العميل',j.customer],['الرقم التسلسلي',j.serial],['حالة الضمان',w.t],['الأولوية',j.priority],['التصنيف المالي',j.fin],['الفني المكلّف',j.tech],['الحالة',j.status]])
-     + `<div class="psec">وصف العطل</div>` + `<div style="font-size:12.5px;padding:8px 4px;line-height:1.9">${esc(j.fault)||'—'}</div>`
-     + (String(j.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(j.terms)}</div>`:'')
+     + `<div class="psec">بيانات الطلب — Request Details</div>` + pGrid([['العميل — Customer',j.customer],['الرقم التسلسلي — Serial Number',j.serial],['حالة الضمان — Warranty Status',w.t],['الأولوية — Priority',j.priority],['التصنيف المالي — Financial Classification',j.fin],['الفني المكلّف — Assigned Technician',j.tech],['الحالة — Status',j.status]])
+     + `<div class="psec">وصف العطل — Fault Description</div>` + `<div style="font-size:12.5px;padding:8px 4px;line-height:1.9">${esc(j.fault)||'—'}</div>`
+     + (String(j.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(j.terms)}</div>`:'')
      + pClientAccept(j)
-     + pSigs(['الفني المكلّف'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت'])) + pFoot();
+     + pSigs(['الفني المكلّف — Assigned Technician'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot();
   }
   if(t==='po'){
     const p = S.pos.find(x=>x.no===no); if(!p) return '';
     const s = S.suppliers.find(x=>x.name===p.supplier)||{};
-    const alert = p.total>50000?`<div class="alertbox">⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً</div>`:'';
+    const alert = p.total>50000?`<div class="alertbox">⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR 50,000: requires signatures from both partners</div>`:'';
     return pHead('PUR-002','أمر شراء — Purchase Order',no,p.date)
-     + pGrid([['مرجع طلب الشراء',p.prRef],['المورد',p.supplier],['الدولة',p.country],['شروط الدفع',s.terms],['العملة',p.cur],['Incoterms',p.inc]])
-     + `<div class="psec">Items — الأصناف (بسعر التكلفة)</div>` + pLines(no,'Unit Cost')
-     + pTotals([['Grand Total — الإجمالي',p.total]]) + alert
-     + `<div class="psec">المطابقة</div>` + pGrid([['المتطلبات','PCoC قبل الشحن + سابر SABER + Packing List']])
-     + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(p)
-     + pSigs(['تأكيد المورد Supplier']) + pFoot();
+     + pGrid([['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['المورد — Supplier',p.supplier],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
+     + `<div class="psec">الأصناف — Items (بسعر التكلفة — at cost)</div>` + pLines(no,'سعر التكلفة — Unit Cost')
+     + pTotals([['الإجمالي — Grand Total',p.total]]) + alert
+     + `<div class="psec">المطابقة — Compliance</div>` + pGrid([['المتطلبات — Requirements','PCoC قبل الشحن + سابر SABER + قائمة التعبئة — Packing List']])
+     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p)
+     + pSigs(['تأكيد المورد — Supplier Confirmation']) + pFoot();
   }
   if(t==='pr'){
     const p = S.prs.find(x=>x.no===no); if(!p) return '';
-    const alert = +p.est>5000?`<div class="alertbox">⚠ يتجاوز 5,000 ريال — يتطلب توقيع الشريكين</div>`:'';
+    const alert = +p.est>5000?`<div class="alertbox">⚠ يتجاوز 5,000 ريال — يتطلب توقيع الشريكين — Exceeds SAR 5,000: requires signatures from both partners</div>`:'';
     return pHead('PUR-001','طلب شراء — Purchase Requisition',no,p.date)
-     + pGrid([['الطالب',p.requester],['السبب',p.reason],['مرجع أمر البيع',p.soRef],['المورد المقترح',p.supplier],['الحالة',p.status]])
-     + `<div class="psec">وصف الاحتياج</div>` + pGrid([['الوصف',p.desc],['التكلفة التقديرية',fmt(p.est)]])
+     + pGrid([['الطالب — Requester',p.requester],['السبب — Reason',p.reason],['مرجع أمر البيع — Sales Order Reference',p.soRef],['المورد المقترح — Suggested Supplier',p.supplier],['الحالة — Status',p.status]])
+     + `<div class="psec">وصف الاحتياج — Requirement Description</div>` + pGrid([['الوصف — Description',p.desc],['التكلفة التقديرية — Estimated Cost',fmt(p.est)]])
      + alert
-     + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(p) + pFoot();
+     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p) + pFoot();
   }
   if(t==='ins'){
     const j = S.installjobs.find(x=>x.no===no); if(!j) return '';
     return pHead('INS-001','مهمة فريق التركيب — Installation Job',no,j.date)
-     + pGrid([['المرجع',(j.refType||'')+' '+(j.ref||'')],['الوصف',j.desc],['فريق التركيب',showMulti(j.crew)],['العدد المطلوب',j.crewCount],['المبلغ المقبوض',fmt(j.amount)],['العهدة المرتبطة',j.custodyRef],['حالة التصفية',j.settled],['حالة المهمة',j.status]])
-     + pSigs(['فريق التركيب','مشرف العمليات','المالية']) + pFoot();
+     + pGrid([['المرجع — Reference',(j.refType||'')+' '+(j.ref||'')],['الوصف — Description',j.desc],['فريق التركيب — Installation Team',showMulti(j.crew)],['العدد المطلوب — Number Required',j.crewCount],['المبلغ المقبوض — Amount Received',fmt(j.amount)],['العهدة المرتبطة — Related Custody',j.custodyRef],['حالة التصفية — Settlement Status',j.settled],['حالة المهمة — Task Status',j.status]])
+     + pSigs(['فريق التركيب — Installation Team','مشرف العمليات — Operations Supervisor','المالية — Finance']) + pFoot();
   }
   if(t==='payv'){
     const p = S.payments.find(x=>x.no===no); if(!p) return '';
     const q = S.quotes.find(x=>x.no===p.quoteRef)||{};
     const rem = q.no ? quoteRemaining(q) : 0;
     return pHead('PAY','سند قبض — Receipt Voucher',no,p.date)
-     + pGrid([['العميل',p.customer],['عرض السعر',p.quoteRef],['طريقة الدفع',p.method],['المرجع/الشيك',p.ref]])
-     + pTotals([['قيمة العرض الإجمالية',q.total],['المبلغ المقبوض بهذا السند',p.amount],['إجمالي المسدَّد على العرض',quotePaid(p.quoteRef)],['المتبقي بعد هذا السند',rem]])
-     + pSigs(['المحاسب / أمين الصندوق','المستلم','العميل']) + pFoot();
+     + pGrid([['العميل — Customer',p.customer],['عرض السعر — Quotation',p.quoteRef],['طريقة الدفع — Payment Method',p.method],['المرجع/الشيك — Reference/Cheque',p.ref]])
+     + pTotals([['قيمة العرض الإجمالية — Total Quote Value',q.total],['المبلغ المقبوض بهذا السند — Amount Received on This Voucher',p.amount],['إجمالي المسدَّد على العرض — Total Paid on Quote',quotePaid(p.quoteRef)],['المتبقي بعد هذا السند — Remaining After This Voucher',rem]])
+     + pSigs(['المحاسب / أمين الصندوق — Accountant / Cashier','المستلم — Recipient','العميل — Customer']) + pFoot();
   }
   if(t==='pay'){
     const p = S.payroll.find(x=>x.no===no); if(!p) return '';
     const net = p.net!=null?p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0));
     return pHead('FIN-002','أمر صرف راتب — Payroll Voucher',no,p.date)
-     + pGrid([['الموظف',p.employee],['الشهر',p.month],['طريقة الصرف',p.method],['الحالة',p.status]])
-     + pTotals([['الراتب الأساسي',p.base],['إضافات/بدلات',p.additions],['خصومات',p.deductions],['صافي المستحق',net]])
-     + pSigs(['المحاسب','المدير العام','استلمت المبلغ (الموظف)']) + pFoot();
+     + pGrid([['الموظف — Employee',p.employee],['الشهر — Month',p.month],['طريقة الصرف — Disbursement Method',p.method],['الحالة — Status',p.status]])
+     + pTotals([['الراتب الأساسي — Basic Salary',p.base],['إضافات/بدلات — Additions/Allowances',p.additions],['خصومات — Deductions',p.deductions],['صافي المستحق — Net Due',net]])
+     + pSigs(['المحاسب — Accountant','المدير العام — General Manager','استلمت المبلغ (الموظف) — Amount Received (Employee)']) + pFoot();
   }
   return '';
 }
@@ -1831,11 +1831,11 @@ function renderInventory(){
    <td>${m.type==='وارد'?'<span class="tag ok">وارد ▼</span>':'<span class="tag warn">صرف ▲</span>'}</td>
    <td>${esc(m.product)}</td><td>${fmt(m.qty)}</td><td>${esc(m.ref||'—')}</td><td>${fmt(stockQty(m.product))}</td></tr>`).join('');
   document.getElementById('main').innerHTML = `
-   ${headHtml('📋 جرد المخزون','رصيد النظام محسوب لحظياً من حركات WHS — الأعمدة الصفراء تُعبَّأ يدوياً أثناء الجرد الفعلي')}
+   ${headHtml('📋 جرد المخزون — Inventory Count','رصيد النظام محسوب لحظياً من حركات WHS — الأعمدة الصفراء تُعبَّأ يدوياً أثناء الجرد الفعلي / System balance is calculated live from WHS movements — highlighted columns are filled manually during the physical count')}
    <div class="btnrow no-print" style="margin-bottom:10px"><button class="btn red" onclick="window.print()">🖨 طباعة محضر الجرد</button></div>
    <div class="card">
     <div class="ptitle">محضر جرد المخزون — Physical Stocktake &nbsp;|&nbsp; التاريخ: ${today()} &nbsp;|&nbsp; رقم الجرد: ..............</div>
-    <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الرمز</th><th>المنتج</th><th>الوحدة</th><th>رصيد النظام</th><th>الحد الأدنى</th><th>الحالة</th><th>القيمة بالتكلفة</th><th style="background:var(--red)">العد الفعلي</th><th style="background:var(--red)">الفرق</th><th style="background:var(--red)">ملاحظات</th></tr></thead>
+    <div style="overflow-x:auto"><table><thead><tr><th>#</th><th>الرمز — Code</th><th>المنتج — Product</th><th>الوحدة — Unit</th><th>رصيد النظام — System Balance</th><th>الحد الأدنى — Minimum</th><th>الحالة — Status</th><th>القيمة بالتكلفة — Value at Cost</th><th style="background:var(--red)">العد الفعلي</th><th style="background:var(--red)">الفرق</th><th style="background:var(--red)">ملاحظات</th></tr></thead>
     <tbody>${body || '<tr><td colspan="11" class="empty">لا منتجات</td></tr>'}</tbody>
     <tfoot><tr><td colspan="4" style="background:var(--light);font-weight:700;color:var(--navy)">الإجمالي — ${rows.length} صنفاً</td>
     <td style="font-weight:700">${fmt(totItems)}</td><td colspan="2"></td><td style="font-weight:700">${fmt(totVal)}</td><td colspan="3"></td></tr></tfoot></table></div>
@@ -1845,7 +1845,7 @@ function renderInventory(){
      <div class="sig"><div class="h">مشرف العمليات</div><div class="b">الاسم: ...............<br>التوقيع: ...............</div></div>
     </div>
    </div>
-   <div class="card no-print"><h3>آخر 15 حركة مخزون</h3><div style="overflow-x:auto"><table><thead><tr><th>الإذن</th><th>التاريخ</th><th>الحركة</th><th>المنتج</th><th>الكمية</th><th>المرجع</th><th>رصيد المنتج الآن</th></tr></thead><tbody>
+   <div class="card no-print"><h3>آخر 15 حركة مخزون</h3><div style="overflow-x:auto"><table><thead><tr><th>الإذن — Order No.</th><th>التاريخ — Date</th><th>الحركة — Movement</th><th>المنتج — Product</th><th>الكمية — Quantity</th><th>المرجع — Reference</th><th>رصيد المنتج الآن — Current Product Balance</th></tr></thead><tbody>
    ${moves || '<tr><td colspan="7" class="empty">لا حركات بعد</td></tr>'}</tbody></table></div></div>`;
 }
 
@@ -1861,23 +1861,23 @@ function renderVAT(){
   const due = oVat - iVat;
   const qBtns = [1,2,3,4].map(q=>`<button class="btn sm ${q===vatQ?'':'ghost'}" onclick="setVatQ(${vatY},${q})">الربع ${q}</button>`).join('');
   document.getElementById('main').innerHTML = `
-   ${headHtml('🧾 تقرير ضريبة القيمة المضافة','المحصلة من العملاء − ضريبة المدخلات من فواتير المصروفات = الصافي المستحق للهيئة')}
+   ${headHtml('🧾 تقرير ضريبة القيمة المضافة — VAT Report','المحصلة من العملاء − ضريبة المدخلات من فواتير المصروفات = الصافي المستحق للهيئة / Collected from customers − input tax on expense invoices = net due to the authority')}
    <div class="card no-print"><div class="btnrow" style="align-items:center">
     <label style="font-weight:700;color:var(--steel)">السنة:</label>
     <input type="number" value="${vatY}" style="width:90px;padding:6px;border:1px solid var(--silver);border-radius:6px" onchange="setVatQ(+this.value,${vatQ})">
     ${qBtns}<button class="btn red sm" onclick="window.print()">🖨 طباعة التقرير</button></div></div>
    <div class="ptitle">تقرير ضريبة القيمة المضافة — الربع ${vatQ} / ${vatY}</div>
    <div class="kpis">
-    <div class="kpi"><div class="lbl">الضريبة المحصلة من العملاء</div><div class="val">${fmt(oVat)}</div></div>
-    <div class="kpi"><div class="lbl">ضريبة المدخلات (المصروفات)</div><div class="val">${fmt(iVat)}</div></div>
-    <div class="kpi ${due>=0?'warn':'good'}"><div class="lbl">${due>=0?'الصافي المستحق للهيئة':'رصيد دائن (استرداد)'}</div><div class="val">${fmt(Math.abs(due))}</div></div>
+    <div class="kpi"><div class="lbl">الضريبة المحصلة من العملاء — Tax Collected from Customers</div><div class="val">${fmt(oVat)}</div></div>
+    <div class="kpi"><div class="lbl">ضريبة المدخلات (المصروفات) — Input Tax (Expenses)</div><div class="val">${fmt(iVat)}</div></div>
+    <div class="kpi ${due>=0?'warn':'good'}"><div class="lbl">${due>=0?'الصافي المستحق للهيئة — Net Due to Authority':'رصيد دائن (استرداد) — Credit Balance (Refund)'}</div><div class="val">${fmt(Math.abs(due))}</div></div>
    </div>
    <div class="card"><h3>أولاً: الضريبة المحصلة — فواتير المبيعات (أوامر البيع المؤكدة)</h3>
-    <div style="overflow-x:auto"><table><thead><tr><th>رقم الفاتورة/الأمر</th><th>التاريخ</th><th>العميل</th><th>الصافي قبل الضريبة</th><th>الضريبة 15%</th><th>الإجمالي بعد الضريبة</th></tr></thead><tbody>
+    <div style="overflow-x:auto"><table><thead><tr><th>رقم الفاتورة/الأمر — Invoice/Order No.</th><th>التاريخ — Date</th><th>العميل — Customer</th><th>الصافي قبل الضريبة — Net Before Tax</th><th>الضريبة 15% — VAT 15%</th><th>الإجمالي بعد الضريبة — Total After Tax</th></tr></thead><tbody>
     ${out.length?out.map(o=>{const n=(+o.total||0)/1.15;return `<tr><td><b>${esc(o.no)}</b></td><td>${esc(o.date)}</td><td>${esc(o.customer)}</td><td>${fmt(n)}</td><td>${fmt(o.total-n)}</td><td>${fmt(o.total)}</td></tr>`;}).join(''):'<tr><td colspan="6" class="empty">لا مبيعات في هذا الربع</td></tr>'}
     </tbody><tfoot><tr><td colspan="3" style="background:var(--light);font-weight:700;color:var(--navy)">إجمالي الربع</td><td style="font-weight:700">${fmt(oNet)}</td><td style="font-weight:700;color:var(--red)">${fmt(oVat)}</td><td style="font-weight:700">${fmt(oNet+oVat)}</td></tr></tfoot></table></div></div>
    <div class="card"><h3>ثانياً: ضريبة المدخلات — فواتير المصروفات الضريبية</h3>
-    <div style="overflow-x:auto"><table><thead><tr><th>القيد</th><th>التاريخ</th><th>التصنيف</th><th>رقم الفاتورة</th><th>الصافي</th><th>الضريبة 15%</th><th>الإجمالي</th></tr></thead><tbody>
+    <div style="overflow-x:auto"><table><thead><tr><th>القيد — Entry</th><th>التاريخ — Date</th><th>التصنيف — Classification</th><th>رقم الفاتورة — Invoice No.</th><th>الصافي — Net</th><th>الضريبة 15% — VAT 15%</th><th>الإجمالي — Total</th></tr></thead><tbody>
     ${inp.length?inp.map(e=>`<tr><td>${esc(e.no)}</td><td>${esc(e.date)}</td><td>${esc(e.cat)}</td><td>${esc(e.invNo||'—')}</td><td>${fmt(expNet(e))}</td><td>${fmt(expVat(e))}</td><td>${fmt(e.amount)}</td></tr>`).join(''):'<tr><td colspan="7" class="empty">لا فواتير مدخلات في هذا الربع</td></tr>'}
     </tbody><tfoot><tr><td colspan="4" style="background:var(--light);font-weight:700;color:var(--navy)">إجمالي الربع</td><td style="font-weight:700">${fmt(inp.reduce((a,e)=>a+expNet(e),0))}</td><td style="font-weight:700;color:var(--green)">${fmt(iVat)}</td><td style="font-weight:700">${fmt(inp.reduce((a,e)=>a+(+e.amount||0),0))}</td></tr></tfoot></table></div></div>
    <div class="card"><div class="totrow"><span>المحصلة: <b>${fmt(oVat)}</b></span><span>−</span><span>المدخلات: <b>${fmt(iVat)}</b></span><span>=</span><span>${due>=0?'المستحق للهيئة':'رصيد دائن'}: <b style="color:var(--red)">${fmt(Math.abs(due))}</b></span></div>
@@ -1917,18 +1917,18 @@ function renderOpps(){
   const o = editing || {};
   const form = `
    <div class="card"><h3>${editing?'تعديل الصفقة '+esc(o.no):'صفقة جديدة'}</h3><div class="formgrid">
-    <div class="fld"><label>رقم الصفقة</label><input readonly value="${esc(o.no||'— يتولد عند الحفظ —')}"></div>
-    <div class="fld"><label>التاريخ *</label><input type="date" id="op_date" value="${esc(o.date||today())}"></div>
-    <div class="fld"><label>اسم الصفقة *</label><input id="op_name" value="${esc(o.name||'')}"></div>
-    <div class="fld"><label>العميل (الحساب) *</label><select id="op_customer"><option value=""></option>${optCustomers().map(c=>`<option ${c===o.customer?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
-    <div class="fld"><label>جهة الاتصال</label><select id="op_contact"><option value=""></option>${S.contacts.map(c=>`<option ${c.name===o.contact?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
-    <div class="fld"><label>المرحلة</label><select id="op_stage">${OPP_STAGES.map(s=>`<option ${s===(o.stage||'جديد')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>القيمة المتوقعة</label><input type="number" step="any" id="op_value" value="${esc(o.value||'')}"></div>
-    <div class="fld"><label>احتمال الإغلاق %</label><input type="number" id="op_prob" value="${esc(o.prob||'50')}"></div>
-    <div class="fld"><label>تاريخ الإغلاق المتوقع</label><input type="date" id="op_close" value="${esc(o.closeDate||'')}"></div>
-    <div class="fld"><label>الحملة</label><select id="op_campaign"><option value=""></option>${S.campaigns.map(c=>`<option ${c.name===o.campaign?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
-    <div class="fld"><label>المسؤول</label><select id="op_owner"><option value=""></option>${optEmployees().map(e=>`<option ${e===o.owner?'selected':''}>${esc(e)}</option>`).join('')}</select></div>
-    <div class="fld"><label>عرض السعر المرتبط</label><input readonly value="${esc(o.quoteNo||'—')}"></div>
+    <div class="fld"><label>رقم الصفقة — Deal No.</label><input readonly value="${esc(o.no||'— يتولد عند الحفظ —')}"></div>
+    <div class="fld"><label>التاريخ — Date *</label><input type="date" id="op_date" value="${esc(o.date||today())}"></div>
+    <div class="fld"><label>اسم الصفقة — Deal Name *</label><input id="op_name" value="${esc(o.name||'')}"></div>
+    <div class="fld"><label>العميل (الحساب) — Customer (Account) *</label><select id="op_customer"><option value=""></option>${optCustomers().map(c=>`<option ${c===o.customer?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+    <div class="fld"><label>جهة الاتصال — Contact</label><select id="op_contact"><option value=""></option>${S.contacts.map(c=>`<option ${c.name===o.contact?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+    <div class="fld"><label>المرحلة — Stage</label><select id="op_stage">${OPP_STAGES.map(s=>`<option ${s===(o.stage||'جديد')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>القيمة المتوقعة — Expected Value</label><input type="number" step="any" id="op_value" value="${esc(o.value||'')}"></div>
+    <div class="fld"><label>احتمال الإغلاق % — Close Probability %</label><input type="number" id="op_prob" value="${esc(o.prob||'50')}"></div>
+    <div class="fld"><label>تاريخ الإغلاق المتوقع — Expected Close Date</label><input type="date" id="op_close" value="${esc(o.closeDate||'')}"></div>
+    <div class="fld"><label>الحملة — Campaign</label><select id="op_campaign"><option value=""></option>${S.campaigns.map(c=>`<option ${c.name===o.campaign?'selected':''}>${esc(c.name)}</option>`).join('')}</select></div>
+    <div class="fld"><label>المسؤول — Contact</label><select id="op_owner"><option value=""></option>${optEmployees().map(e=>`<option ${e===o.owner?'selected':''}>${esc(e)}</option>`).join('')}</select></div>
+    <div class="fld"><label>عرض السعر المرتبط — Related Quotation</label><input readonly value="${esc(o.quoteNo||'—')}"></div>
    </div>
    <div class="btnrow">
     <button class="btn" onclick="saveOpp()">${editing?'حفظ':'إضافة الصفقة'}</button>
@@ -1951,7 +1951,7 @@ function renderOpps(){
       <h4><span>${st} (${S.opps.filter(x=>x.stage===st).length})</span><span>${fmt(sum)}</span></h4>${cards}</div>`;
   }).join('');
   document.getElementById('main').innerHTML = `
-   ${headHtml('🗂 خط المبيعات — الصفقات','اسحب البطاقة بين الأعمدة لتغيير المرحلة — القيم أعلى كل عمود')}
+   ${headHtml('🗂 خط المبيعات — Sales Pipeline','اسحب البطاقة بين الأعمدة لتغيير المرحلة — القيم أعلى كل عمود / Drag a card between columns to change its stage — totals shown above each column')}
    ${canEdit()?form:''}
    <div class="kb">${cols}</div>`;
 }
@@ -2005,26 +2005,26 @@ function renderCRMDash(){
   const topCust = [...S.customers].map(c=>({n:c.name, v:S.sos.filter(o=>o.customer===c.name&&o.status!=='ملغي').reduce((a,o)=>a+(+o.total||0),0)}))
     .filter(x=>x.v>0).sort((a,b)=>b.v-a.v).slice(0,5);
   document.getElementById('main').innerHTML = `
-   ${headHtml('📈 لوحة CRM','مؤشرات دورة المبيعات من العميل المحتمل حتى الإغلاق')}
+   ${headHtml('📈 لوحة CRM — CRM Dashboard','مؤشرات دورة المبيعات من العميل المحتمل حتى الإغلاق / Sales-cycle metrics from lead to close')}
    <div class="kpis">
-    <div class="kpi"><div class="lbl">عملاء محتملون</div><div class="val">${S.leads.length}</div></div>
-    <div class="kpi good"><div class="lbl">نسبة تحويل المحتملين</div><div class="val">${convRate}%</div></div>
-    <div class="kpi"><div class="lbl">صفقات مفتوحة</div><div class="val">${openOpps.length}</div></div>
-    <div class="kpi"><div class="lbl">قيمة خط المبيعات</div><div class="val">${fmt(pipeVal)}</div></div>
-    <div class="kpi good"><div class="lbl">نسبة كسب الصفقات</div><div class="val">${oppConv}%</div></div>
-    <div class="kpi ${stale.length?'warn':''}"><div class="lbl">صفقات راكدة +14يوم</div><div class="val">${stale.length}</div></div>
-    <div class="kpi ${lateActs.length?'warn':''}"><div class="lbl">مهام متأخرة</div><div class="val">${lateActs.length}</div></div>
-    <div class="kpi"><div class="lbl">تذاكر مفتوحة</div><div class="val">${S.tickets.filter(t=>!['محلولة','مغلقة'].includes(t.status)).length}</div></div>
+    <div class="kpi"><div class="lbl">عملاء محتملون — Leads</div><div class="val">${S.leads.length}</div></div>
+    <div class="kpi good"><div class="lbl">نسبة تحويل المحتملين — Lead Conversion Rate</div><div class="val">${convRate}%</div></div>
+    <div class="kpi"><div class="lbl">صفقات مفتوحة — Open Deals</div><div class="val">${openOpps.length}</div></div>
+    <div class="kpi"><div class="lbl">قيمة خط المبيعات — Pipeline Value</div><div class="val">${fmt(pipeVal)}</div></div>
+    <div class="kpi good"><div class="lbl">نسبة كسب الصفقات — Deal Win Rate</div><div class="val">${oppConv}%</div></div>
+    <div class="kpi ${stale.length?'warn':''}"><div class="lbl">صفقات راكدة +14يوم — Stale Deals +14 days</div><div class="val">${stale.length}</div></div>
+    <div class="kpi ${lateActs.length?'warn':''}"><div class="lbl">مهام متأخرة — Overdue Tasks</div><div class="val">${lateActs.length}</div></div>
+    <div class="kpi"><div class="lbl">تذاكر مفتوحة — Open Tickets</div><div class="val">${S.tickets.filter(t=>!['محلولة','مغلقة'].includes(t.status)).length}</div></div>
    </div>
    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px">
     <div class="card"><h3>🏆 أفضل 5 عملاء (بالمبيعات المؤكدة)</h3>
-     ${topCust.length?`<table><thead><tr><th>العميل</th><th>القيمة</th></tr></thead><tbody>${topCust.map(c=>`<tr><td>${esc(c.n)}</td><td><b>${fmt(c.v)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا مبيعات بعد</div>'}</div>
+     ${topCust.length?`<table><thead><tr><th>العميل — Customer</th><th>القيمة — Value</th></tr></thead><tbody>${topCust.map(c=>`<tr><td>${esc(c.n)}</td><td><b>${fmt(c.v)}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا مبيعات بعد</div>'}</div>
     <div class="card"><h3>📣 مصادر العملاء المحتملين</h3>
-     ${Object.keys(bySrc).length?`<table><thead><tr><th>المصدر</th><th>العدد</th></tr></thead><tbody>${Object.entries(bySrc).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<tr><td>${esc(s)}</td><td><b>${n}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا بيانات</div>'}</div>
+     ${Object.keys(bySrc).length?`<table><thead><tr><th>المصدر — Source</th><th>العدد — Count</th></tr></thead><tbody>${Object.entries(bySrc).sort((a,b)=>b[1]-a[1]).map(([s,n])=>`<tr><td>${esc(s)}</td><td><b>${n}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا بيانات</div>'}</div>
     <div class="card"><h3>⚠ صفقات راكدة (بلا تحديث +14 يوم)</h3>
-     ${stale.length?`<table><thead><tr><th>الصفقة</th><th>العميل</th><th>المرحلة</th><th>منذ</th></tr></thead><tbody>${stale.map(o=>`<tr class="clickable" onclick="editId='${o.id}';setView('opps')"><td>${esc(o.no)}</td><td>${esc(o.customer)}</td><td>${esc(o.stage)}</td><td>${daysSince(o._u||o.date)} يوم</td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا صفقات راكدة</div>'}</div>
+     ${stale.length?`<table><thead><tr><th>الصفقة — Deal</th><th>العميل — Customer</th><th>المرحلة — Stage</th><th>منذ — Since</th></tr></thead><tbody>${stale.map(o=>`<tr class="clickable" onclick="editId='${o.id}';setView('opps')"><td>${esc(o.no)}</td><td>${esc(o.customer)}</td><td>${esc(o.stage)}</td><td>${daysSince(o._u||o.date)} يوم</td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا صفقات راكدة</div>'}</div>
     <div class="card"><h3>⏰ مهام متأخرة</h3>
-     ${lateActs.length?`<table><thead><tr><th>الموضوع</th><th>العميل</th><th>الاستحقاق</th></tr></thead><tbody>${lateActs.map(a=>`<tr class="clickable" onclick="editId='${a.id}';setView('activities')"><td>${esc(a.subject)}</td><td>${esc(a.account||'—')}</td><td><span class="tag warn">${esc(a.due)}</span></td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا مهام متأخرة</div>'}</div>
+     ${lateActs.length?`<table><thead><tr><th>الموضوع — Subject</th><th>العميل — Customer</th><th>الاستحقاق — Due Date</th></tr></thead><tbody>${lateActs.map(a=>`<tr class="clickable" onclick="editId='${a.id}';setView('activities')"><td>${esc(a.subject)}</td><td>${esc(a.account||'—')}</td><td><span class="tag warn">${esc(a.due)}</span></td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا مهام متأخرة</div>'}</div>
    </div>`;
 }
 
@@ -2062,7 +2062,7 @@ function renderSearch(){
     if(!out) out = '<div class="empty">لا نتائج مطابقة</div>';
   } else out = '<div class="empty">اكتب حرفين على الأقل للبحث في: العملاء، المحتملين، جهات الاتصال، الصفقات، عروض الأسعار، التذاكر</div>';
   document.getElementById('main').innerHTML = `
-   ${headHtml('🔎 البحث الموحّد','بحث فوري بالاسم/الشركة/الجوال/العلامات عبر كل وحدات النظام')}
+   ${headHtml('🔎 البحث الموحّد — Unified Search','بحث فوري بالاسم/الشركة/الجوال/العلامات عبر كل وحدات النظام / Instant search by name/company/mobile/tags across all modules')}
    <div class="card"><input class="searchbar" style="width:100%;max-width:480px" placeholder="اكتب للبحث..." value="${esc(searchQ)}" oninput="doSearch(this.value)" autofocus></div>
    ${out}`;
 }
@@ -2082,15 +2082,15 @@ function renderAR(){
   rows.sort((a,b)=>b.rem-a.rem);
   const tot = rows.reduce((a,r)=>a+r.rem,0);
   document.getElementById('main').innerHTML = `
-   ${headHtml('📕 الذمم المدينة Accounts Receivable','العروض المقبولة/المؤكدة مقابل الدفعات المسجّلة',
+   ${headHtml('📕 الذمم المدينة — Accounts Receivable','العروض المقبولة/المؤكدة مقابل الدفعات المسجّلة / Accepted/confirmed quotes against recorded payments',
      `<button class="btn ghost sm no-print" onclick="exportAR()">⬇ CSV</button><button class="btn red sm no-print" onclick="window.print()">🖨 طباعة</button>`)}
    <div class="kpis">
-    <div class="kpi ${tot>0?'warn':''}"><div class="lbl">إجمالي الذمم القائمة</div><div class="val">${fmt(tot)}</div></div>
-    <div class="kpi"><div class="lbl">عملاء عليهم ذمم</div><div class="val">${rows.filter(r=>r.rem>0).length}</div></div>
-    <div class="kpi ${rows.some(r=>r.rem>0&&r.oldest>30)?'warn':''}"><div class="lbl">متأخرة +30 يوم</div><div class="val">${rows.filter(r=>r.rem>0&&r.oldest>30).length}</div></div>
+    <div class="kpi ${tot>0?'warn':''}"><div class="lbl">إجمالي الذمم القائمة — Total Outstanding Receivables</div><div class="val">${fmt(tot)}</div></div>
+    <div class="kpi"><div class="lbl">عملاء عليهم ذمم — Customers with Receivables</div><div class="val">${rows.filter(r=>r.rem>0).length}</div></div>
+    <div class="kpi ${rows.some(r=>r.rem>0&&r.oldest>30)?'warn':''}"><div class="lbl">متأخرة +30 يوم — Overdue +30 days</div><div class="val">${rows.filter(r=>r.rem>0&&r.oldest>30).length}</div></div>
    </div>
    <div class="card"><div style="overflow-x:auto"><table>
-    <thead><tr><th>العميل</th><th>إجمالي المستحق</th><th>المسدَّد</th><th>المتبقي</th><th>أقدم دين</th><th>الحالة</th><th class="no-print"></th></tr></thead>
+    <thead><tr><th>العميل — Customer</th><th>إجمالي المستحق — Total Due</th><th>المسدَّد — Paid</th><th>المتبقي — Remaining</th><th>أقدم دين — Oldest Debt</th><th>الحالة — Status</th><th class="no-print"></th></tr></thead>
     <tbody>${rows.length?rows.map(r=>`<tr>
       <td><b>${esc(r.c.name)}</b>${String(r.c.tags||'').includes('متعثر')?' <span class="tag warn">متعثر</span>':''}</td>
       <td>${fmt(r.total)}</td><td style="color:var(--green)">${fmt(r.paid)}</td>
@@ -2124,22 +2124,22 @@ window.openCust360 = id => {
    ${headHtml('👁 ملف العميل: '+esc(c.name),'صورة 360° — المالية والمبيعات والأنشطة والدعم',
      `<button class="btn ghost sm no-print" onclick="editId='${c.id}';setView('customers')">✏ تعديل</button><button class="btn red sm no-print" onclick="window.print()">🖨 طباعة</button>`)}
    <div class="kpis">
-    <div class="kpi"><div class="lbl">إجمالي المستحق</div><div class="val">${fmt(totalDue)}</div></div>
-    <div class="kpi good"><div class="lbl">المسدَّد</div><div class="val">${fmt(paid)}</div></div>
-    <div class="kpi ${totalDue-paid>0?'warn':''}"><div class="lbl">المتبقي في ذمته</div><div class="val">${fmt(totalDue-paid)}</div></div>
-    <div class="kpi"><div class="lbl">صفقات مفتوحة</div><div class="val">${opps2.filter(o=>!['رابحة','خاسرة'].includes(o.stage)).length}</div></div>
+    <div class="kpi"><div class="lbl">إجمالي المستحق — Total Due</div><div class="val">${fmt(totalDue)}</div></div>
+    <div class="kpi good"><div class="lbl">المسدَّد — Paid</div><div class="val">${fmt(paid)}</div></div>
+    <div class="kpi ${totalDue-paid>0?'warn':''}"><div class="lbl">المتبقي في ذمته — Outstanding on Account</div><div class="val">${fmt(totalDue-paid)}</div></div>
+    <div class="kpi"><div class="lbl">صفقات مفتوحة — Open Deals</div><div class="val">${opps2.filter(o=>!['رابحة','خاسرة'].includes(o.stage)).length}</div></div>
    </div>
    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px">
     <div class="card"><h3>💳 سجل الدفعات (${pays.length})</h3>
-     ${pays.length?`<table><thead><tr><th>الرقم</th><th>التاريخ</th><th>العرض</th><th>المبلغ</th><th>الطريقة</th></tr></thead><tbody>${[...pays].reverse().map(p=>`<tr><td>${esc(p.no)}</td><td>${esc(p.date)}</td><td>${esc(p.quoteRef)}</td><td><b>${fmt(p.amount)}</b></td><td>${esc(p.method||'')}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا دفعات مسجّلة</div>'}</div>
+     ${pays.length?`<table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>العرض — Quote</th><th>المبلغ — Amount</th><th>الطريقة — Method</th></tr></thead><tbody>${[...pays].reverse().map(p=>`<tr><td>${esc(p.no)}</td><td>${esc(p.date)}</td><td>${esc(p.quoteRef)}</td><td><b>${fmt(p.amount)}</b></td><td>${esc(p.method||'')}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا دفعات مسجّلة</div>'}</div>
     <div class="card"><h3>📄 عروض الأسعار (${qs.length})</h3>
-     ${qs.length?`<table><thead><tr><th>الرقم</th><th>التاريخ</th><th>الإجمالي</th><th>المسدَّد</th><th>المتبقي</th></tr></thead><tbody>${[...qs].reverse().map(q=>{const rem=quoteRemaining(q);return `<tr class="clickable" onclick="editId='${q.id}';setView('quotes')"><td>${esc(q.no)}</td><td>${esc(q.date)}</td><td>${fmt(q.total)}</td><td style="color:var(--green)">${fmt(quotePaid(q.no))}</td><td>${rem>0?`<b style="color:var(--red)">${fmt(rem)}</b>`:'<span class="tag ok">✓</span>'}</td></tr>`;}).join('')}</tbody></table>`:'<div class="empty">لا عروض</div>'}</div>
+     ${qs.length?`<table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>الإجمالي — Total</th><th>المسدَّد — Paid</th><th>المتبقي — Remaining</th></tr></thead><tbody>${[...qs].reverse().map(q=>{const rem=quoteRemaining(q);return `<tr class="clickable" onclick="editId='${q.id}';setView('quotes')"><td>${esc(q.no)}</td><td>${esc(q.date)}</td><td>${fmt(q.total)}</td><td style="color:var(--green)">${fmt(quotePaid(q.no))}</td><td>${rem>0?`<b style="color:var(--red)">${fmt(rem)}</b>`:'<span class="tag ok">✓</span>'}</td></tr>`;}).join('')}</tbody></table>`:'<div class="empty">لا عروض</div>'}</div>
     <div class="card"><h3>👔 جهات الاتصال (${cnts.length})</h3>
-     ${cnts.length?`<table><thead><tr><th>الاسم</th><th>المنصب</th><th>الجوال</th></tr></thead><tbody>${cnts.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.title||'—')}</td><td>${esc(x.mobile||'—')}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا جهات اتصال</div>'}</div>
+     ${cnts.length?`<table><thead><tr><th>الاسم — Name</th><th>المنصب — Position</th><th>الجوال — Mobile</th></tr></thead><tbody>${cnts.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.title||'—')}</td><td>${esc(x.mobile||'—')}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا جهات اتصال</div>'}</div>
     <div class="card"><h3>📅 آخر الأنشطة (${acts.length})</h3>
-     ${acts.length?`<table><thead><tr><th>التاريخ</th><th>النوع</th><th>الموضوع</th><th>الحالة</th></tr></thead><tbody>${[...acts].reverse().slice(0,8).map(a=>`<tr><td>${esc(a.date)}</td><td>${esc(a.type)}</td><td>${esc(a.subject)}</td><td>${tagStatus(a.status)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا أنشطة</div>'}</div>
+     ${acts.length?`<table><thead><tr><th>التاريخ — Date</th><th>النوع — Type</th><th>الموضوع — Subject</th><th>الحالة — Status</th></tr></thead><tbody>${[...acts].reverse().slice(0,8).map(a=>`<tr><td>${esc(a.date)}</td><td>${esc(a.type)}</td><td>${esc(a.subject)}</td><td>${tagStatus(a.status)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا أنشطة</div>'}</div>
     <div class="card"><h3>🎫 تذاكر الدعم (${tks.length})</h3>
-     ${tks.length?`<table><thead><tr><th>الرقم</th><th>الموضوع</th><th>الحالة</th></tr></thead><tbody>${[...tks].reverse().map(t=>`<tr><td>${esc(t.no)}</td><td>${esc(t.subject)}</td><td>${tagStatus(t.status)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا تذاكر</div>'}</div>
+     ${tks.length?`<table><thead><tr><th>الرقم — Number</th><th>الموضوع — Subject</th><th>الحالة — Status</th></tr></thead><tbody>${[...tks].reverse().map(t=>`<tr><td>${esc(t.no)}</td><td>${esc(t.subject)}</td><td>${tagStatus(t.status)}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا تذاكر</div>'}</div>
    </div>`;
 }
 
@@ -2148,10 +2148,10 @@ function renderExternal(){
   const rows = S.lines.filter(l=>l.supplyType==='طلب خارجي' && l.docType==='SLS-001')
     .map(l=>({l, q:S.quotes.find(q=>q.no===l.docNo)})).filter(x=>x.q);
   document.getElementById('main').innerHTML = `
-   ${headHtml('🌐 الطلبات الخارجية','بنود عروض الأسعار المطلوب توريدها من الخارج — مع حالة السداد قبل التوريد',
+   ${headHtml('🌐 الطلبات الخارجية — External Orders','بنود عروض الأسعار المطلوب توريدها من الخارج — مع حالة السداد قبل التوريد / Quote items to be sourced externally — with payment status before supply',
      `<button class="btn ghost sm no-print" onclick="exportExternal()">⬇ CSV</button>`)}
    <div class="card"><div style="overflow-x:auto"><table>
-    <thead><tr><th>عرض السعر</th><th>العميل</th><th>المنتج</th><th>الكمية</th><th>تاريخ الطلب</th><th>حالة التوريد</th><th>سداد العرض</th></tr></thead>
+    <thead><tr><th>عرض السعر — Quotation</th><th>العميل — Customer</th><th>المنتج — Product</th><th>الكمية — Quantity</th><th>تاريخ الطلب — Request Date</th><th>حالة التوريد — Supply Status</th><th>سداد العرض — Quote Payment</th></tr></thead>
     <tbody>${rows.length?rows.map(({l,q})=>{
       const rem = quoteRemaining(q);
       return `<tr>
@@ -2196,17 +2196,17 @@ function renderReports(){
     ? `<div style="overflow-x:auto"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`
     : '<div class="empty">لا بيانات في النطاق المحدد</div>';
   document.getElementById('main').innerHTML = `
-   ${headHtml('📊 مركز التقارير','مبيعات · CRM · مالية · مخزون — مع تصدير CSV وطباعة PDF',
+   ${headHtml('📊 مركز التقارير — Reports Center','مبيعات · CRM · مالية · مخزون — مع تصدير CSV وطباعة PDF / Sales · CRM · Finance · Inventory — with CSV export and PDF printing',
      `<button class="btn red sm no-print" onclick="window.print()">🖨 طباعة / PDF</button>`)}
    <div class="card no-print"><div class="formgrid" style="max-width:560px">
-    <div class="fld"><label>من تاريخ</label><input type="date" value="${esc(repFrom)}" onchange="repRange(this.value,'${esc(repTo)}')"></div>
-    <div class="fld"><label>إلى تاريخ</label><input type="date" value="${esc(repTo)}" onchange="repRange('${esc(repFrom)}',this.value)"></div>
+    <div class="fld"><label>من تاريخ — From Date</label><input type="date" value="${esc(repFrom)}" onchange="repRange(this.value,'${esc(repTo)}')"></div>
+    <div class="fld"><label>إلى تاريخ — To Date</label><input type="date" value="${esc(repTo)}" onchange="repRange('${esc(repFrom)}',this.value)"></div>
    </div></div>
    <div class="kpis">
-    <div class="kpi"><div class="lbl">مبيعات النطاق (أوامر مؤكدة)</div><div class="val">${fmt(sos.reduce((a,o)=>a+(+o.total||0),0))}</div></div>
-    <div class="kpi good"><div class="lbl">المحصَّل (دفعات)</div><div class="val">${fmt(collected)}</div></div>
-    <div class="kpi ${arTotal>0?'warn':''}"><div class="lbl">إجمالي الذمم القائمة</div><div class="val">${fmt(arTotal)}</div></div>
-    <div class="kpi ${extOpen?'warn':''}"><div class="lbl">طلبات خارجية مفتوحة</div><div class="val">${extOpen}</div></div>
+    <div class="kpi"><div class="lbl">مبيعات النطاق (أوامر مؤكدة) — Range Sales (Confirmed Orders)</div><div class="val">${fmt(sos.reduce((a,o)=>a+(+o.total||0),0))}</div></div>
+    <div class="kpi good"><div class="lbl">المحصَّل (دفعات) — Collected (Payments)</div><div class="val">${fmt(collected)}</div></div>
+    <div class="kpi ${arTotal>0?'warn':''}"><div class="lbl">إجمالي الذمم القائمة — Total Outstanding Receivables</div><div class="val">${fmt(arTotal)}</div></div>
+    <div class="kpi ${extOpen?'warn':''}"><div class="lbl">طلبات خارجية مفتوحة — Open External Orders</div><div class="val">${extOpen}</div></div>
    </div>
    <div class="card"><h3>💰 المبيعات الشهرية <button class="btn ghost sm no-print" onclick="expSalesMonthly()">⬇ CSV</button></h3>
     ${tbl(['الشهر','القيمة'], Object.entries(salesByMonth).sort().map(([m,v])=>[m,`<b>${fmt(v)}</b>`]))}</div>
@@ -2259,7 +2259,7 @@ window.auditSearch = v => { auditFilter = v; render(); };
 window.reloadAudit = () => { auditRows = null; render(); };
 function renderAudit(){
   if(auditRows===null){
-    document.getElementById('main').innerHTML = headHtml('🕵️ سجل التدقيق','جارِ التحميل من السحابة...') + '<div class="empty">⏳ تحميل...</div>';
+    document.getElementById('main').innerHTML = headHtml('🕵️ سجل التدقيق — Audit Log','جارِ التحميل من السحابة... / Loading from the cloud...') + '<div class="empty">⏳ تحميل...</div>';
     window.audit.list(300).then(rows=>{ auditRows = rows; render(); })
       .catch(e=>{ auditRows = []; render(); });
     return;
@@ -2267,11 +2267,11 @@ function renderAudit(){
   const f = auditFilter.trim().toLowerCase();
   const rows = auditRows.filter(r=>!f || JSON.stringify(r).toLowerCase().includes(f));
   document.getElementById('main').innerHTML = `
-   ${headHtml('🕵️ سجل التدقيق Audit Log','كل العمليات المهمة: من قام بماذا ومتى — يُخزَّن في مجموعة مستقلة auditLogs',
+   ${headHtml('🕵️ سجل التدقيق — Audit Log','كل العمليات المهمة: من قام بماذا ومتى — يُخزَّن في مجموعة مستقلة auditLogs / Every important action: who did what and when — stored in a separate auditLogs collection',
      `<button class="btn ghost sm no-print" onclick="reloadAudit()">↻ تحديث</button>`)}
    <div class="card no-print"><input class="searchbar" style="width:100%;max-width:420px" placeholder="تصفية: مستخدم / عملية / رقم مستند..." value="${esc(auditFilter)}" oninput="auditSearch(this.value)"></div>
    <div class="card"><div style="overflow-x:auto"><table>
-    <thead><tr><th>الوقت</th><th>المستخدم</th><th>العملية</th><th>الكيان</th><th>المرجع</th><th>تفاصيل</th></tr></thead>
+    <thead><tr><th>الوقت — Time</th><th>المستخدم — User</th><th>العملية — Transaction</th><th>الكيان — Entity Type</th><th>المرجع — Reference</th><th>تفاصيل — Details</th></tr></thead>
     <tbody>${rows.length?rows.map(r=>`<tr><td style="white-space:nowrap">${esc(r.at||'')}</td><td>${esc(r.by||'')}</td><td>${tagStatus(r.action)}</td><td>${esc(r.entity||'')}</td><td><b>${esc(r.ref||'')}</b></td><td style="font-size:11.5px;color:var(--steel)">${esc(r.details||'')}</td></tr>`).join(''):'<tr><td colspan="6" class="empty">لا سجلات (أو لا صلاحية قراءة)</td></tr>'}</tbody>
    </table></div></div>`;
 }
@@ -2320,7 +2320,7 @@ function renderCompany(){
     ['website','الموقع الإلكتروني'],['address','العنوان الوطني']
   ];
   document.getElementById('main').innerHTML = `
-   ${headHtml('⚙️ بيانات الشركة','تظهر هذه البيانات والشعار في ترويسة جميع المستندات المطبوعة')}
+   ${headHtml('⚙️ بيانات الشركة — Company Profile','تظهر هذه البيانات والشعار في ترويسة جميع المستندات المطبوعة / This data and logo appear in the header of all printed documents')}
    <div class="card"><h3>الشعار</h3>
     <div style="display:flex;align-items:center;gap:14px">
      <div id="pv_logo">${c.logo?`<img src="${window.media.src(c.logo)||''}" style="width:90px;height:90px;object-fit:contain;border:1px solid var(--silver);border-radius:8px">`:'<span style="color:var(--steel)">لا شعار</span>'}</div>
@@ -2342,17 +2342,17 @@ window.saveCompany = () => {
 
 /* ═══════════════ إدارة المستخدمين والصلاحيات ═══════════════ */
 const PERM_VIEWS = [
-  ['crmdash','لوحة CRM'],['leads','العملاء المحتملون'],['opps','خط المبيعات'],['contacts','جهات الاتصال'],
-  ['activities','الأنشطة والمهام'],['campaigns','الحملات'],['tickets','تذاكر الدعم'],
-  ['products','المنتجات'],['customers','العملاء'],['suppliers','الموردون'],['employees','الموظفون'],
-  ['quotes','عروض الأسعار'],['sos','أوامر البيع'],['dos','إذون التسليم'],
-  ['prs','طلبات الشراء'],['pos','أوامر الشراء'],['stock','حركات المخزون'],['inventory','جرد المخزون'],
-  ['external','الطلبات الخارجية'],
-  ['shipments','الشحنات'],['evals','تقييم الموردين'],['qc','الفحص الفني'],['srv','الصيانة'],['complaints','الشكاوى'],
-  ['installjobs','حسابات فريق التركيب'],['payroll','الرواتب'],
-  ['payments','الدفعات'],['ar','الذمم المدينة'],
-  ['petty','العهد النقدية'],['expenses','المصروفات'],['vat','تقرير الضريبة'],['custody','العهد الداخلية'],
-  ['reports','مركز التقارير'],['print','طباعة المستندات']
+  ['crmdash','لوحة CRM — CRM Dashboard'],['leads','العملاء المحتملون — Leads'],['opps','خط المبيعات — Sales Pipeline'],['contacts','جهات الاتصال — Contacts'],
+  ['activities','الأنشطة والمهام — Activities & Tasks'],['campaigns','الحملات — Campaigns'],['tickets','تذاكر الدعم — Support Tickets'],
+  ['products','المنتجات — Products'],['customers','العملاء — Customers'],['suppliers','الموردون — Suppliers'],['employees','الموظفون — Employees'],
+  ['quotes','عروض الأسعار — Quotations'],['sos','أوامر البيع — Sales Orders'],['dos','إذون التسليم — Delivery Orders'],
+  ['prs','طلبات الشراء — Purchase Requisitions'],['pos','أوامر الشراء — Purchase Orders'],['stock','حركات المخزون — Stock Movements'],['inventory','جرد المخزون — Inventory Count'],
+  ['external','الطلبات الخارجية — External Orders'],
+  ['shipments','الشحنات — Shipments'],['evals','تقييم الموردين — Supplier Evaluation'],['qc','الفحص الفني — Technical Inspection'],['srv','الصيانة — Maintenance'],['complaints','الشكاوى — Complaints'],
+  ['installjobs','حسابات فريق التركيب — Installation Team Accounts'],['payroll','الرواتب — Payroll'],
+  ['payments','الدفعات — Payments'],['ar','الذمم المدينة — Accounts Receivable'],
+  ['petty','العهد النقدية — Petty Cash'],['expenses','المصروفات — Expenses'],['vat','تقرير الضريبة — VAT Report'],['custody','العهد الداخلية — Internal Custody'],
+  ['reports','مركز التقارير — Reports Center'],['print','طباعة المستندات — Print Documents']
 ];
 /* أدوار جاهزة تُعبّئ الصلاحيات تلقائياً */
 const ROLE_PRESETS = {
@@ -2380,17 +2380,17 @@ function renderUsers(){
       </td></tr>`;
   }).join('');
   document.getElementById('main').innerHTML = `
-   ${headHtml('👤 المستخدمون والصلاحيات','إضافة مستخدمين وتحديد صلاحياتهم. الشريكان مديران بصلاحية كاملة.')}
+   ${headHtml('👤 المستخدمون والصلاحيات — Users & Permissions','إضافة مستخدمين وتحديد صلاحياتهم. الشريكان مديران بصلاحية كاملة. / Add users and set their permissions. Both partners are full-access admins.')}
    <div class="card"><h3>${editing?'تعديل مستخدم: '+esc(editing.email):'إضافة مستخدم جديد'}</h3>
     <div class="formgrid">
-     <div class="fld"><label>الاسم *</label><input id="u_name" value="${esc(u.name||'')}"></div>
-     <div class="fld"><label>البريد الإلكتروني *</label><input id="u_email" type="email" value="${esc(u.email||'')}" ${editing?'readonly':''}></div>
-     ${editing?'':`<div class="fld"><label>كلمة مرور مؤقتة *</label><input id="u_pass" value="${genPass()}"></div>`}
-     <div class="fld"><label>الجوال</label><input id="u_mobile" value="${esc(u.mobile||'')}"></div>
-     <div class="fld"><label>المنصب/الوصف</label><input id="u_title" value="${esc(u.title||'')}"></div>
-     <div class="fld"><label>الصورة</label><input type="hidden" id="f_uphoto" value="${esc(u.photo||'')}"><div id="pv_uphoto" style="margin-bottom:6px">${u.photo?`<img src="${window.media.src(u.photo)||''}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--silver)">`:''}</div><input type="file" accept="image/*" onchange="onImgPick(this,'f_uphoto','pv_uphoto')"></div>
+     <div class="fld"><label>الاسم — Name *</label><input id="u_name" value="${esc(u.name||'')}"></div>
+     <div class="fld"><label>البريد الإلكتروني — Email *</label><input id="u_email" type="email" value="${esc(u.email||'')}" ${editing?'readonly':''}></div>
+     ${editing?'':`<div class="fld"><label>كلمة مرور مؤقتة — Temporary Password *</label><input id="u_pass" value="${genPass()}"></div>`}
+     <div class="fld"><label>الجوال — Mobile</label><input id="u_mobile" value="${esc(u.mobile||'')}"></div>
+     <div class="fld"><label>المنصب/الوصف — Position/Description</label><input id="u_title" value="${esc(u.title||'')}"></div>
+     <div class="fld"><label>الصورة — Image</label><input type="hidden" id="f_uphoto" value="${esc(u.photo||'')}"><div id="pv_uphoto" style="margin-bottom:6px">${u.photo?`<img src="${window.media.src(u.photo)||''}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--silver)">`:''}</div><input type="file" accept="image/*" onchange="onImgPick(this,'f_uphoto','pv_uphoto')"></div>
     </div>
-    <div class="fld" style="max-width:280px;margin-bottom:8px"><label>الدور الوظيفي (يُعبّئ الصلاحيات تلقائياً)</label>
+    <div class="fld" style="max-width:280px;margin-bottom:8px"><label>الدور الوظيفي (يُعبّئ الصلاحيات تلقائياً) — Job Role (Auto-fills Permissions)</label>
      <select id="u_role" onchange="applyRolePreset(this.value)"><option value=""></option>${Object.keys(ROLE_PRESETS).map(r=>`<option ${u.role===r?'selected':''}>${r}</option>`).join('')}</select></div>
     <div style="display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 10px">
      <label style="font-weight:700"><input type="checkbox" id="u_admin" ${u.admin?'checked':''} onchange="document.getElementById('permbox').style.display=this.checked?'none':'block'"> مدير (صلاحية كاملة)</label>
@@ -2406,7 +2406,7 @@ function renderUsers(){
     <div id="u_msg" style="margin-top:8px;font-size:12.5px"></div>
    </div>
    <div class="card"><h3>المستخدمون (${S.users.length})</h3>
-    <div style="overflow-x:auto"><table><thead><tr><th>صورة</th><th>الاسم</th><th>البريد</th><th>الصلاحيات</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+    <div style="overflow-x:auto"><table><thead><tr><th>صورة — Image</th><th>الاسم — Name</th><th>البريد — Email</th><th>الصلاحيات — Permissions</th><th>الحالة — Status</th><th class="no-print"></th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
 function genPass(){ return 'Erp' + Math.random().toString(36).slice(2,8) + '!' + Math.floor(Math.random()*90+10); }
 window.applyRolePreset = role => {
@@ -2470,22 +2470,22 @@ function renderAccount(){
   const au = window.authUser || {};
   const u = currentUser() || {};
   document.getElementById('main').innerHTML = `
-   ${headHtml('🔑 حسابي','تعديل كلمة المرور الخاصة بك')}
+   ${headHtml('🔑 حسابي — My Account','تعديل كلمة المرور الخاصة بك / Change your password')}
    <div class="card"><h3>معلوماتي</h3>
     <div style="display:flex;align-items:center;gap:12px">${imgTag(u.photo,52)}
      <div><div style="font-weight:700;color:var(--navy)">${esc(u.name||au.email||'')}</div>
      <div style="font-size:12px;color:var(--steel)">${esc(au.email||'')} ${u.admin?'— مدير':''}</div></div></div></div>
    <div class="card"><h3>⚙️ تفضيلاتي</h3><div class="formgrid" style="max-width:520px">
-    <div class="fld"><label>عرض أسماء المنتجات</label>
+    <div class="fld"><label>عرض أسماء المنتجات — Show Product Names</label>
      <select id="pref_lang" onchange="savePrefLang(this.value)">
       ${[['both','عربي + إنجليزي معاً'],['ar','عربي فقط'],['en','إنجليزي فقط']].map(([v2,l2])=>`<option value="${v2}" ${prodLangPref()===v2?'selected':''}>${l2}</option>`).join('')}
      </select></div>
    </div>
    <div style="font-size:11.5px;color:var(--steel)">يُحفظ التفضيل في حسابك بالسحابة ويُطبَّق فوراً على كل الشاشات والمستندات.</div></div>
    <div class="card"><h3>تغيير كلمة المرور</h3><div class="formgrid" style="max-width:520px">
-    <div class="fld"><label>كلمة المرور الحالية</label><input id="cp_old" type="password"></div>
-    <div class="fld"><label>كلمة المرور الجديدة</label><input id="cp_new" type="password"></div>
-    <div class="fld"><label>تأكيد كلمة المرور الجديدة</label><input id="cp_new2" type="password"></div>
+    <div class="fld"><label>كلمة المرور الحالية — Current Password</label><input id="cp_old" type="password"></div>
+    <div class="fld"><label>كلمة المرور الجديدة — New Password</label><input id="cp_new" type="password"></div>
+    <div class="fld"><label>تأكيد كلمة المرور الجديدة — Confirm New Password</label><input id="cp_new2" type="password"></div>
    </div>
    <div class="btnrow"><button class="btn" onclick="changeMyPass()">حفظ كلمة المرور</button></div>
    <div id="cp_msg" style="margin-top:8px;font-size:12.5px"></div></div>`;
@@ -2523,13 +2523,13 @@ window.printPayrollReport = () => {
   const totDed = rows.reduce((a,p)=>a+(+p.deductions||0),0);
   const docHtml =
     pHead('FIN-002','تقرير الرواتب — Payroll Report','تقرير','الشهر: '+(mon||'الكل'))
-    + `<table style="margin-top:8px"><thead><tr><th>#</th><th>الموظف</th><th>الشهر</th><th>الأساسي</th><th>إضافات</th><th>خصومات</th><th>الصافي</th><th>الحالة</th></tr></thead><tbody>
+    + `<table style="margin-top:8px"><thead><tr><th>#</th><th>الموظف — Employee</th><th>الشهر — Month</th><th>الأساسي — Basic</th><th>إضافات — Additions</th><th>خصومات — Deductions</th><th>الصافي — Net</th><th>الحالة — Status</th></tr></thead><tbody>
       ${rows.length?rows.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.employee)}</td><td>${esc(p.month||'')}</td><td>${fmt(p.base)}</td><td>${fmt(p.additions)}</td><td>${fmt(p.deductions)}</td><td><b>${fmt(net(p))}</b></td><td>${esc(p.status||'')}</td></tr>`).join(''):'<tr><td colspan="8" class="empty">لا سجلات</td></tr>'}
       </tbody><tfoot><tr><td colspan="3" style="background:var(--light);font-weight:700;color:var(--navy)">الإجمالي — ${rows.length} موظف</td><td style="font-weight:700">${fmt(totBase)}</td><td style="font-weight:700">${fmt(totAdd)}</td><td style="font-weight:700">${fmt(totDed)}</td><td style="font-weight:700;color:var(--red)">${fmt(tot)}</td><td></td></tr></tfoot></table>`
-    + pSigs(['المحاسب','المدير العام']) + pFoot();
+    + pSigs(['المحاسب — Accountant','المدير العام — General Manager']) + pFoot();
   const acts = `<button class="btn red sm no-print" onclick="window.print()">🖨 طباعة / حفظ PDF</button> <button class="btn ghost sm no-print" onclick="setView('payroll')">رجوع</button>`;
   document.getElementById('main').innerHTML =
-    `${headHtml('💰 تقرير الرواتب','الشهر: '+(mon||'الكل'), acts)}
+    `${headHtml('💰 تقرير الرواتب — Payroll Report','الشهر — Month: '+(mon||'الكل — All'), acts)}
      <div id="printdoc">${docHtml}</div>`;
   setTimeout(()=>window.print(), 300);
 };
