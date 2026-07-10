@@ -7,5 +7,12 @@ service cloud.firestore {
         && request.resource.data.keys().hasOnly(['value', 'updatedAt'])
         && request.resource.data.value is string;
     }
+    // صور مصغّرة: كل صورة في مستند منفصل (data URL نصي) لأي مستخدم مسجّل
+    match /media/{imageId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null
+        && request.resource.data.d is string
+        && request.resource.data.d.size() < 900000;
+    }
   }
 }

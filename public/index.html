@@ -100,7 +100,9 @@ tr.clickable:hover td{background:#eef3fa}
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
+           createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword,
+           EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
 
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCH9ZC6knpkdZ9SGiWq5lN1EDgqmrHOKUU",
@@ -169,6 +171,58 @@ tr.clickable:hover td{background:#eef3fa}
     }
   };
 
+  /* ═══ تخزين الصور: كل صورة في مستند منفصل ضمن مجموعة media (حفاظاً على حد مستند الحالة) ═══ */
+  const mediaCache = {};
+  window.media = {
+    cache: mediaCache,
+    src(id){ return (id && mediaCache[id]) || ''; },
+    async save(dataUrl){
+      const _db = await getDb();
+      const id = 'img_' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+      await setDoc(doc(_db, 'media', id), { d: dataUrl, at: serverTimestamp() });
+      mediaCache[id] = dataUrl;
+      return id;
+    },
+    async load(id){
+      if(!id) return '';
+      if(mediaCache[id]) return mediaCache[id];
+      try{
+        const _db = await getDb();
+        const snap = await getDoc(doc(_db, 'media', id));
+        const d = snap.exists() ? (snap.data().d || '') : '';
+        if(d) mediaCache[id] = d;
+        return d;
+      }catch(e){ return ''; }
+    },
+    async preload(ids){
+      const uniq = [...new Set((ids||[]).filter(Boolean))].filter(id=>!mediaCache[id]);
+      await Promise.all(uniq.map(id=>this.load(id)));
+    }
+  };
+
+  /* ═══ واجهة إدارة المستخدمين والاعتماد ═══ */
+  let secondaryApp = null;
+  window.authApi = {
+    current(){ const u = auth.currentUser; return u ? { uid: u.uid, email: u.email } : null; },
+    // إنشاء مستخدم دون التأثير على جلسة المدير (تطبيق ثانوي منفصل)
+    async createUser(email, password){
+      if(!secondaryApp) secondaryApp = initializeApp(FIREBASE_CONFIG, 'secondary-' + Date.now());
+      const secAuth = getAuth(secondaryApp);
+      const cred = await createUserWithEmailAndPassword(secAuth, email, password);
+      const uid = cred.user.uid;
+      await signOut(secAuth);
+      return uid;
+    },
+    async sendReset(email){ await sendPasswordResetEmail(auth, email); },
+    async changeMyPassword(currentPass, newPass){
+      const u = auth.currentUser;
+      if(!u) throw new Error('غير مسجّل الدخول');
+      const cred = EmailAuthProvider.credential(u.email, currentPass);
+      await reauthenticateWithCredential(u, cred);
+      await updatePassword(u, newPass);
+    }
+  };
+
   /* بوابة الدخول — تسجيل دخول فقط، لا تسجيل ذاتي */
   const loginOverlay = document.getElementById('loginOverlay');
   const appEl = document.getElementById('app');
@@ -191,10 +245,12 @@ tr.clickable:hover td{background:#eef3fa}
 
   onAuthStateChanged(auth, (user) => {
     if(user){
+      window.authUser = { uid: user.uid, email: user.email };
       loginOverlay.style.display = 'none';
       appEl.style.display = 'flex';
       window.dispatchEvent(new Event('erp-auth-ready'));
     } else {
+      window.authUser = null;
       loginOverlay.style.display = 'flex';
       appEl.style.display = 'none';
       passEl.value = '';
@@ -225,9 +281,14 @@ tr.clickable:hover td{background:#eef3fa}
 </div>
 <script>
 /* ═══════════════ النواة: الحالة والتخزين ═══════════════ */
-const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses'];
-let S = {counters:{}, company:{name:'', cr:'', vat:''}};
+const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll'];
+let S = {counters:{}, company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
+/* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
+const SEED_ADMINS = [
+  {uid:'dD73Rqzh2UeVaNtXdv4q8HZAm7H3', email:'tha3ir@gmail.com', name:'الشريك الأول'},
+  {uid:'RUiGaQTOz9PcYVCOs3cBrHnNJqk1', email:'osamahomaidan@gmail.com', name:'الشريك الثاني'}
+];
 let storageOK = true, saveTimer = null, view = 'dash', editId = null;
     const STORAGE_KEY = 'erp:state';
 
@@ -236,7 +297,25 @@ async function loadState(){
     const r = await window.storage.get('erp:state');
     if(r && r.value){ const d = JSON.parse(r.value); Object.assign(S, d); ENT.forEach(e=>{ if(!S[e]) S[e]=[]; }); }
   }catch(e){ /* أول تشغيل — لا بيانات بعد */ }
+  if(!S.company) S.company = {};
   if(!S.products.length && !S._seeded){ seed(); S._seeded = true; persist(); }
+  seedAdmins();
+  // تحميل الصور المصغّرة المشار إليها في الحالة
+  try{
+    const ids = [S.company && S.company.logo]
+      .concat(S.products.map(p=>p.img))
+      .concat(S.users.map(u=>u.photo));
+    await window.media.preload(ids);
+  }catch(e){}
+}
+/* ضمان وجود حسابات المديرين المؤسّسين في قائمة المستخدمين */
+function seedAdmins(){
+  if(!S.users) S.users = [];
+  SEED_ADMINS.forEach(a=>{
+    let u = S.users.find(x=>x.uid===a.uid || (x.email||'').toLowerCase()===a.email.toLowerCase());
+    if(!u){ S.users.push({id:uid(), uid:a.uid, email:a.email, name:a.name, admin:true, readOnly:false, approveManager:true, views:['all'], photo:'', enabled:true}); }
+    else { u.uid = u.uid || a.uid; u.admin = true; u.enabled = (u.enabled!==false); }
+  });
 }
 function persist(){
   clearTimeout(saveTimer);
@@ -259,13 +338,71 @@ function seed(){
     {id:uid(),code:'SUP-0001',name:'Shanghai Equipment Co.',country:'الصين',products:'أفران دهان، غرف تحضير',contact:'',email:'',phone:'',terms:'50% مقدم / 50% قبل الشحن',notes:'عينة'},
     {id:uid(),code:'SUP-0002',name:'Ankara Industrial',country:'تركيا',products:'روافع، معدات مغاسل',contact:'',email:'',phone:'',terms:'40% مقدم / 60% مستندي',notes:'عينة'}];
   S.employees = [
-    {id:uid(),code:'EMP-001',name:'الشريك الأول',dept:'الإدارة',mobile:'',auth:'توقيع الشريكين'},
-    {id:uid(),code:'EMP-002',name:'الشريك الثاني',dept:'الإدارة',mobile:'',auth:'توقيع الشريكين'}];
+    {id:uid(),code:'EMP-001',name:'الشريك الأول',dept:'الإدارة',mobile:'',auth:'توقيع الشريكين',salary:0},
+    {id:uid(),code:'EMP-002',name:'الشريك الثاني',dept:'الإدارة',mobile:'',auth:'توقيع الشريكين',salary:0}];
 }
 const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
 const today = () => new Date().toISOString().slice(0,10);
 const fmt = n => (n===''||n==null||isNaN(n)) ? '—' : Number(n).toLocaleString('en-US',{maximumFractionDigits:2});
 const esc = s => String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ═══════════════ المستخدم الحالي والصلاحيات ═══════════════ */
+function currentUser(){
+  const au = window.authUser;
+  if(!au) return null;
+  let u = (S.users||[]).find(x=>x.uid===au.uid);
+  if(!u) u = (S.users||[]).find(x=>(x.email||'').toLowerCase()===(au.email||'').toLowerCase());
+  if(u && !u.uid) u.uid = au.uid; // ربط أول تسجيل دخول بالحساب
+  return u || {uid:au.uid, email:au.email, name:au.email, admin:false, readOnly:true, approveManager:false, views:[]};
+}
+function curName(){ const u=currentUser(); return u ? (u.name || u.email) : ''; }
+function isAdmin(){ const u=currentUser(); return !!(u && u.admin); }
+function canApproveMgr(){ const u=currentUser(); return !!(u && (u.admin || u.approveManager)); }
+function canEdit(){ const u=currentUser(); return !!(u && (u.admin || !u.readOnly)); }
+function canView(v){
+  const u=currentUser(); if(!u) return false;
+  if(u.admin || (u.views||[]).includes('all')) return true;
+  if(['dash','account','print'].includes(v)) return true; // متاح للجميع
+  return (u.views||[]).includes(v);
+}
+
+/* ═══════════════ الصور المصغّرة ═══════════════ */
+function readImageAsThumb(file, maxDim=256, quality=0.72){
+  return new Promise((resolve,reject)=>{
+    const fr = new FileReader();
+    fr.onerror = () => reject(new Error('فشل قراءة الملف'));
+    fr.onload = () => {
+      const im = new Image();
+      im.onerror = () => reject(new Error('صورة غير صالحة'));
+      im.onload = () => {
+        let {width:w, height:h} = im;
+        if(w>h && w>maxDim){ h = Math.round(h*maxDim/w); w = maxDim; }
+        else if(h>=w && h>maxDim){ w = Math.round(w*maxDim/h); h = maxDim; }
+        const cv = document.createElement('canvas'); cv.width=w; cv.height=h;
+        cv.getContext('2d').drawImage(im,0,0,w,h);
+        resolve(cv.toDataURL('image/jpeg', quality));
+      };
+      im.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+const imgTag = (id, size=34) => {
+  const s = window.media ? window.media.src(id) : '';
+  return s ? `<img src="${s}" style="width:${size}px;height:${size}px;object-fit:cover;border-radius:6px;border:1px solid var(--silver);vertical-align:middle">`
+           : `<span style="display:inline-flex;width:${size}px;height:${size}px;border:1px dashed var(--silver);border-radius:6px;color:var(--silver);align-items:center;justify-content:center;font-size:${Math.round(size*0.4)}px;vertical-align:middle">🖼</span>`;
+};
+// رفع صورة من عنصر إدخال ملف وتخزين المُعرّف في حقل مخفي
+window.onImgPick = async (inputEl, holderId, previewId) => {
+  const f = inputEl.files && inputEl.files[0]; if(!f) return;
+  try{
+    const durl = await readImageAsThumb(f);
+    const id = await window.media.save(durl);
+    document.getElementById(holderId).value = id;
+    const pv = document.getElementById(previewId);
+    if(pv) pv.innerHTML = `<img src="${durl}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--silver)">`;
+  }catch(e){ alert('تعذّر رفع الصورة: '+e.message); }
+};
 
 /* الترقيم الصارم — العداد لا يرجع للخلف أبداً ويُعاد سنوياً */
 function nextNo(code){
@@ -326,6 +463,7 @@ const optSupAll = () => S.suppliers.map(s=>s.name);
 const VIEWS = {
  products:{icon:'📦',title:'المنتجات',code:'MD-PRD',ent:'products',autoCode:'PRD',
   fields:[
+   {k:'img',l:'صورة المنتج',t:'img'},
    {k:'code',l:'الرمز',t:'ro'},{k:'nameAr',l:'اسم المنتج (عربي)',t:'text',req:1},{k:'nameEn',l:'الاسم (إنجليزي)',t:'text'},
    {k:'cat',l:'الفئة',t:'sel',o:['أفران دهان','غرف تحضير','روافع','سحب شاصي','معدات مغاسل','تغيير زيوت','إطارات','تكييف','محطات وقود','عدد يدوية','أخرى']},
    {k:'brand',l:'الماركة/المنشأ',t:'text'},{k:'unit',l:'الوحدة',t:'sel',o:['قطعة','طقم','متر','لتر']},
@@ -335,6 +473,7 @@ const VIEWS = {
    {k:'wterms',l:'شروط الضمان وتفاصيله',t:'text',ph:'مثال: يشمل الأجزاء الميكانيكية والكهربائية والحساسات؛ لا يشمل سوء الاستخدام أو الفلاتر الاستهلاكية؛ يبدأ من محضر التشغيل'},
    {k:'notes',l:'ملاحظات',t:'text'}],
   cols:[
+   {k:'img',l:'صورة',f:(v)=>imgTag(v,34)},
    {k:'code',l:'الرمز'},{k:'nameAr',l:'المنتج'},{k:'cat',l:'الفئة'},
    {k:'cost',l:'التكلفة',f:fmt},{k:'price',l:'البيع',f:fmt},
    {k:'_margin',l:'الهامش',f:(v,r)=> r.cost>0? ((r.price-r.cost)/r.cost*100).toFixed(0)+'%':'—'},
@@ -364,8 +503,11 @@ const VIEWS = {
   note:'المورد «الموقوف» يُستبعد تلقائياً من قوائم الاختيار في طلبات وأوامر الشراء.'},
 
  employees:{icon:'🪪',title:'الموظفون',code:'MD-EMP',ent:'employees',autoCode:'EMP',
-  fields:[{k:'code',l:'الرقم الوظيفي',t:'ro'},{k:'name',l:'الاسم',t:'text',req:1},{k:'dept',l:'القسم',t:'sel',o:['الإدارة','المبيعات','المشتريات','المستودع','الفني','المالية']},{k:'mobile',l:'الجوال',t:'text'},{k:'auth',l:'صلاحية الاعتماد',t:'sel',o:['توقيع الشريكين','المدير العام','مشرف العمليات','لا يوجد']}],
-  cols:[{k:'code',l:'الرقم'},{k:'name',l:'الاسم'},{k:'dept',l:'القسم'},{k:'auth',l:'الصلاحية'}]},
+  fields:[{k:'code',l:'الرقم الوظيفي',t:'ro'},{k:'name',l:'الاسم',t:'text',req:1},{k:'dept',l:'القسم',t:'sel',o:['الإدارة','المبيعات','المشتريات','المستودع','الفني','فريق التركيب','المالية']},{k:'mobile',l:'الجوال',t:'text'},
+   {k:'installTeam',l:'ضمن فريق التركيب؟',t:'sel',o:['نعم','لا']},
+   {k:'salary',l:'الراتب الشهري',t:'num'},
+   {k:'auth',l:'صلاحية الاعتماد',t:'sel',o:['توقيع الشريكين','المدير العام','مشرف العمليات','لا يوجد']}],
+  cols:[{k:'code',l:'الرقم'},{k:'name',l:'الاسم'},{k:'dept',l:'القسم'},{k:'installTeam',l:'فريق تركيب',f:v=>v==='نعم'?'<span class="tag ok">نعم</span>':'—'},{k:'salary',l:'الراتب',f:fmt},{k:'auth',l:'الصلاحية'}]},
 
  prs:{icon:'📝',title:'طلبات الشراء PUR-001',code:'PUR-001',ent:'prs',docCode:'PUR1',
   fields:[{k:'no',l:'رقم الطلب',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},{k:'requester',l:'الطالب',t:'sel',o:optEmployees},
@@ -374,8 +516,10 @@ const VIEWS = {
    {k:'supplier',l:'المورد المقترح',t:'sel',o:optSupOK},{k:'status',l:'الحالة',t:'sel',o:['قيد المراجعة','معتمد','مرفوض','ملغي']},{k:'notes',l:'ملاحظات',t:'text'}],
   cols:[{k:'no',l:'الرقم'},{k:'date',l:'التاريخ'},{k:'requester',l:'الطالب'},{k:'desc',l:'الوصف'},{k:'est',l:'التقدير',f:fmt},
    {k:'_a',l:'تنبيه',f:(v,r)=> +r.est>5000?'<span class="tag warn">⚠ توقيع الشريكين</span>':''},
+   {k:'_ap',l:'الاعتماد',f:(v,r)=>apprBadge(r)},
    {k:'status',l:'الحالة',f:v=>tagStatus(v)}],
-  note:'أي طلب يتجاوز 5,000 ريال يتطلب توقيع الشريكين. أمر الشراء لا يُنشأ إلا من طلب «معتمد».'},
+  approvals:true, docType:'pr',
+  note:'أي طلب يتجاوز 5,000 ريال يتطلب توقيع الشريكين. أمر الشراء لا يُنشأ إلا من طلب «معتمد». الاعتماد إلكتروني: المندوب ثم المدير.'},
 
  stock:{icon:'🏗️',title:'حركات المخزون WHS',code:'WHS-001/002',ent:'stock',
   fields:[{k:'no',l:'رقم الإذن',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
@@ -483,6 +627,43 @@ const VIEWS = {
   cols:[{k:'no',l:'المحضر'},{k:'date',l:'التاريخ'},{k:'from',l:'من'},{k:'to',l:'إلى'},{k:'desc',l:'الوصف'},{k:'value',l:'القيمة',f:fmt},
    {k:'_a',l:'تنبيه',f:(v,r)=> +r.value>10000?'<span class="tag warn">⚠ يتطلب شاهداً</span>':''},
    {k:'status',l:'الحالة',f:tagStatus}]},
+
+ installjobs:{icon:'🧰',title:'حسابات فريق التركيب INS-001',code:'INS-001',ent:'installjobs',docCode:'INS1',
+  fields:[{k:'no',l:'رقم المهمة',t:'ro'},{k:'date',l:'التاريخ',t:'date',req:1},
+   {k:'refType',l:'نوع المرجع',t:'sel',o:['أمر شراء PUR-002','طلب صيانة SRV-001','أمر بيع SLS-002','أخرى']},
+   {k:'ref',l:'رقم المرجع',t:'sel',o:()=>S.pos.map(p=>p.no).concat(S.srv.map(s=>s.no)).concat(S.sos.map(o=>o.no))},
+   {k:'desc',l:'وصف المهمة',t:'text',req:1},
+   {k:'crew',l:'فريق التركيب المكلَّف',t:'multi',o:()=>S.employees.filter(e=>e.installTeam==='نعم').map(e=>e.name)},
+   {k:'crewCount',l:'عدد المطلوبين للمهمة',t:'sel',o:['1','2','3']},
+   {k:'amount',l:'المبلغ المقبوض من العميل',t:'num'},
+   {k:'custodyRef',l:'عهدة مرتبطة (تصفية)',t:'sel',o:()=>S.petty.map(p=>p.no+' — '+p.to)},
+   {k:'settled',l:'حالة التصفية',t:'sel',o:['غير مصفّى','مصفّى']},
+   {k:'status',l:'حالة المهمة',t:'sel',o:['مجدولة','قيد التنفيذ','منجزة']},{k:'notes',l:'ملاحظات',t:'text'}],
+  beforeSave:r=>{ if(r.custodyRef && r.custodyRef.includes(' — ')) r.custodyRef = r.custodyRef.split(' — ')[0]; },
+  cols:[{k:'no',l:'المهمة'},{k:'date',l:'التاريخ'},{k:'refType',l:'المرجع'},{k:'ref',l:'الرقم'},{k:'desc',l:'الوصف'},
+   {k:'crew',l:'الفريق',f:v=>showMulti(v)},
+   {k:'_cnt',l:'العدد',f:(v,r)=>{const n=String(r.crew||'').split('|').filter(Boolean).length; const req=+r.crewCount||0; return req&&n!==req?`<span class="tag warn">${n}/${req}</span>`:`<span class="tag ok">${n}${req?'/'+req:''}</span>`;}},
+   {k:'amount',l:'المقبوض',f:fmt},
+   {k:'settled',l:'التصفية',f:v=>v==='مصفّى'?'<span class="tag ok">مصفّى</span>':'<span class="tag warn">غير مصفّى</span>'},
+   {k:'status',l:'الحالة',f:tagStatus}],
+  docType:'ins',
+  note:'كل مهمة تُربط بأمر شراء أو طلب صيانة أو أمر بيع سابق. يُحدَّد فريق التركيب المكلَّف (شخص أو أكثر حسب المهمة) ويُصفّى ما يقبضونه مقابل العهدة المرتبطة.'},
+
+ payroll:{icon:'💰',title:'الرواتب FIN-002',code:'FIN-002',ent:'payroll',docCode:'FIN2',
+  fields:[{k:'no',l:'رقم أمر الصرف',t:'ro'},{k:'date',l:'تاريخ الصرف',t:'date',req:1},
+   {k:'employee',l:'الموظف',t:'sel',o:optEmployees,req:1},
+   {k:'month',l:'الشهر',t:'text',ph:'YYYY-MM'},
+   {k:'base',l:'الراتب الأساسي (تلقائي)',t:'num'},
+   {k:'additions',l:'إضافات/بدلات',t:'num'},{k:'deductions',l:'خصومات',t:'num'},
+   {k:'method',l:'طريقة الصرف',t:'sel',o:['تحويل بنكي','نقداً','شيك']},
+   {k:'status',l:'الحالة',t:'sel',o:['مصروف','معلّق']},{k:'notes',l:'ملاحظات',t:'text'}],
+  beforeSave:r=>{ const e=S.employees.find(x=>x.name===r.employee); if(e && (r.base===''||r.base==null)) r.base=+e.salary||0; r.net=(+r.base||0)+(+r.additions||0)-(+r.deductions||0); },
+  cols:[{k:'no',l:'أمر الصرف'},{k:'date',l:'التاريخ'},{k:'employee',l:'الموظف'},{k:'month',l:'الشهر'},
+   {k:'base',l:'الأساسي',f:fmt},{k:'additions',l:'إضافات',f:fmt},{k:'deductions',l:'خصومات',f:fmt},
+   {k:'net',l:'الصافي',f:(v,r)=>`<b>${fmt(r.net!=null?r.net:((+r.base||0)+(+r.additions||0)-(+r.deductions||0)))}</b>`},
+   {k:'status',l:'الحالة',f:tagStatus}],
+  docType:'pay',
+  note:'الراتب الأساسي يُسحب تلقائياً من بطاقة الموظف عند الحفظ إن تُرك فارغاً. الصافي = الأساسي + الإضافات − الخصومات. لطباعة تقرير الرواتب استخدم زر التقرير أعلى الصفحة.'},
 };
 function tagStatus(v){
   if(!v) return '—';
@@ -499,16 +680,27 @@ const NAVDEF = [
  ['دورة المبيعات', [['quotes','📄 عروض الأسعار SLS-001'],['sos','🧾 أوامر البيع SLS-002'],['dos','🚚 إذون التسليم SLS-003']]],
  ['المشتريات والمخزون', [['prs','📝 طلبات الشراء PUR-001'],['pos','🛒 أوامر الشراء PUR-002'],['stock','🏗️ حركات المخزون WHS'],['inventory','📋 جرد المخزون'],['shipments','🚢 الشحنات LOG-001'],['evals','⭐ تقييم الموردين PUR-003']]],
  ['الجودة والخدمة', [['qc','🔍 الفحص الفني QLT-001'],['srv','🔧 الصيانة SRV-001'],['complaints','📮 الشكاوى QLT-002']]],
+ ['التركيب والرواتب', [['installjobs','🧰 حسابات فريق التركيب'],['payroll','💰 الرواتب FIN-002']]],
  ['المالية والإدارة', [['petty','💵 العهد النقدية FIN-001'],['expenses','💸 المصروفات'],['vat','🧾 تقرير الضريبة'],['custody','🔑 العهد الداخلية ADM-001']]],
+ ['الإعدادات', [['company','⚙️ بيانات الشركة'],['users','👤 المستخدمون والصلاحيات'],['account','🔑 حسابي']]],
  ['المخرجات', [['print','🖨️ طباعة المستندات']]],
 ];
 function renderNav(){
-  document.getElementById('nav').innerHTML = NAVDEF.map(([g,items])=>
-    (g?`<div class="navgrp">${g}</div>`:'') +
-    items.map(([k,l])=>`<button class="navbtn ${view===k?'active':''}" onclick="setView('${k}')">${l}</button>`).join('')
-  ).join('');
+  const uName = curName();
+  document.getElementById('nav').innerHTML =
+   (uName?`<div class="navgrp" style="color:#fff">👋 ${esc(uName)}</div>`:'') +
+   NAVDEF.map(([g,items])=>{
+    const vis = items.filter(([k])=> k==='users'||k==='company' ? isAdmin() : canView(k));
+    if(!vis.length) return '';
+    return (g?`<div class="navgrp">${g}</div>`:'') +
+      vis.map(([k,l])=>`<button class="navbtn ${view===k?'active':''}" onclick="setView('${k}')">${l}</button>`).join('');
+  }).join('');
 }
-window.setView = v => { view=v; editId=null; tmpLines=[]; render(); };
+window.setView = v => {
+  const allowed = (v==='users'||v==='company') ? isAdmin() : canView(v);
+  if(!allowed){ alert('لا تملك صلاحية الوصول لهذه الشاشة'); return; }
+  view=v; editId=null; tmpLines=[]; render();
+};
 
 /* ═══════════════ السجلات العامة ═══════════════ */
 function fieldInput(f, val){
@@ -520,24 +712,50 @@ function fieldInput(f, val){
   }
   if(f.t==='date') return `<input type="date" id="f_${f.k}" value="${esc(v)}">`;
   if(f.t==='num') return `<input type="number" step="any" id="f_${f.k}" value="${esc(v)}" placeholder="${esc(f.ph||'')}">`;
+  if(f.t==='img'){
+    const pv = v ? `<img src="${(window.media?window.media.src(v):'')||''}" style="width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--silver)">` : '<span style="color:var(--steel);font-size:12px">لا صورة</span>';
+    return `<input type="hidden" id="f_${f.k}" value="${esc(v)}">
+      <div id="pv_${f.k}" style="margin-bottom:6px">${pv}</div>
+      <input type="file" accept="image/*" onchange="onImgPick(this,'f_${f.k}','pv_${f.k}')">`;
+  }
+  if(f.t==='multi'){
+    const cur = String(v||'').split('|').filter(Boolean);
+    const opts = (typeof f.o==='function'?f.o():f.o);
+    return `<input type="hidden" id="f_${f.k}" value="${esc(cur.join('|'))}">
+      <div style="display:flex;flex-wrap:wrap;gap:8px;border:1px solid var(--silver);border-radius:6px;padding:7px">${
+        opts.map(o=>`<label style="font-size:12.5px;display:flex;align-items:center;gap:3px;font-weight:400"><input type="checkbox" value="${esc(o)}" ${cur.includes(o)?'checked':''} onchange="multiSet('f_${f.k}')">${esc(o)}</label>`).join('') || '<span style="color:var(--steel);font-size:12px">لا خيارات</span>'
+      }</div>`;
+  }
   return `<input id="f_${f.k}" value="${esc(v)}" placeholder="${esc(f.ph||'')}">`;
 }
+window.multiSet = holderId => {
+  const holder = document.getElementById(holderId);
+  const boxes = holder.parentElement.querySelectorAll('input[type=checkbox]');
+  holder.value = [...boxes].filter(b=>b.checked).map(b=>b.value).join('|');
+};
+const showMulti = v => String(v||'').split('|').filter(Boolean).join('، ') || '—';
 function renderRegister(key){
   const V = VIEWS[key], rows = S[V.ent];
   const row = editId ? rows.find(r=>r.id===editId) : null;
   const defaults = {date: today()};
+  const editable = canEdit();
   const formHtml = V.fields.map(f=>`<div class="fld"><label>${f.l}${f.req?' *':''}</label>${fieldInput(f, row?row[f.k]:(defaults[f.k]??''))}</div>`).join('');
   const tableRows = rows.length ? [...rows].reverse().map(r=>{
     const tds = V.cols.map(c=>`<td>${c.f? c.f(r[c.k], r) : esc(r[c.k]??'—')||'—'}</td>`).join('');
-    return `<tr class="clickable" onclick="editRow('${key}','${r.id}')">${tds}<td class="no-print"><button class="btn sm red" onclick="event.stopPropagation();delRow('${key}','${r.id}')">حذف</button></td></tr>`;
-  }).join('') : `<tr><td colspan="${V.cols.length+1}" class="empty">لا سجلات بعد — أضف أول سجل من النموذج أعلاه</td></tr>`;
+    const printBtn = V.docType ? `<button class="btn sm ghost" onclick="event.stopPropagation();goPrint('${V.docType}','${r.no}')">🖨</button> ` : '';
+    return `<tr class="clickable" onclick="editRow('${key}','${r.id}')">${tds}<td class="no-print">${printBtn}${editable?`<button class="btn sm red" onclick="event.stopPropagation();delRow('${key}','${r.id}')">حذف</button>`:''}</td></tr>`;
+  }).join('') : `<tr><td colspan="${V.cols.length+1}" class="empty">لا سجلات بعد${editable?' — أضف أول سجل من النموذج أعلاه':''}</td></tr>`;
+  const printAction = (V.docType && row) ? `<button class="btn red sm no-print" onclick="goPrint('${V.docType}','${row.no}')">🖨 طباعة المستند</button>` : '';
+  const reportAction = (key==='payroll') ? `<button class="btn ghost sm no-print" onclick="printPayrollReport()">📄 تقرير الرواتب</button>` : '';
   document.getElementById('main').innerHTML = `
-   ${headHtml(V.icon+' '+V.title, 'رمز النموذج: '+V.code)}
-   <div class="card"><h3>${row?'تعديل السجل':'سجل جديد'}</h3>
+   ${headHtml(V.icon+' '+V.title, 'رمز النموذج: '+V.code, reportAction+printAction)}
+   ${editable ? `<div class="card"><h3>${row?'تعديل السجل':'سجل جديد'}</h3>
     <div class="formgrid">${formHtml}</div>
     ${V.note?`<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">ℹ ${V.note}</div>`:''}
+    ${(V.approvals && row)?approvalsBox(key, row):''}
     <div class="btnrow"><button class="btn" onclick="saveRegister('${key}')">${row?'حفظ التعديل':'إضافة السجل'}</button>
-    ${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>
+    ${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>` :
+    `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">👁 لديك صلاحية استعراض فقط لهذه الشاشة.</div>`}
    <div class="card"><h3>السجلات (${rows.length})</h3>
     <div style="overflow-x:auto"><table><thead><tr>${V.cols.map(c=>`<th>${c.l}</th>`).join('')}<th class="no-print"></th></tr></thead><tbody>${tableRows}</tbody></table></div></div>`;
 }
@@ -569,7 +787,7 @@ window.saveRegister = key => {
   else S[V.ent].push(r);
   editId=null; persist(); render();
 };
-const headHtml = (t, sub) => `<div class="pagehead"><h2>${t}</h2><span id="savest" class="savestate">✓ محفوظ تلقائياً</span></div><div class="pagesub">${sub}</div><div class="redline"></div>`;
+const headHtml = (t, sub, actions='') => `<div class="pagehead"><h2>${t}</h2><div style="display:flex;align-items:center;gap:10px">${actions}<span id="savest" class="savestate">✓ محفوظ تلقائياً</span></div></div><div class="pagesub">${sub}</div><div class="redline"></div>`;
 
 /* ═══════════════ محرر بنود المستندات ═══════════════ */
 let tmpLines = [];
@@ -619,7 +837,7 @@ function renderQuotes(){
   if(row && !tmpLines.length) tmpLines = quoteLines(row.no).map(l=>({...l}));
   const f = (k,def='') => row ? (row[k]??'') : def;
   document.getElementById('main').innerHTML = `
-   ${headHtml('📄 عروض الأسعار SLS-001','اختر العميل والمنتجات — الأسعار والإجماليات والضريبة تلقائية')}
+   ${headHtml('📄 عروض الأسعار SLS-001','اختر العميل والمنتجات — الأسعار والإجماليات والضريبة تلقائية', row?`<button class="btn red sm no-print" onclick="goPrint('quote','${row.no}')">🖨 طباعة العرض</button>`:'')}
    <div class="card"><h3>${row?'تعديل العرض '+esc(row.no):'عرض سعر جديد'}</h3>
     <div class="formgrid">
      <div class="fld"><label>رقم العرض</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
@@ -636,6 +854,7 @@ function renderQuotes(){
     <h3>بنود العرض</h3><div id="linesbox">${linesHTML('price')}</div>
     <div class="totrow"><span>المجموع: <b id="t_gross">0</b></span><span>الخصم: <b id="t_disc">0</b></span><span>الصافي: <b id="t_net">0</b></span><span>الضريبة 15%: <b id="t_vat">0</b></span><span>الإجمالي: <b id="t_total" style="color:var(--red)">0</b></span></div>
     <div id="docalert" class="alertbox" data-limit="q" style="display:none"></div>
+    ${row?approvalsBox('quotes', row):''}
     <div class="btnrow"><button class="btn" onclick="saveQuote()">${row?'حفظ التعديل':'حفظ العرض'}</button>
     ${row?`<button class="btn ghost" onclick="editId=null;tmpLines=[];render()">إلغاء</button>`:''}</div></div>
    <div class="card"><h3>سجل العروض (${S.quotes.length})</h3><div style="overflow-x:auto"><table><thead><tr>
@@ -671,7 +890,7 @@ function renderSOs(){
   const f=(k,d='')=>row?(row[k]??''):d;
   const qopts = S.quotes.filter(q=>['مقبول','مرسل','مفتوح'].includes(q.status)||q.no===f('quoteRef'));
   document.getElementById('main').innerHTML = `
-   ${headHtml('🧾 أوامر البيع SLS-002','اختر مرجع العرض — العميل والإجمالي والدفعة المقدمة تلقائية')}
+   ${headHtml('🧾 أوامر البيع SLS-002','اختر مرجع العرض — العميل والإجمالي والدفعة المقدمة تلقائية', row?`<button class="btn red sm no-print" onclick="goPrint('so','${row.no}')">🖨 طباعة الأمر</button>`:'')}
    <div class="card"><h3>${row?'تعديل الأمر '+esc(row.no):'أمر بيع جديد'}</h3><div class="formgrid">
     <div class="fld"><label>رقم الأمر</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
     <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
@@ -710,7 +929,7 @@ function renderDOs(){
   const row = editId ? S.dos.find(o=>o.id===editId) : null;
   const f=(k,d='')=>row?(row[k]??''):d;
   document.getElementById('main').innerHTML = `
-   ${headHtml('🚚 إذون التسليم SLS-003','لا يخرج تسليم نهائي قبل تأشيرة سداد كامل المستحقات')}
+   ${headHtml('🚚 إذون التسليم SLS-003','لا يخرج تسليم نهائي قبل تأشيرة سداد كامل المستحقات', row?`<button class="btn red sm no-print" onclick="goPrint('do','${row.no}')">🖨 طباعة الإذن</button>`:'')}
    <div class="card"><h3>${row?'تعديل '+esc(row.no):'إذن تسليم جديد'}</h3><div class="formgrid">
     <div class="fld"><label>رقم الإذن</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
     <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
@@ -754,7 +973,7 @@ function renderPOs(){
   const f=(k,d='')=>row?(row[k]??''):d;
   const prOK = S.prs.filter(p=>p.status==='معتمد');
   document.getElementById('main').innerHTML = `
-   ${headHtml('🛒 أوامر الشراء PUR-002','ينشأ من طلب شراء معتمد فقط — الموردون الموقوفون مستبعدون — البنود بسعر التكلفة')}
+   ${headHtml('🛒 أوامر الشراء PUR-002','ينشأ من طلب شراء معتمد فقط — الموردون الموقوفون مستبعدون — البنود بسعر التكلفة', row?`<button class="btn red sm no-print" onclick="goPrint('po','${row.no}')">🖨 طباعة الأمر</button>`:'')}
    <div class="card"><h3>${row?'تعديل '+esc(row.no):'أمر شراء جديد'}</h3><div class="formgrid">
     <div class="fld"><label>رقم الأمر</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
     <div class="fld"><label>التاريخ *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
@@ -767,6 +986,7 @@ function renderPOs(){
    <h3>بنود الأمر (بسعر التكلفة)</h3><div id="linesbox">${linesHTML('cost')}</div>
    <div class="totrow"><span>الإجمالي: <b id="t_total" style="color:var(--red)">0</b></span><span style="display:none"><b id="t_gross"></b><b id="t_disc"></b><b id="t_net"></b><b id="t_vat"></b></span></div>
    <div id="docalert" class="alertbox" data-limit="po" style="display:none"></div>
+   ${row?approvalsBox('pos', row):''}
    <div class="btnrow"><button class="btn" onclick="savePO()">${row?'حفظ':'حفظ الأمر'}</button>${row?`<button class="btn ghost" onclick="editId=null;tmpLines=[];render()">إلغاء</button>`:''}</div></div>
    <div class="card"><h3>سجل أوامر الشراء (${S.pos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم</th><th>التاريخ</th><th>طلب الشراء</th><th>المورد</th><th>الإجمالي</th><th>تنبيه</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>
    ${S.pos.length?[...S.pos].reverse().map(p=>`<tr class="clickable" onclick="editId='${p.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(p.no)}</b></td><td>${esc(p.date)}</td><td>${esc(p.prRef)}</td><td>${esc(p.supplier)}</td><td>${fmt(p.total)}</td><td>${p.total>50000?'<span class="tag warn">⚠ الشريكان</span>':''}</td><td>${tagStatus(p.status)}</td>
@@ -837,12 +1057,12 @@ function renderDash(){
      ${top5.length?`<table><thead><tr><th>المنتج</th><th>الكمية</th></tr></thead><tbody>${top5.map(([p,q])=>`<tr><td>${esc(p)}</td><td><b>${q}</b></td></tr>`).join('')}</tbody></table>`:'<div class="empty">لا مبيعات مؤكدة بعد</div>'}</div>
     <div class="card"><h3>⚠ حالة المخزون الحرجة</h3>
      ${low.length?`<table><thead><tr><th>المنتج</th><th>الرصيد</th><th>الحد الأدنى</th></tr></thead><tbody>${low.map(p=>`<tr><td>${esc(p.nameAr)}</td><td><span class="tag warn">${stockQty(p.nameAr)}</span></td><td>${p.min}</td></tr>`).join('')}</tbody></table>`:'<div class="empty">✓ لا منتجات تحت الحد الأدنى</div>'}</div>
-    <div class="card"><h3>⚙️ بيانات الشركة (تظهر في المستندات المطبوعة)</h3>
-     <div class="formgrid">
-      <div class="fld"><label>اسم الشركة</label><input id="co_name" value="${esc(S.company.name)}" placeholder="يُعبَّأ بعد حسم الاسم"></div>
-      <div class="fld"><label>السجل التجاري</label><input id="co_cr" value="${esc(S.company.cr)}"></div>
-      <div class="fld"><label>الرقم الضريبي</label><input id="co_vat" value="${esc(S.company.vat)}"></div>
-     </div><button class="btn sm" onclick="S.company={name:document.getElementById('co_name').value,cr:document.getElementById('co_cr').value,vat:document.getElementById('co_vat').value};persist();alert('حُفظت بيانات الشركة')">حفظ</button></div>
+    <div class="card"><h3>⚙️ بيانات الشركة</h3>
+     <div style="display:flex;align-items:center;gap:12px">${imgTag(S.company&&S.company.logo,52)}
+      <div><div style="font-weight:700;color:var(--navy)">${esc((S.company&&S.company.name)||'— لم تُحدَّد بعد —')}</div>
+      <div style="font-size:12px;color:var(--steel)">${esc((S.company&&S.company.nameEn)||'')}</div></div></div>
+     <p style="font-size:12px;color:var(--steel);margin:10px 0">تُدار بيانات الشركة والشعار من صفحة مستقلة (تظهر في المستندات المطبوعة).</p>
+     ${isAdmin()?`<button class="btn sm" onclick="setView('company')">فتح صفحة بيانات الشركة</button>`:'<span class="tag info">للمدير فقط</span>'}</div>
     <div class="card"><h3>💾 النسخ الاحتياطي</h3>
      <p style="font-size:12px;color:var(--steel);margin-bottom:8px">البيانات تُحفظ تلقائياً داخل هذه الواجهة. للمشاركة مع الشريك أو الأرشفة: صدّر نسخة JSON ثم استوردها في أي جهاز.</p>
      <div class="btnrow"><button class="btn ghost sm" onclick="exportBackup()">⬇ تصدير نسخة احتياطية</button>
@@ -867,7 +1087,7 @@ window.importBackup = inp => {
 let printType='quote', printNo='';
 window.goPrint = (t,no) => { printType=t; printNo=no; setView('print'); };
 function renderPrint(){
-  const types = {quote:['عرض سعر SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم SLS-003',S.dos.map(o=>o.no)], po:['أمر شراء PUR-002',S.pos.map(p=>p.no)]};
+  const types = {quote:['عرض سعر SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم SLS-003',S.dos.map(o=>o.no)], po:['أمر شراء PUR-002',S.pos.map(p=>p.no)], pr:['طلب شراء PUR-001',S.prs.map(p=>p.no)], ins:['مهمة تركيب INS-001',S.installjobs.map(j=>j.no)], pay:['أمر صرف راتب FIN-002',S.payroll.map(p=>p.no)]};
   document.getElementById('main').innerHTML = `
    ${headHtml('🖨️ طباعة المستندات','اختر النوع والرقم — ثم اطبع أو احفظ PDF من نافذة الطباعة')}
    <div class="card no-print"><div class="formgrid">
@@ -878,22 +1098,33 @@ function renderPrint(){
    <div id="printdoc">${printNo ? buildDoc(printType, printNo) : '<div class="empty">اختر مستنداً لعرضه</div>'}</div>`;
 }
 function pHead(code, title, no, date){
-  const co = S.company;
-  return `<div class="ph"><div class="logo">الشعار<br>LOGO</div>
-   <div class="co"><div class="n1">${esc(co.name)||'شركة .................................'}</div><div class="n2">.................... Co. Ltd.</div></div>
+  const co = S.company || {};
+  const logo = co.logo && window.media.src(co.logo);
+  const logoBox = logo ? `<div class="logo" style="padding:0;overflow:hidden"><img src="${logo}" style="width:100%;height:100%;object-fit:contain"></div>`
+                       : `<div class="logo">الشعار<br>LOGO</div>`;
+  return `<div class="ph">${logoBox}
+   <div class="co"><div class="n1">${esc(co.name)||'شركة .................................'}</div><div class="n2">${esc(co.nameEn)||'.................... Co. Ltd.'}</div></div>
    <div class="meta">رمز النموذج: <b>${code}</b><br>رقم السجل: <b>${esc(no)}</b><br>التاريخ: ${esc(date)} — V1.0</div></div>
    <div class="pline"></div><div class="ptitle">${title}</div>`;
 }
 const pGrid = pairs => `<div class="pgrid">${pairs.map(([k,v])=>`<div class="pi"><div class="k">${k}</div><div class="v">${esc(v)||'—'}</div></div>`).join('')}</div>`;
 function pLines(no, priceLabel){
   const ls = S.lines.filter(l=>l.docNo===no);
-  return `<table style="margin-top:6px"><thead><tr><th>#</th><th>الوصف</th><th>الماركة</th><th>الكمية</th><th>${priceLabel}</th><th>الإجمالي</th></tr></thead><tbody>
-   ${ls.map((l,i)=>`<tr><td>${i+1}</td><td>${esc(l.product)}</td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`).join('')}
+  return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة</th><th>الوصف</th><th>الماركة</th><th>الكمية</th><th>${priceLabel}</th><th>الإجمالي</th></tr></thead><tbody>
+   ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td>${esc(l.product)}</td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
 const pTotals = rows => `<table style="margin-top:0"><tbody>${rows.map(([k,v])=>`<tr><td style="background:var(--light);font-weight:700;color:var(--navy);width:70%">${k}</td><td><b>${fmt(v)}</b></td></tr>`).join('')}</tbody></table>`;
 const pSigs = roles => `<div class="sigs">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم: ...............<br>التوقيع: ...............<br>التاريخ: ...............</div></div>`).join('')}</div>`;
-const pFoot = () => `<div class="pfoot">س.ت: ${esc(S.company.cr)||'............'} — الرقم الضريبي: ${esc(S.company.vat)||'............'} — الرياض</div>`;
+// اعتمادات إلكترونية في المستند المطبوع: تعرض المعتمد ووقته بدل التوقيع اليدوي
+function pApprovals(rec){
+  const a = rec.approvals || {};
+  const cell = (title, ap) => `<div class="sig"><div class="h">${title}</div><div class="b">${
+    ap && ap.by ? `✔ اعتُمد إلكترونياً<br><b style="color:var(--navy)">${esc(ap.by)}</b><br>${esc(ap.at||'')}` : 'بانتظار الاعتماد<br>الاسم: ...........<br>التاريخ: ..........'
+  }</div></div>`;
+  return `<div class="sigs">${cell('اعتماد المندوب', a.rep)}${cell('اعتماد المدير', a.manager)}</div>`;
+}
+const pFoot = () => `<div class="pfoot">س.ت: ${esc((S.company||{}).cr)||'............'} — الرقم الضريبي: ${esc((S.company||{}).vat)||'............'} — ${esc((S.company||{}).phone)||'الرياض'}</div>`;
 function buildDoc(t, no){
   if(t==='quote'){
     const q = S.quotes.find(x=>x.no===no); if(!q) return '';
@@ -912,7 +1143,8 @@ function buildDoc(t, no){
      + alert
      + `<div class="psec">الشروط العامة</div>` + pGrid([['شروط الدفع',q.pay],['مدة التوريد',q.delivery],['الضمان العام',q.warranty],['المندوب',q.rep]])
      + wsec
-     + pSigs(['مندوب المبيعات','اعتماد المدير العام','موافقة العميل']) + pFoot();
+     + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(q)
+     + pSigs(['موافقة العميل']) + pFoot();
   }
   if(t==='so'){
     const o = S.sos.find(x=>x.no===no); if(!o) return '';
@@ -941,7 +1173,31 @@ function buildDoc(t, no){
      + `<div class="psec">Items — الأصناف (بسعر التكلفة)</div>` + pLines(no,'Unit Cost')
      + pTotals([['Grand Total — الإجمالي',p.total]]) + alert
      + `<div class="psec">المطابقة</div>` + pGrid([['المتطلبات','PCoC قبل الشحن + سابر SABER + Packing List']])
-     + pSigs(['المدير العام + الختم','الشريك الثاني (>50,000)','تأكيد المورد Supplier']) + pFoot();
+     + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(p)
+     + pSigs(['تأكيد المورد Supplier']) + pFoot();
+  }
+  if(t==='pr'){
+    const p = S.prs.find(x=>x.no===no); if(!p) return '';
+    const alert = +p.est>5000?`<div class="alertbox">⚠ يتجاوز 5,000 ريال — يتطلب توقيع الشريكين</div>`:'';
+    return pHead('PUR-001','طلب شراء — Purchase Requisition',no,p.date)
+     + pGrid([['الطالب',p.requester],['السبب',p.reason],['مرجع أمر البيع',p.soRef],['المورد المقترح',p.supplier],['الحالة',p.status]])
+     + `<div class="psec">وصف الاحتياج</div>` + pGrid([['الوصف',p.desc],['التكلفة التقديرية',fmt(p.est)]])
+     + alert
+     + `<div class="psec">الاعتمادات الإلكترونية</div>` + pApprovals(p) + pFoot();
+  }
+  if(t==='ins'){
+    const j = S.installjobs.find(x=>x.no===no); if(!j) return '';
+    return pHead('INS-001','مهمة فريق التركيب — Installation Job',no,j.date)
+     + pGrid([['المرجع',(j.refType||'')+' '+(j.ref||'')],['الوصف',j.desc],['فريق التركيب',showMulti(j.crew)],['العدد المطلوب',j.crewCount],['المبلغ المقبوض',fmt(j.amount)],['العهدة المرتبطة',j.custodyRef],['حالة التصفية',j.settled],['حالة المهمة',j.status]])
+     + pSigs(['فريق التركيب','مشرف العمليات','المالية']) + pFoot();
+  }
+  if(t==='pay'){
+    const p = S.payroll.find(x=>x.no===no); if(!p) return '';
+    const net = p.net!=null?p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0));
+    return pHead('FIN-002','أمر صرف راتب — Payroll Voucher',no,p.date)
+     + pGrid([['الموظف',p.employee],['الشهر',p.month],['طريقة الصرف',p.method],['الحالة',p.status]])
+     + pTotals([['الراتب الأساسي',p.base],['إضافات/بدلات',p.additions],['خصومات',p.deductions],['صافي المستحق',net]])
+     + pSigs(['المحاسب','المدير العام','استلمت المبلغ (الموظف)']) + pFoot();
   }
   return '';
 }
@@ -1015,10 +1271,234 @@ function renderVAT(){
    <div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">ℹ هذا التقرير تشغيلي داخلي لدعم الإقرار الربعي — الإقرار الرسمي يُقدَّم عبر منصة زاتكا ZATCA وتُراجَع أرقامه مع المحاسب.</div></div>`;
 }
 
+/* ═══════════════ الاعتمادات الإلكترونية ═══════════════ */
+function apprBadge(rec){
+  const a = (rec&&rec.approvals)||{};
+  const chip = (t,ap)=> ap&&ap.by ? `<span class="tag ok" title="${esc(ap.by)} — ${esc(ap.at||'')}">${t} ✔</span>` : `<span class="tag info">${t} —</span>`;
+  return chip('مندوب', a.rep) + ' ' + chip('مدير', a.manager);
+}
+function approvalsBox(key, rec){
+  const a = rec.approvals || {};
+  const line = (label, ap) => ap&&ap.by
+    ? `<div style="font-size:12.5px">✔ <b>${esc(label)}</b>: ${esc(ap.by)} <span style="color:var(--steel)">(${esc(ap.at||'')})</span></div>`
+    : `<div style="font-size:12.5px;color:var(--steel)">◻ <b>${esc(label)}</b>: بانتظار الاعتماد</div>`;
+  const mgrBtn = canApproveMgr()
+    ? `<button class="btn sm" onclick="approve('${key}','${rec.id}','manager')">${a.manager&&a.manager.by?'إلغاء اعتماد المدير':'اعتماد كمدير'}</button>`
+    : `<span class="tag info">اعتماد المدير يتطلب صلاحية</span>`;
+  return `<div class="card" style="margin-top:10px;background:var(--pale)"><h3>الاعتماد الإلكتروني</h3>
+    ${line('اعتماد المندوب', a.rep)}${line('اعتماد المدير', a.manager)}
+    <div class="btnrow" style="margin-top:8px">
+      <button class="btn sm ghost" onclick="approve('${key}','${rec.id}','rep')">${a.rep&&a.rep.by?'إلغاء اعتماد المندوب':'اعتماد كمندوب'}</button>
+      ${mgrBtn}
+    </div></div>`;
+}
+window.approve = (key, id, role) => {
+  const ent = VIEWS[key] ? VIEWS[key].ent : key; // يدعم quotes/pos أيضاً
+  const rec = (S[ent]||S[key]||[]).find(r=>r.id===id) || (S.quotes.concat(S.pos)).find(r=>r.id===id);
+  if(!rec) return;
+  if(role==='manager' && !canApproveMgr()){ alert('لا تملك صلاحية اعتماد المدير'); return; }
+  if(!rec.approvals) rec.approvals = {};
+  if(rec.approvals[role] && rec.approvals[role].by){ rec.approvals[role] = null; }
+  else { rec.approvals[role] = { by: curName(), at: new Date().toLocaleString('en-GB',{hour12:false}).replace(',','') }; }
+  persist(); render();
+};
+
+/* ═══════════════ صفحة بيانات الشركة ═══════════════ */
+function renderCompany(){
+  const c = S.company || (S.company={});
+  const F = [
+    ['name','اسم الشركة (عربي)'],['nameEn','Company Name (English)'],
+    ['cr','السجل التجاري'],['vat','الرقم الضريبي'],
+    ['phone','الهاتف/الجوال'],['email','البريد الإلكتروني'],
+    ['website','الموقع الإلكتروني'],['address','العنوان الوطني']
+  ];
+  document.getElementById('main').innerHTML = `
+   ${headHtml('⚙️ بيانات الشركة','تظهر هذه البيانات والشعار في ترويسة جميع المستندات المطبوعة')}
+   <div class="card"><h3>الشعار</h3>
+    <div style="display:flex;align-items:center;gap:14px">
+     <div id="pv_logo">${c.logo?`<img src="${window.media.src(c.logo)||''}" style="width:90px;height:90px;object-fit:contain;border:1px solid var(--silver);border-radius:8px">`:'<span style="color:var(--steel)">لا شعار</span>'}</div>
+     <div><input type="hidden" id="f_logo" value="${esc(c.logo||'')}">
+      <input type="file" accept="image/*" onchange="onImgPick(this,'f_logo','pv_logo')">
+      <div style="font-size:11.5px;color:var(--steel);margin-top:6px">يُفضَّل شعار مربّع بخلفية بيضاء.</div></div>
+    </div></div>
+   <div class="card"><h3>البيانات</h3><div class="formgrid">
+    ${F.map(([k,l])=>`<div class="fld"><label>${l}</label><input id="co_${k}" value="${esc(c[k]||'')}"></div>`).join('')}
+   </div>
+   <div class="btnrow"><button class="btn" onclick="saveCompany()">💾 حفظ بيانات الشركة</button></div></div>`;
+}
+window.saveCompany = () => {
+  const c = S.company || (S.company={});
+  ['name','nameEn','cr','vat','phone','email','website','address'].forEach(k=>{ c[k] = document.getElementById('co_'+k).value; });
+  c.logo = document.getElementById('f_logo').value;
+  persist(); alert('حُفظت بيانات الشركة'); render();
+};
+
+/* ═══════════════ إدارة المستخدمين والصلاحيات ═══════════════ */
+const PERM_VIEWS = [
+  ['products','المنتجات'],['customers','العملاء'],['suppliers','الموردون'],['employees','الموظفون'],
+  ['quotes','عروض الأسعار'],['sos','أوامر البيع'],['dos','إذون التسليم'],
+  ['prs','طلبات الشراء'],['pos','أوامر الشراء'],['stock','حركات المخزون'],['inventory','جرد المخزون'],
+  ['shipments','الشحنات'],['evals','تقييم الموردين'],['qc','الفحص الفني'],['srv','الصيانة'],['complaints','الشكاوى'],
+  ['installjobs','حسابات فريق التركيب'],['payroll','الرواتب'],
+  ['petty','العهد النقدية'],['expenses','المصروفات'],['vat','تقرير الضريبة'],['custody','العهد الداخلية'],['print','طباعة المستندات']
+];
+function renderUsers(){
+  const editing = editId ? S.users.find(u=>u.id===editId) : null;
+  const u = editing || {};
+  const uViews = u.views || [];
+  const checkAll = (u.admin || uViews.includes('all'));
+  const rows = S.users.map(x=>{
+    const scope = x.admin ? '<span class="tag ok">مدير — كل الصلاحيات</span>' : (x.readOnly?'<span class="tag info">استعراض فقط</span>':'<span class="tag mid">تعديل محدود</span>');
+    return `<tr>
+      <td>${imgTag(x.photo,30)}</td><td><b>${esc(x.name||'')}</b></td><td>${esc(x.email||'')}</td>
+      <td>${scope}${x.approveManager&&!x.admin?' <span class="tag ok">اعتماد مدير</span>':''}</td>
+      <td>${x.enabled===false?'<span class="tag warn">موقوف</span>':'<span class="tag ok">نشط</span>'}</td>
+      <td class="no-print">
+        <button class="btn sm ghost" onclick="editUserRow('${x.id}')">تعديل</button>
+        <button class="btn sm ghost" onclick="resetUserPass('${x.id}')">إعادة تعيين كلمة السر</button>
+        ${x.admin?'':`<button class="btn sm ghost" onclick="toggleUser('${x.id}')">${x.enabled===false?'تفعيل':'إيقاف'}</button>`}
+      </td></tr>`;
+  }).join('');
+  document.getElementById('main').innerHTML = `
+   ${headHtml('👤 المستخدمون والصلاحيات','إضافة مستخدمين وتحديد صلاحياتهم. الشريكان مديران بصلاحية كاملة.')}
+   <div class="card"><h3>${editing?'تعديل مستخدم: '+esc(editing.email):'إضافة مستخدم جديد'}</h3>
+    <div class="formgrid">
+     <div class="fld"><label>الاسم *</label><input id="u_name" value="${esc(u.name||'')}"></div>
+     <div class="fld"><label>البريد الإلكتروني *</label><input id="u_email" type="email" value="${esc(u.email||'')}" ${editing?'readonly':''}></div>
+     ${editing?'':`<div class="fld"><label>كلمة مرور مؤقتة *</label><input id="u_pass" value="${genPass()}"></div>`}
+     <div class="fld"><label>الجوال</label><input id="u_mobile" value="${esc(u.mobile||'')}"></div>
+     <div class="fld"><label>المنصب/الوصف</label><input id="u_title" value="${esc(u.title||'')}"></div>
+     <div class="fld"><label>الصورة</label><input type="hidden" id="f_uphoto" value="${esc(u.photo||'')}"><div id="pv_uphoto" style="margin-bottom:6px">${u.photo?`<img src="${window.media.src(u.photo)||''}" style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid var(--silver)">`:''}</div><input type="file" accept="image/*" onchange="onImgPick(this,'f_uphoto','pv_uphoto')"></div>
+    </div>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;margin:6px 0 10px">
+     <label style="font-weight:700"><input type="checkbox" id="u_admin" ${u.admin?'checked':''} onchange="document.getElementById('permbox').style.display=this.checked?'none':'block'"> مدير (صلاحية كاملة)</label>
+     <label style="font-weight:700"><input type="checkbox" id="u_ro" ${u.readOnly?'checked':''}> استعراض فقط (بدون تعديل)</label>
+     <label style="font-weight:700"><input type="checkbox" id="u_mgr" ${u.approveManager?'checked':''}> صلاحية اعتماد المدير</label>
+    </div>
+    <div id="permbox" class="card" style="background:var(--pale);display:${checkAll?'none':'block'}"><h3>الشاشات المسموح بها</h3>
+     <div style="display:flex;flex-wrap:wrap;gap:8px 16px">
+      ${PERM_VIEWS.map(([k,l])=>`<label style="font-size:12.5px;font-weight:400"><input type="checkbox" class="permchk" value="${k}" ${uViews.includes(k)||uViews.includes('all')?'checked':''}> ${l}</label>`).join('')}
+     </div><div style="font-size:11.5px;color:var(--steel);margin-top:6px">لوحة التحكم وصفحة «حسابي» متاحة للجميع دائماً.</div></div>
+    <div class="btnrow"><button class="btn" onclick="saveUser()">${editing?'حفظ التعديل':'➕ إنشاء المستخدم'}</button>
+     ${editing?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div>
+    <div id="u_msg" style="margin-top:8px;font-size:12.5px"></div>
+   </div>
+   <div class="card"><h3>المستخدمون (${S.users.length})</h3>
+    <div style="overflow-x:auto"><table><thead><tr><th>صورة</th><th>الاسم</th><th>البريد</th><th>الصلاحيات</th><th>الحالة</th><th class="no-print"></th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
+}
+function genPass(){ return 'Erp' + Math.random().toString(36).slice(2,8) + '!' + Math.floor(Math.random()*90+10); }
+function readUserForm(){
+  const admin = document.getElementById('u_admin').checked;
+  const views = admin ? ['all'] : [...document.querySelectorAll('.permchk')].filter(c=>c.checked).map(c=>c.value);
+  return {
+    name: document.getElementById('u_name').value.trim(),
+    email: document.getElementById('u_email').value.trim().toLowerCase(),
+    mobile: document.getElementById('u_mobile').value.trim(),
+    title: document.getElementById('u_title').value.trim(),
+    photo: document.getElementById('f_uphoto').value,
+    admin, readOnly: document.getElementById('u_ro').checked,
+    approveManager: admin || document.getElementById('u_mgr').checked,
+    views
+  };
+}
+window.editUserRow = id => { editId=id; render(); window.scrollTo(0,0); };
+window.toggleUser = id => { const u=S.users.find(x=>x.id===id); if(!u||u.admin) return; u.enabled = u.enabled===false; persist(); render(); };
+window.resetUserPass = async id => {
+  const u = S.users.find(x=>x.id===id); if(!u) return;
+  if(!confirm('إرسال رابط إعادة تعيين كلمة المرور إلى '+u.email+'؟')) return;
+  try{ await window.authApi.sendReset(u.email); alert('تم إرسال رابط إعادة التعيين إلى '+u.email); }
+  catch(e){ alert('تعذّر الإرسال: '+e.message); }
+};
+window.saveUser = async () => {
+  const msg = document.getElementById('u_msg');
+  const f = readUserForm();
+  if(!f.name){ alert('الاسم مطلوب'); return; }
+  if(!f.email){ alert('البريد الإلكتروني مطلوب'); return; }
+  if(editId){
+    const i = S.users.findIndex(x=>x.id===editId);
+    S.users[i] = {...S.users[i], ...f};
+    editId=null; persist(); render(); return;
+  }
+  // مستخدم جديد: أنشئ حساب فايربيس دون التأثير على جلسة المدير
+  const pass = document.getElementById('u_pass').value;
+  if(!pass || pass.length<6){ alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
+  msg.innerHTML = '<span style="color:var(--steel)">جارِ إنشاء الحساب...</span>';
+  try{
+    const uid2 = await window.authApi.createUser(f.email, pass);
+    S.users.push({id:uid(), uid:uid2, enabled:true, ...f});
+    persist();
+    msg.innerHTML = `<div class="alertbox" style="background:#e6f4ea;color:var(--green);border-right-color:var(--green)">✔ تم إنشاء المستخدم <b>${esc(f.email)}</b> — كلمة المرور المؤقتة: <b>${esc(pass)}</b> (سلّمها للمستخدم، ويمكنه تغييرها من «حسابي»).</div>`;
+    setTimeout(()=>{ render(); }, 4000);
+  }catch(e){
+    const m = e.code==='auth/email-already-in-use' ? 'هذا البريد مستخدم مسبقاً' : (e.code==='auth/invalid-email'?'بريد غير صالح':e.message);
+    msg.innerHTML = `<span style="color:var(--red)">تعذّر الإنشاء: ${esc(m)}</span>`;
+  }
+};
+
+/* ═══════════════ صفحة «حسابي» — تغيير كلمة المرور ═══════════════ */
+function renderAccount(){
+  const au = window.authUser || {};
+  const u = currentUser() || {};
+  document.getElementById('main').innerHTML = `
+   ${headHtml('🔑 حسابي','تعديل كلمة المرور الخاصة بك')}
+   <div class="card"><h3>معلوماتي</h3>
+    <div style="display:flex;align-items:center;gap:12px">${imgTag(u.photo,52)}
+     <div><div style="font-weight:700;color:var(--navy)">${esc(u.name||au.email||'')}</div>
+     <div style="font-size:12px;color:var(--steel)">${esc(au.email||'')} ${u.admin?'— مدير':''}</div></div></div></div>
+   <div class="card"><h3>تغيير كلمة المرور</h3><div class="formgrid" style="max-width:520px">
+    <div class="fld"><label>كلمة المرور الحالية</label><input id="cp_old" type="password"></div>
+    <div class="fld"><label>كلمة المرور الجديدة</label><input id="cp_new" type="password"></div>
+    <div class="fld"><label>تأكيد كلمة المرور الجديدة</label><input id="cp_new2" type="password"></div>
+   </div>
+   <div class="btnrow"><button class="btn" onclick="changeMyPass()">حفظ كلمة المرور</button></div>
+   <div id="cp_msg" style="margin-top:8px;font-size:12.5px"></div></div>`;
+}
+window.changeMyPass = async () => {
+  const msg = document.getElementById('cp_msg');
+  const oldP = document.getElementById('cp_old').value;
+  const n1 = document.getElementById('cp_new').value, n2 = document.getElementById('cp_new2').value;
+  if(n1.length<6){ msg.innerHTML='<span style="color:var(--red)">كلمة المرور الجديدة 6 أحرف على الأقل</span>'; return; }
+  if(n1!==n2){ msg.innerHTML='<span style="color:var(--red)">كلمتا المرور غير متطابقتين</span>'; return; }
+  try{
+    await window.authApi.changeMyPassword(oldP, n1);
+    msg.innerHTML='<span style="color:var(--green)">✔ تم تغيير كلمة المرور بنجاح</span>';
+    document.getElementById('cp_old').value=document.getElementById('cp_new').value=document.getElementById('cp_new2').value='';
+  }catch(e){
+    const m = (e.code==='auth/wrong-password'||e.code==='auth/invalid-credential')?'كلمة المرور الحالية غير صحيحة':e.message;
+    msg.innerHTML='<span style="color:var(--red)">تعذّر التغيير: '+esc(m)+'</span>';
+  }
+};
+
+/* ═══════════════ تقرير الرواتب ═══════════════ */
+window.printPayrollReport = () => {
+  const mon = prompt('اكتب الشهر بصيغة YYYY-MM لطباعة تقريره (اتركه فارغاً لكل السجلات):', today().slice(0,7));
+  if(mon===null) return;
+  const rows = S.payroll.filter(p=> !mon || (p.month||'')===mon);
+  const net = p => p.net!=null?p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0));
+  const tot = rows.reduce((a,p)=>a+net(p),0);
+  const totBase = rows.reduce((a,p)=>a+(+p.base||0),0);
+  const totAdd = rows.reduce((a,p)=>a+(+p.additions||0),0);
+  const totDed = rows.reduce((a,p)=>a+(+p.deductions||0),0);
+  const docHtml =
+    pHead('FIN-002','تقرير الرواتب — Payroll Report','تقرير','الشهر: '+(mon||'الكل'))
+    + `<table style="margin-top:8px"><thead><tr><th>#</th><th>الموظف</th><th>الشهر</th><th>الأساسي</th><th>إضافات</th><th>خصومات</th><th>الصافي</th><th>الحالة</th></tr></thead><tbody>
+      ${rows.length?rows.map((p,i)=>`<tr><td>${i+1}</td><td>${esc(p.employee)}</td><td>${esc(p.month||'')}</td><td>${fmt(p.base)}</td><td>${fmt(p.additions)}</td><td>${fmt(p.deductions)}</td><td><b>${fmt(net(p))}</b></td><td>${esc(p.status||'')}</td></tr>`).join(''):'<tr><td colspan="8" class="empty">لا سجلات</td></tr>'}
+      </tbody><tfoot><tr><td colspan="3" style="background:var(--light);font-weight:700;color:var(--navy)">الإجمالي — ${rows.length} موظف</td><td style="font-weight:700">${fmt(totBase)}</td><td style="font-weight:700">${fmt(totAdd)}</td><td style="font-weight:700">${fmt(totDed)}</td><td style="font-weight:700;color:var(--red)">${fmt(tot)}</td><td></td></tr></tfoot></table>`
+    + pSigs(['المحاسب','المدير العام']) + pFoot();
+  const acts = `<button class="btn red sm no-print" onclick="window.print()">🖨 طباعة / حفظ PDF</button> <button class="btn ghost sm no-print" onclick="setView('payroll')">رجوع</button>`;
+  document.getElementById('main').innerHTML =
+    `${headHtml('💰 تقرير الرواتب','الشهر: '+(mon||'الكل'), acts)}
+     <div id="printdoc">${docHtml}</div>`;
+  setTimeout(()=>window.print(), 300);
+};
+
 /* ═══════════════ الموجه والتهيئة ═══════════════ */
 function render(){
   renderNav();
   if(view==='dash') return renderDash();
+  if(view==='company') return isAdmin()?renderCompany():renderDash();
+  if(view==='users') return isAdmin()?renderUsers():renderDash();
+  if(view==='account') return renderAccount();
   if(view==='quotes') return renderQuotes();
   if(view==='sos') return renderSOs();
   if(view==='dos') return renderDOs();
