@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello World</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: #fff8f0;
+      color: #1a1a1a;
+    }
+    h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    #status { color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Hello, World!</h1>
+  <p id="status">Connecting to Firebase&hellip;</p>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+    import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCH9ZC6knpkdZ9SGiWq5lN1EDgqmrHOKUU",
+      authDomain: "erp-workshop-equip.firebaseapp.com",
+      projectId: "erp-workshop-equip",
+      storageBucket: "erp-workshop-equip.firebasestorage.app",
+      messagingSenderId: "827086737774",
+      appId: "1:827086737774:web:bcf2da1ea2299e473df17f",
+      measurementId: "G-X3PQTJY06X"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const statusEl = document.getElementById("status");
+
+    isSupported()
+      .then((supported) => {
+        if (supported) getAnalytics(app);
+        statusEl.textContent = "Firebase initialized ✔";
+      })
+      .catch(() => {
+        statusEl.textContent = "Firebase initialized ✔ (analytics unavailable)";
+      });
+  </script>
+</body>
+</html>
