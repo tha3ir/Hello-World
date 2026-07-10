@@ -1,6 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    function isOptStr(m, k, maxLen) {
+      return !(k in m) || (m[k] is string && m[k].size() <= maxLen);
+    }
     match /erp/main {
       allow read: if request.auth != null;
       allow write: if request.auth != null
@@ -45,6 +48,39 @@ service cloud.firestore {
         && request.resource.data.action is string
         && request.resource.data.by is string;
       allow update, delete: if false;
+    }
+    // النموذج العام: العميل (بلا حساب) يُنشئ طلب شكوى/صيانة فقط — لا قراءة ولا تعديل ولا حذف.
+    // الموظف المسجّل يقرأ وينقل السجل (absorb) إلى complaints/srv ثم يحذف مستند الالتقاط.
+    match /publicIntake/{id} {
+      allow read, update, delete: if request.auth != null;
+      allow create: if
+        request.resource.data.keys().hasOnly(['type','status','submittedTs','customerName','mobile',
+          'crOrAccount','invoiceRef','serial','description','category','productModel','purchaseDate','requestType','files','pubRef'])
+        && request.resource.data.type in ['complaint','srv']
+        && request.resource.data.status == 'new'
+        && request.resource.data.submittedTs is number
+        && request.resource.data.customerName is string && request.resource.data.customerName.size() >= 2 && request.resource.data.customerName.size() <= 120
+        && request.resource.data.mobile is string && request.resource.data.mobile.size() >= 9 && request.resource.data.mobile.size() <= 20
+        && request.resource.data.description is string && request.resource.data.description.size() >= 3 && request.resource.data.description.size() <= 3000
+        && isOptStr(request.resource.data, 'crOrAccount', 60)
+        && isOptStr(request.resource.data, 'invoiceRef', 60)
+        && isOptStr(request.resource.data, 'serial', 60)
+        && isOptStr(request.resource.data, 'category', 40)
+        && isOptStr(request.resource.data, 'productModel', 120)
+        && isOptStr(request.resource.data, 'purchaseDate', 20)
+        && isOptStr(request.resource.data, 'requestType', 30)
+        && isOptStr(request.resource.data, 'pubRef', 20)
+        && (!('files' in request.resource.data) || (request.resource.data.files is list && request.resource.data.files.size() <= 3));
+    }
+    // بيانات الشركة العامة (اسم + شعار مصغّر فقط) — تُقرأ من صفحة الطلب العام بلا حساب. لا بيانات حسّاسة هنا إطلاقاً.
+    match /publicProfile/main {
+      allow read: if true;
+      allow write: if request.auth != null
+        && request.resource.data.keys().hasOnly(['name','nameEn','logo','phone'])
+        && isOptStr(request.resource.data, 'name', 200)
+        && isOptStr(request.resource.data, 'nameEn', 200)
+        && isOptStr(request.resource.data, 'phone', 40)
+        && isOptStr(request.resource.data, 'logo', 400000);
     }
   }
 }

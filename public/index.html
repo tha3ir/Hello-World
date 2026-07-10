@@ -132,6 +132,21 @@ tr.clickable:hover td{background:#eef3fa}
 .shok .big{font-size:44px;margin-bottom:8px}
 .shok h3{color:var(--green);font-family:'Cairo';font-size:18px;margin-bottom:6px}
 .pdblock{margin:0 auto 14px;box-shadow:0 4px 18px rgba(14,35,66,.08)}
+/* ═══ النموذج العام: تقديم شكوى / طلب صيانة وضمان بلا حساب ═══ */
+#pubReqView{min-height:100vh;background:var(--pale);padding:18px 12px}
+.pubhead{max-width:640px;margin:0 auto 14px;text-align:center}
+.pubhead .logo{width:64px;height:64px;margin:0 auto 8px;border-radius:10px}
+.pubhead h1{color:var(--navy);font-family:'Cairo';font-size:18px}
+.pubhead p{color:var(--steel);font-size:12.5px;margin-top:2px}
+.pubtabs{display:flex;gap:10px;max-width:640px;margin:0 auto 14px}
+.pubtab{flex:1;background:#fff;border:2px solid var(--silver);border-radius:10px;padding:14px 10px;text-align:center;cursor:pointer;font-family:inherit;font-weight:700;color:var(--navy);font-size:13.5px;line-height:1.6}
+.pubtab .ic{font-size:26px;display:block;margin-bottom:4px}
+.pubtab.active{border-color:var(--red);background:#fdecea}
+.pubcard{background:#fff;border:1px solid var(--silver);border-radius:12px;max-width:640px;margin:0 auto 14px;padding:20px;box-shadow:0 4px 18px rgba(14,35,66,.08)}
+.filelist{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.filechip{display:flex;align-items:center;gap:6px;background:var(--light);border-radius:20px;padding:5px 10px;font-size:11.5px;color:var(--navy)}
+.filechip button{background:none;border:none;color:var(--red);font-weight:800;cursor:pointer;font-size:13px;padding:0 2px}
+.pubreqno{background:var(--light);border-radius:8px;padding:10px 14px;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;letter-spacing:.5px;direction:ltr;text-align:center;margin:10px 0}
 /* ═══ الجوال: شريط علوي + قائمة جانبية منزلقة ═══ */
 #topbar{display:none}
 #backdrop{display:none}
@@ -175,8 +190,8 @@ tr.clickable:hover td{background:#eef3fa}
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, serverTimestamp,
-           collection, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+  import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp,
+           collection, query, orderBy, limit, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
            createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword,
            EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
@@ -331,14 +346,60 @@ tr.clickable:hover td{background:#eef3fa}
     }
   };
 
+  /* ═══ النموذج العام: التقاط شكاوى/طلبات صيانة من عملاء بلا حساب ═══ */
+  window.intake = {
+    async create(data){
+      const _db = await getDb();
+      const id = 'pi' + Date.now().toString(36) + Math.random().toString(36).slice(2,8);
+      await setDoc(doc(_db, 'publicIntake', id), { ...data, status:'new', submittedTs: Date.now() });
+      return id;
+    },
+    // تُستدعى فقط من جلسة موظف مسجّل دخوله (rules تمنع القراءة لغير المسجّلين)
+    async listAll(){
+      const _db = await getDb();
+      const snap = await getDocs(collection(_db, 'publicIntake'));
+      const out = []; snap.forEach(d=>out.push({ id: d.id, ...d.data() }));
+      return out;
+    },
+    async remove(id){
+      const _db = await getDb();
+      await deleteDoc(doc(_db, 'publicIntake', id));
+    },
+    // مراقبة حيّة لعدد الطلبات الجديدة الواردة — تعمل فقط بعد تسجيل دخول ناجح
+    watch(cb){
+      getDb().then(_db => {
+        onSnapshot(collection(_db, 'publicIntake'), snap => {
+          const out = []; snap.forEach(d=>out.push({ id: d.id, ...d.data() }));
+          cb(out.filter(x=>x.status==='new'));
+        }, ()=>{});
+      }).catch(()=>{});
+    }
+  };
+
+  /* ═══ بيانات الشركة العامة (اسم + شعار مصغّر) — تُقرأ بلا تسجيل دخول من صفحة الطلب العام ═══ */
+  window.publicProfile = {
+    async get(){
+      try{
+        const _db = await getDb();
+        const s = await getDoc(doc(_db, 'publicProfile', 'main'));
+        return s.exists() ? s.data() : null;
+      }catch(e){ return null; }
+    },
+    async save(data){
+      const _db = await getDb();
+      await setDoc(doc(_db, 'publicProfile', 'main'), data);
+    }
+  };
+
   /* ═══ وضع العميل: فتح الرابط العام ?share=TOKEN — بلا تسجيل دخول ═══ */
   const shareParam = new URLSearchParams(location.search).get('share');
+  const isPublicRequestRoute = () => location.hash.indexOf('public-request') !== -1;
+  const escS = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
   async function renderShareView(token){
     const el = document.getElementById('shareView');
     el.style.display = 'block';
     const wrap = inner => `<div class="shcard">${inner}</div>`;
-    const escS = s => String(s??'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
     el.innerHTML = wrap('<p style="text-align:center;color:var(--steel)">جارِ تحميل المستند...</p>');
     let d = null;
     try{ d = await window.shares.get(token); }catch(e){}
@@ -389,6 +450,169 @@ tr.clickable:hover td{background:#eef3fa}
     });
   }
 
+  /* ═══ رفع الملفات لصفحة الطلب العام — ذاتية الاكتفاء بلا اعتماد على السكربت الإداري ═══ */
+  function resizeImageDataUrl(file, maxDim=900, quality=0.8){
+    return new Promise((resolve,reject)=>{
+      const fr = new FileReader();
+      fr.onerror = () => reject(new Error('فشل قراءة الملف'));
+      fr.onload = () => {
+        const im = new Image();
+        im.onerror = () => reject(new Error('صورة غير صالحة'));
+        im.onload = () => {
+          let {width:w, height:h} = im;
+          if(w>h && w>maxDim){ h = Math.round(h*maxDim/w); w = maxDim; }
+          else if(h>=w && h>maxDim){ w = Math.round(w*maxDim/h); h = maxDim; }
+          const cv = document.createElement('canvas'); cv.width=w; cv.height=h;
+          const ctx = cv.getContext('2d');
+          ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h);
+          ctx.drawImage(im,0,0,w,h);
+          resolve(cv.toDataURL('image/jpeg', quality));
+        };
+        im.src = fr.result;
+      };
+      fr.readAsDataURL(file);
+    });
+  }
+  async function fileToAttachment(file){
+    if(file.type.startsWith('image/')) return { name:file.name, kind:'img', d: await resizeImageDataUrl(file) };
+    if(file.type === 'application/pdf'){
+      if(file.size > 500*1024) throw new Error('حجم ملف PDF يتجاوز 500KB — رجاءً صغّر الملف — PDF file exceeds 500KB, please compress it');
+      return new Promise((resolve,reject)=>{
+        const fr = new FileReader();
+        fr.onerror = () => reject(new Error('فشل قراءة الملف'));
+        fr.onload = () => resolve({ name:file.name, kind:'pdf', d: fr.result });
+        fr.readAsDataURL(file);
+      });
+    }
+    throw new Error('الأنواع المدعومة: صور JPG/PNG و PDF فقط — Supported types: JPG/PNG images and PDF only');
+  }
+
+  /* ═══ نموذج الطلب العام: شكوى (complaints/QLT-002) أو صيانة وضمان (srv/SRV-001) ═══ */
+  const PUB_CATS = ['جودة منتج','تأخير توريد','تركيب','فوترة','سلوك خدمة','أخرى'];
+  const PUB_REQ_TYPES = ['صيانة عادية','ضمان','قطعة غيار'];
+  let pubKind = 'complaint';
+  let pubFiles = [];
+
+  function pubField(id, label, opts={}){
+    const req = opts.req ? ' *' : '';
+    if(opts.type === 'textarea')
+      return `<div class="fld" style="margin-bottom:12px"><label>${label}${req}</label><textarea id="${id}" placeholder="${escS(opts.ph||'')}" style="font-size:16px"></textarea></div>`;
+    if(opts.type === 'select')
+      return `<div class="fld" style="margin-bottom:12px"><label>${label}${req}</label><select id="${id}" style="font-size:16px"><option value="">${escS(opts.ph||'—')}</option>${opts.options.map(o=>`<option value="${escS(o.v||o)}">${escS(o.l||o)}</option>`).join('')}</select></div>`;
+    return `<div class="fld" style="margin-bottom:12px"><label>${label}${req}</label><input id="${id}" type="${opts.type||'text'}" placeholder="${escS(opts.ph||'')}" style="font-size:16px${opts.ltr?';direction:ltr;text-align:right':''}"></div>`;
+  }
+
+  function renderPubForm(){
+    const isSrv = pubKind === 'srv';
+    const box = document.getElementById('pubFormBox');
+    if(!box) return;
+    box.innerHTML = `
+      ${pubField('pf_name','الاسم الكامل — Customer Name',{req:1})}
+      ${pubField('pf_mobile','رقم الجوال — Mobile Number',{req:1, type:'tel', ltr:1, ph:'05xxxxxxxx'})}
+      ${pubField('pf_cr','رقم السجل التجاري أو الحساب (إن وجد) — CR or Account Number',{})}
+      ${pubField('pf_inv','رقم الفاتورة أو أمر البيع المرتبط — Invoice or Sales Order Number',{})}
+      ${pubField('pf_serial','الرقم التسلسلي للمنتج — Product Serial Number',{})}
+      ${isSrv ? pubField('pf_model','اسم أو موديل المنتج — Product Name or Model',{}) : ''}
+      ${isSrv ? pubField('pf_pdate','تاريخ الشراء أو التركيب (إن كان معروفاً) — Purchase or Installation Date',{type:'date'}) : ''}
+      ${isSrv ? pubField('pf_rtype','نوع الطلب — Request Type',{req:1, type:'select', options:[{v:'صيانة عادية',l:'صيانة عادية — Maintenance'},{v:'ضمان',l:'ضمان — Warranty'},{v:'قطعة غيار',l:'قطعة غيار — Spare Part'}]})
+             : pubField('pf_cat','تصنيف الشكوى — Complaint Category',{type:'select', options: PUB_CATS.map(c=>({v:c,l:c}))})}
+      ${pubField('pf_desc','وصف الشكوى أو المشكلة — Complaint or Issue Description',{req:1, type:'textarea', ph:'يرجى وصف المشكلة بالتفصيل...'})}
+      <div class="fld" style="margin-bottom:6px"><label>إرفاق صور أو ملفات (فاتورة، صورة العطل، صورة الضمان) — Attach Files</label>
+        <input type="file" accept="image/*,application/pdf" id="pf_file" style="font-size:14px"></div>
+      <div class="filelist" id="pf_filelist"></div>
+      <p style="font-size:11px;color:var(--steel);margin:4px 0 12px">حتى 3 ملفات — صور JPG/PNG أو PDF (أقل من 500KB) — Up to 3 files, JPG/PNG images or PDF under 500KB</p>
+      <button class="btn red" id="pf_submit" style="width:100%;font-size:15px">📨 إرسال الطلب — Submit Request</button>
+      <p id="pf_err" style="color:var(--red);font-size:12.5px;margin-top:8px;min-height:15px"></p>`;
+    renderPubFileList();
+    document.getElementById('pf_file').addEventListener('change', async (e) => {
+      const f = e.target.files && e.target.files[0]; if(!f) return;
+      e.target.value = '';
+      const err = document.getElementById('pf_err'); err.textContent = '';
+      if(pubFiles.length >= 3){ err.textContent = 'الحد الأقصى 3 ملفات — Maximum 3 files'; return; }
+      try{ pubFiles.push(await fileToAttachment(f)); renderPubFileList(); }
+      catch(ex){ err.textContent = ex.message; }
+    });
+    document.getElementById('pf_submit').addEventListener('click', submitPubForm);
+  }
+  function renderPubFileList(){
+    const el = document.getElementById('pf_filelist'); if(!el) return;
+    el.innerHTML = pubFiles.map((f,i)=>`<span class="filechip">${f.kind==='img'?'🖼️':'📄'} ${escS(f.name).slice(0,24)}<button type="button" onclick="__pubRemoveFile(${i})">✕</button></span>`).join('');
+  }
+  window.__pubRemoveFile = i => { pubFiles.splice(i,1); renderPubFileList(); };
+
+  async function submitPubForm(){
+    const g = id => { const el = document.getElementById(id); return el ? el.value.trim() : ''; };
+    const err = document.getElementById('pf_err'); err.textContent = '';
+    const name = g('pf_name'), mobile = g('pf_mobile'), desc = g('pf_desc');
+    if(name.length < 2){ err.textContent = 'يرجى إدخال الاسم الكامل — Please enter your full name'; return; }
+    if(!/^[0-9+\s-]{9,20}$/.test(mobile)){ err.textContent = 'يرجى إدخال رقم جوال صحيح — Please enter a valid mobile number'; return; }
+    if(desc.length < 3){ err.textContent = 'يرجى وصف المشكلة — Please describe the issue'; return; }
+    const isSrv = pubKind === 'srv';
+    if(isSrv && !g('pf_rtype')){ err.textContent = 'يرجى اختيار نوع الطلب — Please select a request type'; return; }
+    const btn = document.getElementById('pf_submit');
+    btn.disabled = true; btn.textContent = 'جارِ الإرسال... — Sending...';
+    try{
+      const payload = {
+        type: isSrv ? 'srv' : 'complaint',
+        customerName: name, mobile,
+        crOrAccount: g('pf_cr'), invoiceRef: g('pf_inv'), serial: g('pf_serial'),
+        description: desc, files: pubFiles.map(f=>({name:f.name, kind:f.kind, d:f.d}))
+      };
+      if(isSrv){ payload.productModel = g('pf_model'); payload.purchaseDate = g('pf_pdate'); payload.requestType = g('pf_rtype'); }
+      else { payload.category = g('pf_cat'); }
+      const id = await window.intake.create(payload);
+      const pubRef = 'PUB-' + id.slice(-8).toUpperCase();
+      try{ const _db = await getDb(); await updateDoc(doc(_db,'publicIntake',id), { pubRef }); }catch(e){}
+      renderPubSuccess(pubRef, isSrv);
+    }catch(e){
+      err.textContent = 'تعذّر إرسال الطلب — أعد المحاولة أو تواصل مع الشركة هاتفياً — Failed to send, please retry or call us';
+      btn.disabled = false; btn.textContent = '📨 إرسال الطلب — Submit Request';
+    }
+  }
+
+  async function renderPubSuccess(pubRef, isSrv){
+    const box = document.getElementById('pubFormBox'); if(!box) return;
+    let phone = '';
+    try{ const prof = await window.publicProfile.get(); phone = (prof&&prof.phone) || ''; }catch(e){}
+    box.innerHTML = `<div class="shok"><div class="big">✅</div>
+      <h3>تم استلام طلبك بنجاح — Your request has been received</h3>
+      <p style="color:var(--steel);font-size:13px;margin-bottom:4px">شكراً لتواصلك معنا، سيقوم فريقنا بمراجعة ${isSrv?'طلب الصيانة':'الشكوى'} في أقرب وقت.<br>
+      Thank you for contacting us — our team will review your ${isSrv?'maintenance request':'complaint'} shortly.</p>
+      <div class="pubreqno">${escS(pubRef)}</div>
+      <p style="color:var(--steel);font-size:12px">احتفظ بهذا الرقم المرجعي للمتابعة — Please keep this reference number for follow-up${phone?`<br>للاستفسار: <span dir="ltr">${escS(phone)}</span>`:''}</p>
+      <button class="btn ghost sm" style="margin-top:10px" onclick="location.reload()">تقديم طلب آخر — Submit another request</button>
+      </div>`;
+  }
+
+  async function renderPublicRequestView(){
+    const el = document.getElementById('pubReqView');
+    el.style.display = 'block';
+    let prof = null;
+    try{ prof = await window.publicProfile.get(); }catch(e){}
+    const name = (prof && prof.name) || 'خدمة العملاء — Customer Service';
+    const logo = (prof && prof.logo) ? `<img class="logo" src="${prof.logo}" style="object-fit:contain;background:#fff;border:1px solid var(--silver)">` : '';
+    el.innerHTML = `
+      <div class="pubhead">${logo}<h1>${escS(name)}</h1><p>تقديم شكوى أو طلب صيانة وضمان — Submit a complaint or a maintenance/warranty request</p></div>
+      <div class="pubtabs">
+        <button type="button" class="pubtab active" id="tab_complaint"><span class="ic">📮</span>تقديم شكوى<br>Submit a Complaint</button>
+        <button type="button" class="pubtab" id="tab_srv"><span class="ic">🔧</span>طلب صيانة أو ضمان<br>Maintenance & Warranty Request</button>
+      </div>
+      <div class="pubcard" id="pubFormBox"></div>`;
+    document.getElementById('tab_complaint').addEventListener('click', () => {
+      pubKind = 'complaint'; pubFiles = [];
+      document.getElementById('tab_complaint').classList.add('active');
+      document.getElementById('tab_srv').classList.remove('active');
+      renderPubForm();
+    });
+    document.getElementById('tab_srv').addEventListener('click', () => {
+      pubKind = 'srv'; pubFiles = [];
+      document.getElementById('tab_srv').classList.add('active');
+      document.getElementById('tab_complaint').classList.remove('active');
+      renderPubForm();
+    });
+    renderPubForm();
+  }
+
   /* بوابة الدخول — تسجيل دخول فقط، لا تسجيل ذاتي */
   const loginOverlay = document.getElementById('loginOverlay');
   const appEl = document.getElementById('app');
@@ -404,7 +628,12 @@ tr.clickable:hover td{background:#eef3fa}
     if(cachedName){ document.title = cachedName; const el = document.getElementById('li_sysname'); if(el) el.textContent = cachedName; }
   }catch(e){}
 
-  if(shareParam){
+  if(isPublicRequestRoute()){
+    /* الرابط العام لتقديم شكوى/طلب صيانة: لا لوحة تحكم ولا تسجيل دخول */
+    loginOverlay.style.display = 'none';
+    appEl.style.display = 'none';
+    renderPublicRequestView();
+  } else if(shareParam){
     /* وضع العميل: لا لوحة تحكم ولا تسجيل دخول — صفحة الموافقة فقط */
     loginOverlay.style.display = 'none';
     appEl.style.display = 'none';
@@ -427,6 +656,14 @@ tr.clickable:hover td{background:#eef3fa}
         loginOverlay.style.display = 'none';
         appEl.style.display = 'flex';
         window.dispatchEvent(new Event('erp-auth-ready'));
+        if(!window._intakeWatching){
+          window._intakeWatching = true;
+          window.pendingIntake = [];
+          window.intake.watch(list => {
+            window.pendingIntake = list;
+            try{ if(typeof renderNav==='function') renderNav(); }catch(e){}
+          });
+        }
       } else {
         window.authUser = null;
         loginOverlay.style.display = 'flex';
@@ -440,6 +677,7 @@ tr.clickable:hover td{background:#eef3fa}
 </head>
 <body>
 <div id="shareView" style="display:none"></div>
+<div id="pubReqView" style="display:none"></div>
 <div id="loginOverlay" style="position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px">
   <div style="background:#fff;color:var(--ink);padding:28px 32px;border-radius:12px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.35)">
     <h2 style="font-family:'Cairo';color:var(--navy);margin-bottom:2px;font-size:18px">تسجيل الدخول</h2>
@@ -470,8 +708,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.4';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة */
+const SYS_VERSION = 'V1.5';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -600,9 +838,52 @@ function computeNotifs(){
     .forEach(l=>N.push({id:'ex_'+l.id, pr:'mid', type:'طلب خارجي', msg:`${prodLabelByName(l.product)} (${l.qty}) في ${l.docNo} لم يورَّد بعد`, view:'external'}));
   S.activities.filter(a=>a.due && a.due<today() && a.status!=='منجز')
     .forEach(a=>N.push({id:'ac_'+a.no, pr:'high', type:'مهمة متأخرة', msg:`مهمة متأخرة: ${a.subject||a.type} (استحقاق ${a.due})`, view:'activities'}));
+  (window.pendingIntake||[]).forEach(it=>N.push({id:'pub_'+it.id, pr:'high', type:'طلب عميل خارجي',
+    msg:`${it.type==='srv'?'طلب صيانة':'شكوى'} جديد من ${it.customerName||'عميل'} — ${it.mobile||''}`,
+    view: it.type==='srv'?'srv':'complaints'}));
   return N;
 }
 const unreadNotifs = () => computeNotifs().filter(n=>!S.notifRead[n.id]).length;
+
+/* ═══════════════ استيعاب طلبات النموذج العام في complaints/srv (نفس بنية الحقول الحالية تماماً) ═══════════════ */
+async function absorbIntake(type){
+  if(!window.intake) return;
+  const pend = (window.pendingIntake||[]).filter(x=>x.type===type);
+  if(!pend.length) return;
+  const ent = type==='srv' ? 'srv' : 'complaints';
+  const docCode = type==='srv' ? 'SRV1' : 'QLT2';
+  const title = VIEWS[ent].title;
+  let changed = false;
+  for(const it of pend){
+    try{
+      const mobNorm = String(it.mobile||'').replace(/[^0-9]/g,'');
+      const match = S.customers.find(c =>
+        (mobNorm && c.mobile && String(c.mobile).replace(/[^0-9]/g,'')===mobNorm) ||
+        (c.name && it.customerName && c.name.trim()===it.customerName.trim()));
+      const customerName = match ? match.name : (it.customerName||'');
+      const atts = [];
+      for(const f of (it.files||[])){
+        try{ const id = await window.media.save(f.d); atts.push({id, kind:f.kind, name:f.name, by:'العميل (رابط عام) — Customer (Public Link)', at: today()}); }
+        catch(e){ /* نتجاهل ملفاً فشل ترحيله ونكمل بقية الطلب */ }
+      }
+      const base = { id: uid(), no: nextNo(docCode), date: today(), customer: customerName,
+        source: 'رابط عام', pubRef: it.pubRef||'', atts,
+        _pub: { mobile: it.mobile||'', crOrAccount: it.crOrAccount||'', invoiceRef: it.invoiceRef||'' } };
+      const rec = type==='srv'
+        ? Object.assign(base, { serial: it.serial||'', priority: it.requestType==='ضمان'?'عاجل (48 ساعة)':'عادي (5 أيام)',
+            fault: it.description||'', tech:'', fin: it.requestType==='ضمان'?'ضمان':'خارج الضمان',
+            status:'مفتوح', rating:'', notes: it.productModel?('الموديل — Model: '+it.productModel):'', terms:'' })
+        : Object.assign(base, { cat: it.category||'أخرى', sev:'متوسط', summary: it.description||'',
+            root:'', action:'', owner:'', sat:'لم يُتواصل', status:'مفتوحة' });
+      S[ent].push(rec);
+      logAudit('استلام طلب عام', title, rec.no, customerName + ' — ' + (it.mobile||''));
+      await window.intake.remove(it.id);
+      changed = true;
+    }catch(e){ /* نتجاهل عنصراً فشل استيعابه ونكمل الباقي */ }
+  }
+  if(changed){ persist(); render(); }
+}
+window.absorbIntake = absorbIntake;
 
 /* ═══════════════ تصدير CSV (يفتح في Excel) ═══════════════ */
 function dlCSV(name, header, rows){
@@ -866,12 +1147,13 @@ const VIEWS = {
    {k:'tech',l:'الفني — Technician',t:'sel',o:optEmployees},{k:'fin',l:'التصنيف المالي — Financial Classification',t:'sel',o:['ضمان','خارج الضمان']},
    {k:'status',l:'الحالة — Status',t:'sel',o:['مفتوح','مجدول','مغلق']},{k:'rating',l:'تقييم الخدمة /5 — Service Rating /5',t:'num'},{k:'notes',l:'ملاحظات — Notes',t:'text'},
    {k:'terms',l:'الشروط والأحكام (لرابط موافقة العميل) — Terms & Conditions (for customer approval link)',t:'ta',ph:'مثال: تشمل الصيانة الأعطال المشمولة بالضمان فقط؛ سوء الاستخدام والقطع الاستهلاكية غير مشمولة؛ يلتزم العميل بتوفير الوصول للمعدة...'}],
-  share:1,
+  share:1, attach:true,
   cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'البلاغ — Report Date'},{k:'customer',l:'العميل — Customer'},{k:'serial',l:'التسلسلي — Serial No.'},
    {k:'_w',l:'حالة الضمان (تلقائي) — Warranty Status (Auto)',f:(v,r)=>{const w=warrantyStatus(r.serial,r.date);return `<span class="tag ${w.cls}">${w.t}</span>`;}},
    {k:'priority',l:'الأولوية — Priority'},{k:'status',l:'الحالة — Status',f:tagStatus},
-   {k:'_sh',l:'موافقة العميل — Customer Approval',f:(v,r)=>shareStateTag(r)}],
-  note:'حالة الضمان تُكشف تلقائياً من الرقم التسلسلي عبر محاضر التشغيل QLT-001.'},
+   {k:'_sh',l:'موافقة العميل — Customer Approval',f:(v,r)=>shareStateTag(r)},
+   {k:'_src',l:'المصدر — Source',f:(v,r)=>sourceTag(r)}],
+  note:'حالة الضمان تُكشف تلقائياً من الرقم التسلسلي عبر محاضر التشغيل QLT-001. الطلبات الواردة من الرابط العام #public-request تُستوعب تلقائياً هنا.'},
 
  evals:{icon:'⭐',title:'تقييم الموردين — Supplier Evaluation PUR-003',code:'PUR-003',ent:'evals',
   fields:[{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'supplier',l:'المورد — Supplier',t:'sel',o:optSupAll,req:1},{k:'ref',l:'مرجع الشحنة — Shipment Reference',t:'text'},
@@ -883,7 +1165,7 @@ const VIEWS = {
    {k:'_cls',l:'التصنيف الناتج — Resulting Classification',f:(v,r)=>{const s=+r.total;const c=s>=24?['معتمد','ok']:s>=18?['معتمد بشروط','mid']:['موقوف','warn'];return `<span class="tag ${c[1]}">${c[0]}</span>`;}}],
   note:'آخر تقييم يحدّث تصنيف المورد فوراً في ورقة الموردين وفي قوائم الاختيار.'},
 
- complaints:{icon:'📮',title:'الشكاوى — Complaints QLT-002',code:'QLT-002',ent:'complaints',docCode:'QLT2',
+ complaints:{icon:'📮',title:'الشكاوى — Complaints QLT-002',code:'QLT-002',ent:'complaints',docCode:'QLT2',attach:true,
   fields:[{k:'no',l:'رقم الشكوى — Complaint No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'customer',l:'العميل — Customer',t:'sel',o:optCustomers},
    {k:'cat',l:'التصنيف — Classification',t:'sel',o:['جودة منتج','تأخير توريد','تركيب','فوترة','سلوك خدمة','أخرى']},
    {k:'sev',l:'الخطورة — Severity',t:'sel',o:['منخفض','متوسط','مرتفع']},{k:'summary',l:'ملخص الشكوى — Complaint Summary',t:'text'},
@@ -892,8 +1174,9 @@ const VIEWS = {
    {k:'status',l:'الحالة — Status',t:'sel',o:['مفتوحة','قيد المعالجة','مغلقة']}],
   cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'customer',l:'العميل — Customer'},{k:'cat',l:'التصنيف — Classification'},
    {k:'sev',l:'الخطورة — Severity',f:v=>`<span class="tag ${v==='مرتفع'?'warn':v==='متوسط'?'mid':'info'}">${v||'—'}</span>`},
-   {k:'status',l:'الحالة — Status',f:tagStatus}],
-  note:'شكاوى «مرتفع» لا تُغلق إلا باطلاع المدير العام.'},
+   {k:'status',l:'الحالة — Status',f:tagStatus},
+   {k:'_src',l:'المصدر — Source',f:(v,r)=>sourceTag(r)}],
+  note:'شكاوى «مرتفع» لا تُغلق إلا باطلاع المدير العام. الطلبات الواردة من الرابط العام #public-request تُستوعب تلقائياً هنا.'},
 
  shipments:{icon:'🚢',title:'الشحنات — Shipments LOG-001',code:'LOG-001',ent:'shipments',docCode:'LOG1',
   fields:[{k:'no',l:'رقم السجل — Record No.',t:'ro'},{k:'date',l:'تاريخ الفتح — Opening Date',t:'date',req:1},
@@ -1074,6 +1357,10 @@ function tagStatus(v){
   const cls = warn.some(w=>v.startsWith(w))?'warn': ok.some(o=>v.startsWith(o))?'ok':'info';
   return `<span class="tag ${cls}">${esc(v)}</span>`;
 }
+// مصدر السجل: مُدخل يدوياً من الموظف أم قادم من الرابط العام #public-request
+const sourceTag = r => r.source==='رابط عام'
+  ? '<span class="tag warn">🔴 جديد من العميل — Public Link</span>'
+  : '<span class="tag info">يدوي — Manual</span>';
 
 /* ═══════════════ التنقل ═══════════════ */
 const NAVDEF = [
@@ -1296,6 +1583,8 @@ function renderRegister(key){
    <div class="card"><h3>السجلات (${rows.length})</h3>
     <div style="overflow-x:auto"><table><thead><tr>${V.cols.map(c=>`<th>${c.l}</th>`).join('')}<th class="no-print"></th></tr></thead><tbody>${tableRows}</tbody></table></div></div>`;
   if(V.share) checkShares(V.ent);
+  if(key==='complaints') absorbIntake('complaint');
+  if(key==='srv') absorbIntake('srv');
 }
 window.editRow = (key,id) => { editId=id; render(); window.scrollTo(0,0); };
 window.delRow = (key,id) => {
@@ -1603,6 +1892,7 @@ function renderDash(){
   const cOpen = S.complaints.filter(c=>c.status!=='مغلقة').length;
   const sSusp = S.suppliers.filter(s=>supClass(s.name).t==='موقوف').length;
   const svOpen = S.srv.filter(s=>s.status!=='مغلق').length;
+  const pubPend = (window.pendingIntake||[]).length;
   // مؤشرات مالية إضافية
   const invValue = S.products.reduce((a,p)=>a+stockQty(p.nameAr)*(+p.cost||0),0);
   const mExp = S.expenses.filter(e=>(e.date||'').startsWith(ym)).reduce((a,e)=>a+(+e.amount||0),0);
@@ -1625,6 +1915,7 @@ function renderDash(){
     <div class="kpi"><div class="lbl">عروض مفتوحة/مرسلة — Open/Sent Quotes</div><div class="val">${qOpen}</div></div>
     <div class="kpi good"><div class="lbl">عروض مقبولة — Accepted Quotes</div><div class="val">${qAcc}</div></div>
     <div class="kpi ${low.length?'warn':''}"><div class="lbl">منتجات تحت الحد الأدنى — Products Below Minimum</div><div class="val">${low.length}</div></div>
+    <div class="kpi ${pubPend?'warn':''}" ${pubPend?`style="cursor:pointer" onclick="setView('notifs')"`:''}><div class="lbl">طلبات عملاء جديدة (رابط عام) — New Customer Requests (Public Link)</div><div class="val">${pubPend}</div></div>
     <div class="kpi ${cOpen?'warn':''}"><div class="lbl">شكاوى غير مغلقة — Unclosed Complaints</div><div class="val">${cOpen}</div></div>
     <div class="kpi ${sSusp?'warn':''}"><div class="lbl">موردون موقوفون — Suspended Suppliers</div><div class="val">${sSusp}</div></div>
     <div class="kpi"><div class="lbl">طلبات صيانة مفتوحة — Open Maintenance Requests</div><div class="val">${svOpen}</div></div>
@@ -2338,6 +2629,13 @@ window.saveCompany = () => {
   ['name','nameEn','cr','vat','phone','email','website','address'].forEach(k=>{ c[k] = document.getElementById('co_'+k).value; });
   c.logo = document.getElementById('f_logo').value;
   persist(); alert('حُفظت بيانات الشركة'); render();
+  // مزامنة بيانات العرض العامة (اسم + شعار مصغّر + هاتف) لصفحة الطلب العام #public-request — لا بيانات حسّاسة
+  try{
+    window.publicProfile.save({
+      name: c.name || '', nameEn: c.nameEn || '', phone: c.phone || '',
+      logo: c.logo ? (window.media.src(c.logo) || '') : ''
+    });
+  }catch(e){}
 };
 
 /* ═══════════════ إدارة المستخدمين والصلاحيات ═══════════════ */
