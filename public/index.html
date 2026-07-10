@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>نظام التشغيل المصغر — Mini ERP</title>
+<title>نظام تشغيل الأعمال</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#0E2342;--steel:#51647A;--red:#DA291C;--silver:#B9C2CC;--ink:#0A0F16;--light:#EEF1F5;--pale:#F7F9FB;--green:#1F7A3D;--amber:#B45309}
@@ -65,7 +65,7 @@ tr.clickable:hover td{background:#eef3fa}
 .empty{color:var(--steel);text-align:center;padding:18px;font-size:13px}
 .searchbar{padding:7px 10px;border:1px solid var(--silver);border-radius:7px;font-family:inherit;width:230px}
 /* الطباعة */
-#printdoc{background:#fff;border:1px solid var(--silver);border-radius:10px;padding:26px;max-width:820px}
+#printdoc,.pdblock{background:#fff;border:1px solid var(--silver);border-radius:10px;padding:26px;max-width:820px}
 .ph{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .ph .logo{border:1px solid var(--silver);color:var(--silver);width:95px;height:60px;display:flex;align-items:center;justify-content:center;font-size:11px;border-radius:6px}
 .ph .co{text-align:center;flex:1}
@@ -80,8 +80,8 @@ tr.clickable:hover td{background:#eef3fa}
 .pgrid .pi{display:flex;border:1px solid var(--light)}
 .pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:11px;padding:6px 8px;min-width:105px}
 .pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12.5px;flex:1}
-#printdoc table{margin-top:0}
-#printdoc th{background:var(--steel)}
+#printdoc table,.pdblock table{margin-top:0}
+#printdoc th,.pdblock th{background:var(--steel)}
 .sigs{display:flex;gap:0;margin-top:18px}
 .sig{flex:1;border:1px solid var(--silver)}
 .sig .h{background:var(--navy);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:5px}
@@ -90,13 +90,14 @@ tr.clickable:hover td{background:#eef3fa}
 @page{size:A4;margin:12mm}
 @media print{
   #side,.no-print,.pagehead,.pagesub,.redline{display:none!important}
-  body,#printdoc{background:#fff;font-family:'Tajawal','Cairo',sans-serif!important;
+  body,#printdoc,#shareView,.pdblock{background:#fff!important;font-family:'Tajawal','Cairo',sans-serif!important;
     print-color-adjust:exact;-webkit-print-color-adjust:exact}
   #main{padding:0;max-width:none}
-  #printdoc{border:none;padding:0;max-width:none}
+  #shareView{padding:0}
+  #printdoc,.pdblock{border:none;padding:0;max-width:none;box-shadow:none}
   th,.psec,.ph .co .n1,.pline,.sig .h,.tag,.kpi,.alertbox,.totrow,.pgrid .pi .k,tfoot td{
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
-  #printdoc img{display:block!important;visibility:visible!important;max-width:100%}
+  #printdoc img,.pdblock img{display:block!important;visibility:visible!important;max-width:100%}
 }
 /* لوحة كانبان للصفقات */
 .kb{display:flex;gap:10px;overflow-x:auto;align-items:flex-start;padding-bottom:8px}
@@ -124,16 +125,13 @@ tr.clickable:hover td{background:#eef3fa}
 .sharebox .lnk{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .sharebox .lnk input{flex:1;min-width:200px;padding:7px 9px;border:1px solid var(--silver);border-radius:6px;font-size:12px;direction:ltr;background:#fff}
 .sharebox.ok{border-color:var(--green);background:#e6f4ea}
-/* صفحة العميل العامة */
+/* صفحة العميل العامة — تعرض نفس مستند الطباعة/PDF (.pdblock) حرفياً + بطاقة إقرار الموافقة */
 #shareView{min-height:100vh;background:var(--pale);padding:18px 12px}
-.shcard{background:#fff;border:1px solid var(--silver);border-radius:12px;max-width:680px;margin:0 auto 14px;padding:20px;box-shadow:0 4px 18px rgba(14,35,66,.08)}
-.shhead{background:var(--navy);color:#fff;border-radius:12px;max-width:680px;margin:0 auto 14px;padding:16px 20px;text-align:center}
-.shhead .n1{font-family:'Cairo';font-weight:800;font-size:18px}
-.shhead .n2{color:var(--silver);font-size:12px;margin-top:2px}
-.shterms{border:1px solid var(--silver);border-radius:8px;background:var(--pale);padding:12px 14px;max-height:280px;overflow-y:auto;font-size:13px;line-height:2;white-space:pre-wrap;margin:8px 0 4px}
+.shcard{background:#fff;border:1px solid var(--silver);border-radius:12px;max-width:820px;margin:0 auto 14px;padding:20px;box-shadow:0 4px 18px rgba(14,35,66,.08)}
 .shok{text-align:center;padding:26px 12px}
 .shok .big{font-size:44px;margin-bottom:8px}
 .shok h3{color:var(--green);font-family:'Cairo';font-size:18px;margin-bottom:6px}
+.pdblock{margin:0 auto 14px;box-shadow:0 4px 18px rgba(14,35,66,.08)}
 /* ═══ الجوال: شريط علوي + قائمة جانبية منزلقة ═══ */
 #topbar{display:none}
 #backdrop{display:none}
@@ -346,40 +344,23 @@ tr.clickable:hover td{background:#eef3fa}
     try{ d = await window.shares.get(token); }catch(e){}
     if(!d){ el.innerHTML = wrap('<div class="shok"><div class="big">⚠️</div><h3 style="color:var(--red)">الرابط غير صالح</h3><p style="color:var(--steel)">تحقق من الرابط أو تواصل مع الشركة</p></div>'); return; }
 
-    const fmtN = n => (Math.round((+n||0)*100)/100).toLocaleString('en-US');
-    const head = `<div class="shhead"><div class="n1">${escS(d.company||'')}</div><div class="n2">${escS(d.label)} — ${escS(d.no)}</div></div>`;
-    const info = rows => `<table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px">${
-      rows.filter(([,v])=>v).map(([k,v])=>`<tr><td style="background:var(--light);color:var(--steel);font-weight:700;padding:6px 10px;width:130px;border:1px solid #fff">${k}</td><td style="padding:6px 10px;border-bottom:1px solid var(--light);font-weight:700;color:var(--navy)">${escS(v)}</td></tr>`).join('')
-    }</table>`;
-    const linesT = (d.lines&&d.lines.length) ? `<h3 style="color:var(--navy);font-size:14px;margin:10px 0 6px">البنود</h3>
-      <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12.5px"><thead><tr>
-      ${['#','الوصف','الكمية','السعر','الإجمالي'].map(h=>`<th style="background:var(--navy);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px">${h}</th>`).join('')}</tr></thead><tbody>
-      ${d.lines.map((l,i)=>`<tr>${[i+1,escS(l.product)+(l.brand?' — '+escS(l.brand):''),l.qty,fmtN(l.price),fmtN(l.amount)].map(c=>`<td style="padding:6px 8px;border-bottom:1px solid var(--light)">${c}</td>`).join('')}</tr>`).join('')}
-      </tbody></table></div>
-      ${d.total!=null?`<div style="background:var(--light);padding:9px 12px;border-radius:7px;margin-top:8px;font-weight:700;font-size:13.5px;color:var(--navy)">الإجمالي شامل الضريبة: <span style="color:var(--red)">${fmtN(d.total)} ريال</span></div>`:''}` : '';
+    // نعرض للعميل نفس مخرجات الطباعة/PDF حرفياً (docHtml محفوظة وقت إنشاء الرابط) — لا نعيد بناء عرض مختلف
+    const docBlock = `<div class="pdblock">${d.docHtml || '<p class="empty">تعذّر عرض المستند</p>'}</div>`;
+    const printBtn = `<div class="shcard no-print" style="text-align:center;padding:12px"><button class="btn ghost sm" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div>`;
 
     if(d.status === 'accepted'){
-      el.innerHTML = head + wrap(`<div class="shok"><div class="big">✅</div><h3>تمت الموافقة على الشروط والأحكام</h3>
-        <p style="color:var(--steel);font-size:13px">${escS(d.acceptName||'')} — ${escS(d.acceptMobile||'')}<br>${escS(d.acceptedOn||'')}</p></div>`);
+      el.innerHTML = docBlock + wrap(`<div class="shok"><div class="big">✅</div><h3>تمت الموافقة على الشروط والأحكام</h3>
+        <p style="color:var(--steel);font-size:13px">${escS(d.acceptName||'')} — <span dir="ltr">${escS(d.acceptMobile||'')}</span><br>${escS(d.acceptedOn||'')}</p></div>`) + printBtn;
       return;
     }
 
-    el.innerHTML = head + wrap(
-      info([['المستند', d.label+' '+d.no],['التاريخ', d.date],['العميل', d.customer],
-            ['مرجع أمر البيع', d.soRef],['عنوان التسليم', d.address],
-            ['الرقم التسلسلي', d.serial],['وصف العطل', d.fault],['الأولوية', d.priority],
-            ['شروط الدفع', d.pay],['مدة التوريد', d.delivery],['الضمان', d.warranty],
-            ['صلاحية العرض', d.validity ? d.validity+' يوماً' : '']])
-      + linesT
-      + `<h3 style="color:var(--navy);font-size:14px;margin:14px 0 4px">📜 الشروط والأحكام</h3>
-         <p style="color:var(--steel);font-size:12px;margin-bottom:4px">يرجى قراءة الشروط والأحكام كاملة قبل الموافقة</p>
-         <div class="shterms">${escS(d.terms||'')}</div>`
-    ) + wrap(
-      `<h3 style="color:var(--navy);font-size:14.5px;margin-bottom:10px">إقرار الموافقة</h3>
+    el.innerHTML = printBtn + docBlock + wrap(
+      `<h3 style="color:var(--navy);font-size:14.5px;margin-bottom:6px">إقرار الموافقة</h3>
+       <p style="font-size:12px;color:var(--steel);margin-bottom:10px">بالضغط على «موافقة واعتماد» فإنك تقر بأنك قرأت المستند أعلاه بكامل بنوده وشروطه وأحكامه وتوافق عليه.</p>
        <div class="fld" style="margin-bottom:10px"><label>الاسم الكامل *</label><input id="sh_name" style="font-size:16px"></div>
        <div class="fld" style="margin-bottom:12px"><label>رقم الجوال *</label><input id="sh_mobile" type="tel" style="font-size:16px;direction:ltr;text-align:right" placeholder="05xxxxxxxx"></div>
        <label style="display:flex;gap:8px;align-items:flex-start;font-size:13px;font-weight:700;color:var(--navy);margin-bottom:12px;cursor:pointer">
-         <input type="checkbox" id="sh_agree" style="margin-top:3px;width:17px;height:17px"> قرأت الشروط والأحكام المذكورة أعلاه وأوافق عليها</label>
+         <input type="checkbox" id="sh_agree" style="margin-top:3px;width:17px;height:17px"> قرأت جميع بنود المستند أعلاه، بما في ذلك الشروط والأحكام، وأوافق عليها</label>
        <button class="btn red" id="sh_btn" style="width:100%;font-size:15px">✔ موافقة واعتماد</button>
        <p id="sh_err" style="color:var(--red);font-size:12.5px;margin-top:8px;min-height:15px"></p>`
     );
@@ -416,6 +397,12 @@ tr.clickable:hover td{background:#eef3fa}
   const errEl = document.getElementById('li_err');
   const loginBtn = document.getElementById('li_btn');
   const signOutBtn = document.getElementById('signOutBtn');
+
+  // اسم الشركة يظهر في شاشة الدخول أيضاً (اسم عرض غير حساس، محفوظ محلياً من آخر جلسة) قبل توفّر بيانات فايربيس
+  try{
+    const cachedName = localStorage.getItem('erp:companyName');
+    if(cachedName){ document.title = cachedName; const el = document.getElementById('li_sysname'); if(el) el.textContent = cachedName; }
+  }catch(e){}
 
   if(shareParam){
     /* وضع العميل: لا لوحة تحكم ولا تسجيل دخول — صفحة الموافقة فقط */
@@ -456,7 +443,7 @@ tr.clickable:hover td{background:#eef3fa}
 <div id="loginOverlay" style="position:fixed;inset:0;background:var(--navy);display:flex;align-items:center;justify-content:center;z-index:9999;padding:16px">
   <div style="background:#fff;color:var(--ink);padding:28px 32px;border-radius:12px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.35)">
     <h2 style="font-family:'Cairo';color:var(--navy);margin-bottom:2px;font-size:18px">تسجيل الدخول</h2>
-    <p style="color:var(--steel);font-size:12px;margin-bottom:16px">نظام التشغيل المصغر — Mini ERP</p>
+    <p id="li_sysname" style="color:var(--steel);font-size:12px;margin-bottom:16px">نظام تشغيل الأعمال</p>
     <div class="fld" style="margin-bottom:10px"><label>البريد الإلكتروني</label><input id="li_email" type="email" autocomplete="username"></div>
     <div class="fld" style="margin-bottom:12px"><label>كلمة المرور</label><input id="li_pass" type="password" autocomplete="current-password"></div>
     <button id="li_btn" class="btn" style="width:100%">دخول</button>
@@ -466,12 +453,12 @@ tr.clickable:hover td{background:#eef3fa}
 <div id="app" style="display:none">
   <header id="topbar">
     <button id="hamb" aria-label="القائمة" onclick="toggleNav()">☰</button>
-    <span class="mtitle" id="mtitle">نظام التشغيل المصغر</span>
+    <span class="mtitle" id="mtitle">نظام تشغيل الأعمال</span>
     <button class="tbell" aria-label="الإشعارات" onclick="closeNav();setView('notifs')">🔔<span class="cnt" id="tbellCnt" style="display:none">0</span></button>
   </header>
   <div id="backdrop" onclick="closeNav()"></div>
   <nav id="side">
-    <div class="brand"><h1>نظام التشغيل المصغر</h1><small>Mini ERP — V1.0</small>
+    <div class="brand"><h1 id="brandName">نظام تشغيل الأعمال</h1><small id="brandVer">V1.0</small>
       <button id="signOutBtn" class="no-print" style="margin-top:8px;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit">خروج ⏻</button>
     </div>
     <div id="nav"></div>
@@ -482,6 +469,9 @@ tr.clickable:hover td{background:#eef3fa}
 /* ═══════════════ النواة: الحالة والتخزين ═══════════════ */
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
+/* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
+const SYS_VERSION = 'V1.3';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -869,7 +859,7 @@ const VIEWS = {
    {k:'_wend',l:'انتهاء الضمان (تلقائي)',f:(v,r)=>warrantyEnd(r)||'—'}],
   note:'انتهاء الضمان يُحسب تلقائياً من مدة ضمان المنتج. محضر «تشغيل وتسليم» هو نقطة بدء الضمان الرسمية.'},
 
- srv:{icon:'🔧',title:'الصيانة والضمان SRV-001',code:'SRV-001',ent:'srv',docCode:'SRV1',
+ srv:{icon:'🔧',title:'الصيانة والضمان SRV-001',code:'SRV-001',ent:'srv',docCode:'SRV1',docType:'srv',
   fields:[{k:'no',l:'رقم الطلب',t:'ro'},{k:'date',l:'تاريخ البلاغ',t:'date',req:1},
    {k:'customer',l:'العميل',t:'sel',o:optCustomers},{k:'serial',l:'الرقم التسلسلي',t:'text'},
    {k:'priority',l:'الأولوية',t:'sel',o:['عاجل (48 ساعة)','عادي (5 أيام)']},{k:'fault',l:'وصف العطل',t:'text'},
@@ -1100,6 +1090,18 @@ const NAVDEF = [
  ['المخرجات', [['print','🖨️ طباعة المستندات']]],
 ];
 const ADMIN_ONLY_VIEWS = ['users','company','audit'];
+// اسم النظام = اسم الشركة المسجَّلة (يتحدّث فور تعديل بيانات الشركة) — نص افتراضي قبل تعبئتها
+function companyDisplayName(){
+  const n = (S.company && String(S.company.name||'').trim()) || '';
+  return n || 'نظام تشغيل الأعمال';
+}
+function syncBrand(){
+  const nm = companyDisplayName();
+  try{ document.title = nm; }catch(e){}
+  const bn = document.getElementById('brandName'); if(bn) bn.textContent = nm;
+  const bv = document.getElementById('brandVer'); if(bv) bv.textContent = SYS_VERSION;
+  try{ if(typeof localStorage!=='undefined' && S.company && S.company.name) localStorage.setItem('erp:companyName', S.company.name); }catch(e){}
+}
 function renderNav(){
   const uName = curName();
   const nUnread = unreadNotifs();
@@ -1111,6 +1113,7 @@ function renderNav(){
     return (g?`<div class="navgrp">${g}</div>`:'') +
       vis.map(([k,l])=>`<button class="navbtn ${view===k?'active':''}" onclick="setView('${k}')">${l}${k==='notifs'&&nUnread?` <span class="tag warn" style="font-size:10px;padding:0 6px">${nUnread}</span>`:''}</button>`).join('');
   }).join('');
+  syncBrand();
   syncTopbar();
 }
 window.setView = v => {
@@ -1125,7 +1128,7 @@ function closeNav(){ if(document.body) document.body.classList.remove('nav-open'
 window.toggleNav = toggleNav; window.closeNav = closeNav;
 function syncTopbar(){
   const t = document.getElementById('mtitle');
-  if(t){ const l = VIEW_TITLES[view]||'نظام التشغيل المصغر'; t.textContent = l.replace(/^\S+\s/,''); }
+  if(t){ const l = VIEW_TITLES[view]||'نظام تشغيل الأعمال'; t.textContent = l.replace(/^\S+\s/,''); }
   const c = document.getElementById('tbellCnt');
   if(c){ const n = unreadNotifs(); c.textContent = n; c.style.display = n ? 'flex' : 'none'; }
 }
@@ -1175,22 +1178,11 @@ window.addCategory = selId => {
   if(sel){ const o=document.createElement('option'); o.textContent=name; o.selected=true; sel.appendChild(o); }
 };
 /* ═══════════════ روابط موافقة العميل (عرض سعر / إذن تسليم / صيانة الضمان) ═══════════════ */
+/* عرض العميل يستنسخ حرفياً مخرجات buildDoc() نفسها المستخدمة في الطباعة/PDF — لا نسخة مبسّطة موازية */
 const SHARE_CONF = {
-  quotes: { label:'عرض سعر', snap(r){ return {
-    kind:'quote', label:'عرض سعر', no:r.no, date:r.date, customer:r.customer,
-    company:(S.company||{}).name||'', terms:r.terms||'',
-    pay:r.pay||'', delivery:r.delivery||'', warranty:r.warranty||'', validity:r.validity||'',
-    total:+r.total||0,
-    lines: quoteLines(r.no).map(l=>{ const pr=+(l.override||l.defPrice)||0; return {product:l.product, brand:l.brand||'', qty:+l.qty, price:pr, amount:pr*(+l.qty||0)}; })
-  }; } },
-  dos: { label:'إذن تسليم', snap(r){ return {
-    kind:'do', label:'إذن تسليم', no:r.no, date:r.date, customer:r.customer,
-    company:(S.company||{}).name||'', terms:r.terms||'', soRef:r.soRef||'', address:r.address||''
-  }; } },
-  srv: { label:'طلب صيانة (ضمان)', snap(r){ return {
-    kind:'srv', label:'طلب صيانة', no:r.no, date:r.date, customer:r.customer||'',
-    company:(S.company||{}).name||'', terms:r.terms||'', serial:r.serial||'', fault:r.fault||'', priority:r.priority||''
-  }; } }
+  quotes: { label:'عرض سعر', printType:'quote', snap(r){ return { kind:'quote', label:'عرض سعر', no:r.no, date:r.date, customer:r.customer, company:(S.company||{}).name||'' }; } },
+  dos:    { label:'إذن تسليم', printType:'do', snap(r){ return { kind:'do', label:'إذن تسليم', no:r.no, date:r.date, customer:r.customer, company:(S.company||{}).name||'' }; } },
+  srv:    { label:'طلب صيانة (ضمان)', printType:'srv', snap(r){ return { kind:'srv', label:'طلب صيانة', no:r.no, date:r.date, customer:r.customer||'', company:(S.company||{}).name||'' }; } }
 };
 function makeToken(){
   if(typeof crypto!=='undefined' && crypto.getRandomValues){
@@ -1203,14 +1195,24 @@ function shareUrl(token){
   const base = (typeof location!=='undefined') ? location.origin + location.pathname : '';
   return base + '?share=' + token;
 }
+// حد مستند Firestore 1MiB — إن تجاوزته النسخة (بسبب صور مضمَّنة) نستبدل الصور بعنصر نائب مطابق للشكل دون كسر التخطيط
+function stripHeavyImages(html){
+  return html
+    .replace(/<span class="imgbox"[^>]*>\s*<img[^>]*>\s*<\/span>/gi, '<span class="imgbox" style="display:inline-flex;width:30px;height:30px;vertical-align:middle"><span class="noimg">🖼</span></span>')
+    .replace(/<div class="logo" style="padding:0;overflow:hidden">\s*<img[^>]*>\s*<\/div>/gi, '<div class="logo">الشعار<br>LOGO</div>');
+}
 async function shareDoc(ent, id){
   const conf = SHARE_CONF[ent]; if(!conf) return;
   const r = S[ent].find(x=>x.id===id); if(!r) return;
   if(!String(r.terms||'').trim()){ alert('⚠ يجب تعبئة خانة «الشروط والأحكام» وحفظ المستند قبل إنشاء رابط الموافقة'); return; }
   if(r.shareToken){ render(); return; }
   try{
+    let docHtml = buildDoc(conf.printType, r.no);
+    if(!docHtml){ alert('تعذّر إنشاء نسخة المستند — تأكد من حفظ السجل أولاً'); return; }
+    const payload = { ...conf.snap(r), docHtml };
+    if(JSON.stringify(payload).length > 900000) payload.docHtml = stripHeavyImages(docHtml);
     const token = makeToken();
-    await window.shares.create(token, conf.snap(r));
+    await window.shares.create(token, payload);
     r.shareToken = token; r._u = today();
     logAudit('إنشاء رابط موافقة', conf.label, r.no, '');
     persist(); render();
@@ -1672,7 +1674,7 @@ window.importBackup = inp => {
 let printType='quote', printNo='';
 window.goPrint = (t,no) => { printType=t; printNo=no; setView('print'); };
 function renderPrint(){
-  const types = {quote:['عرض سعر SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم SLS-003',S.dos.map(o=>o.no)], po:['أمر شراء PUR-002',S.pos.map(p=>p.no)], pr:['طلب شراء PUR-001',S.prs.map(p=>p.no)], ins:['مهمة تركيب INS-001',S.installjobs.map(j=>j.no)], pay:['أمر صرف راتب FIN-002',S.payroll.map(p=>p.no)], payv:['سند قبض دفعة PAY',S.payments.map(p=>p.no)]};
+  const types = {quote:['عرض سعر SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم SLS-003',S.dos.map(o=>o.no)], srv:['طلب صيانة SRV-001',S.srv.map(j=>j.no)], po:['أمر شراء PUR-002',S.pos.map(p=>p.no)], pr:['طلب شراء PUR-001',S.prs.map(p=>p.no)], ins:['مهمة تركيب INS-001',S.installjobs.map(j=>j.no)], pay:['أمر صرف راتب FIN-002',S.payroll.map(p=>p.no)], payv:['سند قبض دفعة PAY',S.payments.map(p=>p.no)]};
   document.getElementById('main').innerHTML = `
    ${headHtml('🖨️ طباعة المستندات','اختر النوع والرقم — ثم اطبع أو احفظ PDF من نافذة الطباعة')}
    <div class="card no-print"><div class="formgrid">
@@ -1689,7 +1691,7 @@ function pHead(code, title, no, date){
                        : `<div class="logo">الشعار<br>LOGO</div>`;
   return `<div class="ph">${logoBox}
    <div class="co"><div class="n1">${esc(co.name)||'شركة .................................'}</div><div class="n2">${esc(co.nameEn)||'.................... Co. Ltd.'}</div></div>
-   <div class="meta">رمز النموذج: <b>${code}</b><br>رقم السجل: <b>${esc(no)}</b><br>التاريخ: ${esc(date)} — V1.0</div></div>
+   <div class="meta">رمز النموذج: <b>${code}</b><br>رقم السجل: <b>${esc(no)}</b><br>التاريخ: ${esc(date)} — ${SYS_VERSION}</div></div>
    <div class="pline"></div><div class="ptitle">${title}</div>`;
 }
 const pGrid = pairs => `<div class="pgrid">${pairs.map(([k,v])=>`<div class="pi"><div class="k">${k}</div><div class="v">${esc(v)||'—'}</div></div>`).join('')}</div>`;
@@ -1755,6 +1757,16 @@ function buildDoc(t, no){
      + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
      + pClientAccept(o)
      + pSigs(['مندوب الشركة / السائق'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت'])) + pFoot();
+  }
+  if(t==='srv'){
+    const j = S.srv.find(x=>x.no===no); if(!j) return '';
+    const w = warrantyStatus(j.serial, j.date);
+    return pHead('SRV-001','طلب صيانة وضمان — Maintenance & Warranty Request',no,j.date)
+     + `<div class="psec">بيانات الطلب</div>` + pGrid([['العميل',j.customer],['الرقم التسلسلي',j.serial],['حالة الضمان',w.t],['الأولوية',j.priority],['التصنيف المالي',j.fin],['الفني المكلّف',j.tech],['الحالة',j.status]])
+     + `<div class="psec">وصف العطل</div>` + `<div style="font-size:12.5px;padding:8px 4px;line-height:1.9">${esc(j.fault)||'—'}</div>`
+     + (String(j.terms||'').trim()?`<div class="psec">الشروط والأحكام</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(j.terms)}</div>`:'')
+     + pClientAccept(j)
+     + pSigs(['الفني المكلّف'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت'])) + pFoot();
   }
   if(t==='po'){
     const p = S.pos.find(x=>x.no===no); if(!p) return '';
