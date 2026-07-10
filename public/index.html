@@ -147,6 +147,9 @@ tr.clickable:hover td{background:#eef3fa}
 .filechip{display:flex;align-items:center;gap:6px;background:var(--light);border-radius:20px;padding:5px 10px;font-size:11.5px;color:var(--navy)}
 .filechip button{background:none;border:none;color:var(--red);font-weight:800;cursor:pointer;font-size:13px;padding:0 2px}
 .pubreqno{background:var(--light);border-radius:8px;padding:10px 14px;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;letter-spacing:.5px;direction:ltr;text-align:center;margin:10px 0}
+/* تنبيه حيّ لوصول طلب عميل جديد عبر الرابط العام */
+.toastMsg{background:var(--navy);color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.3);transition:opacity .4s;animation:toastIn .25s ease}
+@keyframes toastIn{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
 /* ═══ الجوال: شريط علوي + قائمة جانبية منزلقة ═══ */
 #topbar{display:none}
 #backdrop{display:none}
@@ -367,10 +370,19 @@ tr.clickable:hover td{background:#eef3fa}
     },
     // مراقبة حيّة لعدد الطلبات الجديدة الواردة — تعمل فقط بعد تسجيل دخول ناجح
     watch(cb){
+      let first = true; // نتجاهل الدفعة الأولى (السجلات المعلّقة أصلاً وقت فتح الجلسة) — التنبيه فقط للوارد الجديد فعلاً
       getDb().then(_db => {
         onSnapshot(collection(_db, 'publicIntake'), snap => {
           const out = []; snap.forEach(d=>out.push({ id: d.id, ...d.data() }));
           cb(out.filter(x=>x.status==='new'));
+          if(!first){
+            snap.docChanges().forEach(ch => {
+              if(ch.type==='added' && typeof window.onNewPublicRequest==='function'){
+                try{ window.onNewPublicRequest({ id: ch.doc.id, ...ch.doc.data() }); }catch(e){}
+              }
+            });
+          }
+          first = false;
         }, ()=>{});
       }).catch(()=>{});
     }
@@ -661,7 +673,11 @@ tr.clickable:hover td{background:#eef3fa}
           window.pendingIntake = [];
           window.intake.watch(list => {
             window.pendingIntake = list;
-            try{ if(typeof renderNav==='function') renderNav(); }catch(e){}
+            try{
+              const v = (typeof window.getView==='function') ? window.getView() : null;
+              if(['complaints','srv','dash','notifs'].includes(v) && typeof render==='function') render();
+              else if(typeof renderNav==='function') renderNav();
+            }catch(e){}
           });
         }
       } else {
@@ -708,8 +724,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.5';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv */
+const SYS_VERSION = 'V1.6';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -1407,6 +1423,38 @@ window.setView = v => {
   const allowed = ADMIN_ONLY_VIEWS.includes(v) ? isAdmin() : canView(v);
   if(!allowed){ alert('لا تملك صلاحية الوصول لهذه الشاشة'); return; }
   view=v; editId=null; tmpLines=[]; closeNav(); render();
+};
+window.getView = () => view;
+
+/* ═══ تنبيه حيّ (toast + صوت) عند وصول طلب عام جديد — يستدعيها module script عبر onSnapshot ═══ */
+function showToast(msg){
+  if(!document.body) return;
+  let host = document.getElementById('toastHost');
+  if(!host){ host = document.createElement('div'); host.id='toastHost';
+    host.style.cssText = 'position:fixed;bottom:16px;left:16px;z-index:99999;display:flex;flex-direction:column;gap:8px;max-width:90vw';
+    document.body.appendChild(host); }
+  const el = document.createElement('div');
+  el.className = 'toastMsg'; el.textContent = msg;
+  host.appendChild(el);
+  setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>el.remove(), 400); }, 6000);
+}
+function playNotifySound(){
+  try{
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    const ctx = new Ctx();
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = 880;
+    g.gain.setValueAtTime(0.15, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    o.connect(g); g.connect(ctx.destination);
+    o.start(); o.stop(ctx.currentTime + 0.35);
+  }catch(e){ /* الصوت اختياري — لا نكسر شيئاً إن تعذّر تشغيله */ }
+}
+window.onNewPublicRequest = item => {
+  const isSrv = item.type === 'srv';
+  const label = isSrv ? 'طلب صيانة جديد — New maintenance request' : 'شكوى جديدة — New complaint';
+  showToast(`🔔 ${label}: ${item.customerName||'عميل'} — ${item.mobile||''}`);
+  playNotifySound();
 };
 /* ── القائمة المنزلقة للجوال ── */
 const VIEW_TITLES = (()=>{ const m={}; NAVDEF.forEach(([,items])=>items.forEach(([k,l])=> m[k]=l)); return m; })();
