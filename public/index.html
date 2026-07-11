@@ -76,15 +76,15 @@ tr.clickable:hover td{background:#eef3fa}
 .pline{height:3px;background:var(--red);margin:10px 0}
 .ptitle{text-align:center;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;margin-bottom:12px}
 /* ترويسة موحّدة لكل المستندات القابلة للطباعة: شعار+اسم الشركة (يمين) — عنوان المستند (وسط) — QR السجل التجاري (يسار) */
-.phdr{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;padding-bottom:12px;border-bottom:2px solid #333;margin-bottom:14px;gap:10px;flex-wrap:wrap}
-.phdr-r{display:flex;align-items:center;gap:10px}
-.phdr-r img{max-height:65px;max-width:120px;object-fit:contain;border:none;box-shadow:none;outline:none;background:none}
-.phdr-name{font-size:15px;font-weight:700;color:var(--navy)}
-.phdr-title{font-size:16px;font-weight:700;color:var(--navy);text-align:center;flex:1}
-.phdr-l{width:75px;height:75px;flex-shrink:0}
-.phdr-l img{width:75px;height:75px;object-fit:contain}
-.pmeta{font-size:10.5px;color:var(--steel);text-align:center;margin:-8px 0 14px}
-.pmeta b{color:var(--navy)}
+.doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;padding-bottom:8px;border-bottom:2px solid var(--navy);margin-bottom:8px;gap:10px;flex-wrap:wrap}
+.doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
+.doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
+.doc-header-names{display:flex;flex-direction:column;gap:2px}
+.doc-header-names span{font-size:14px;font-weight:700;color:var(--navy);line-height:1.3}
+.doc-header-center{font-size:15px;font-weight:700;color:var(--navy);text-align:center;flex:1}
+.doc-header-left{width:75px;height:75px;flex-shrink:0}
+.doc-header-qr{width:75px;height:75px;object-fit:contain}
+.doc-meta-line{font-size:9px;color:#666;text-align:center;margin-bottom:10px}
 .psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
 .pgrid .pi{display:flex;border:1px solid var(--light)}
@@ -109,7 +109,7 @@ tr.clickable:hover td{background:#eef3fa}
 .eicr-eq{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
 .eicr-eq th{background:var(--steel);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px}
 .eicr-eq td{border:1px solid var(--silver);padding:8px;height:26px}
-@page{size:A4;margin:12mm}
+@page{size:A4;margin:10mm 8mm}
 @media print{
   #side,.no-print,.pagehead,.pagesub,.redline{display:none!important}
   body,#printdoc,#shareView,.pdblock{background:#fff!important;font-family:'Tajawal','Cairo',sans-serif!important;
@@ -117,18 +117,27 @@ tr.clickable:hover td{background:#eef3fa}
   #main{padding:0;max-width:none}
   #shareView{padding:0}
   #printdoc,.pdblock{border:none;padding:0;max-width:none;box-shadow:none}
-  th,.psec,.phdr-name,.pline,.sig .h,.tag,.kpi,.totrow,.pgrid .pi .k,tfoot td{
+  th,.psec,.doc-header-names span,.pline,.sig .h,.tag,.kpi,.totrow,.pgrid .pi .k,tfoot td{
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
   #printdoc img,.pdblock img{display:block!important;visibility:visible!important;max-width:100%}
   /* تنبيهات/تحذيرات داخلية للموظفين (اعتماد، سقف مبلغ...) لا تظهر أبداً على نسخة الطباعة/PDF التي يستلمها العميل أو المورد */
   [class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
+  /* عناصر واجهة التطبيق التي لا يجوز أن تظهر في أي مخرجات طباعة مهما كانت الصفحة الحالية */
+  .modal,.dialog,.overlay,.toastMsg,[class*="bell"],[class*="notification"],
+  .fab,.badge,#topbar,#backdrop,.asgpanel{display:none!important}
   /* تقرير EICR يبدأ في صفحة جديدة بعد إذن التسليم */
   .eicr{page-break-before:always}
+  /* ترويسة المستند: تتكرر أعلى كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) */
+  .doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#fff;
+    print-color-adjust:exact;-webkit-print-color-adjust:exact}
   /* تذييل المستند: يظهر أسفل كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) */
   .doc-footer{display:block!important;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;
     font-size:9px;color:#666;border-top:1px solid #ccc;padding-top:4px;text-align:center;background:#fff;
     print-color-adjust:exact;-webkit-print-color-adjust:exact}
-  #printdoc,.pdblock{padding-bottom:26px}
+  .doc-footer div+div{margin-top:2px}
+  #printdoc,.pdblock{padding-top:100px;padding-bottom:30px}
+  /* منع انقطاع صفوف البنود وكتل التوقيعات/الاعتمادات/الشروط في منتصف صفحة مطبوعة */
+  .line-item-row,.signatures-block,.approvals-block,.terms-block{page-break-inside:avoid}
 }
 /* لوحة كانبان للصفقات */
 .kb{display:flex;gap:10px;overflow-x:auto;align-items:flex-start;padding-bottom:8px}
@@ -220,8 +229,8 @@ tr.clickable:hover td{background:#eef3fa}
   th,td{padding:9px 8px}
   .kbcol{min-width:78vw}
   #printdoc{padding:16px}
-  .phdr{flex-wrap:wrap;justify-content:center;text-align:center}
-  .phdr-title{order:3;flex-basis:100%}
+  .doc-header{flex-wrap:wrap;justify-content:center;text-align:center}
+  .doc-header-center{order:3;flex-basis:100%}
 }
 @media(max-width:420px){
   .formgrid{grid-template-columns:1fr}
@@ -768,8 +777,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.9';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات */
+const SYS_VERSION = 'V2.0';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -2135,7 +2144,7 @@ function renderPrint(){
    <div class="card no-print"><div class="formgrid">
     <div class="fld"><label>نوع المستند — Document Type</label><select id="p_type" onchange="printType=this.value;printNo='';renderPrint()">${Object.entries(types).map(([k,[l]])=>`<option value="${k}" ${k===printType?'selected':''}>${l}</option>`).join('')}</select></div>
     <div class="fld"><label>رقم المستند — Document No.</label><select id="p_no" onchange="printNo=this.value;renderPrint()"><option value=""></option>${types[printType][1].map(n=>`<option ${n===printNo?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
-    <div class="fld"><label>&nbsp;</label><button class="btn red" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div>
+    <div class="fld"><label>&nbsp;</label><button class="btn red" onclick="printCurrentDoc()">🖨 طباعة / حفظ PDF</button></div>
    </div>${printType==='do'?`<label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;margin-top:6px">
      <input type="checkbox" ${window.eicrPrint?'checked':''} onchange="window.eicrPrint=this.checked;renderPrint()" style="width:17px;height:17px">
      طباعة تقرير EICR مع الإذن — Print EICR with Delivery Note</label>`:''}</div>
@@ -2144,36 +2153,39 @@ function renderPrint(){
 function pHead(code, title, no, date){
   const co = S.company || {};
   const logo = co.logo && window.media.src(co.logo);
-  const logoImg = logo ? `<img src="${logo}">` : '';
+  const logoImg = logo ? `<img src="${logo}" class="doc-header-logo" alt="logo">` : '';
   const qr = co.crQr && window.media.src(co.crQr);
-  const qrBox = qr ? `<img src="${qr}">` : '';
-  return `<div class="phdr">
-    <div class="phdr-r">${logoImg}
-     <div><div class="phdr-name">${esc(co.name)||'شركة .................................'}</div><div class="phdr-name">${esc(co.nameEn)||'.................... Co. Ltd.'}</div></div>
+  const qrBox = qr ? `<img src="${qr}" class="doc-header-qr">` : '';
+  return `<div class="doc-print-header">
+   <div class="doc-header">
+    <div class="doc-header-right">${logoImg}
+     <div class="doc-header-names"><span>${esc(co.name)||'شركة .................................'}</span><span>${esc(co.nameEn)||'.................... Co. Ltd.'}</span></div>
     </div>
-    <div class="phdr-title">${title}</div>
-    <div class="phdr-l">${qrBox}</div>
+    <div class="doc-header-center">${title}</div>
+    <div class="doc-header-left">${qrBox}</div>
    </div>
-   <div class="pmeta">رمز النموذج — Form Code: <b>${code}</b> &nbsp;·&nbsp; رقم السجل — Record No.: <b>${esc(no)}</b> &nbsp;·&nbsp; التاريخ — Date: ${esc(date)} — ${SYS_VERSION}</div>`;
+   <div class="doc-meta-line">رمز النموذج — Form Code: <b>${code}</b> &nbsp;·&nbsp; رقم السجل — Record No.: <b>${esc(no)}</b> &nbsp;·&nbsp; التاريخ — Date: ${esc(date)} — ${SYS_VERSION}</div>
+  </div>`;
 }
 const pGrid = pairs => `<div class="pgrid">${pairs.map(([k,v])=>`<div class="pi"><div class="k">${k}</div><div class="v">${esc(v)||'—'}</div></div>`).join('')}</div>`;
 function pLines(no, priceLabel){
   const ls = S.lines.filter(l=>l.docNo===no);
   return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الماركة — Brand</th><th>الكمية — Quantity</th><th>${priceLabel}</th><th>الإجمالي — Total</th></tr></thead><tbody>
-   ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
+   ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
 const pTotals = rows => `<table style="margin-top:0"><tbody>${rows.map(([k,v])=>`<tr><td style="background:var(--light);font-weight:700;color:var(--navy);width:70%">${k}</td><td><b>${fmt(v)}</b></td></tr>`).join('')}</tbody></table>`;
-const pSigs = roles => `<div class="sigs">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم — Name: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............</div></div>`).join('')}</div>`;
+const pSigs = roles => `<div class="sigs signatures-block">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم — Name: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............</div></div>`).join('')}</div>`;
 // اعتمادات إلكترونية في المستند المطبوع: تعرض المعتمد ووقته بدل التوقيع اليدوي
 function pApprovals(rec){
   const a = rec.approvals || {};
   const cell = (title, ap) => `<div class="sig"><div class="h">${title}</div><div class="b">${
     ap && ap.by ? `✔ اعتُمد إلكترونياً — Approved electronically<br><b style="color:var(--navy)">${esc(ap.by)}</b><br>${esc(ap.at||'')}` : 'بانتظار الاعتماد — Pending Approval<br>الاسم — Name: ...........<br>التاريخ — Date: ..........'
   }</div></div>`;
-  return `<div class="sigs">${cell('اعتماد المندوب — Representative Approval', a.rep)}${cell('اعتماد المدير — Manager Approval', a.manager)}</div>`;
+  return `<div class="sigs approvals-block">${cell('اعتماد المندوب — Representative Approval', a.rep)}${cell('اعتماد المدير — Manager Approval', a.manager)}</div>`;
 }
-const pFoot = () => `<div class="pfoot">س.ت — CR No.: ${esc((S.company||{}).cr)||'............'} — الرقم الضريبي — Tax No.: ${esc((S.company||{}).vat)||'............'} — ${esc((S.company||{}).phone)||'الرياض'}</div>`;
+const companyFootLine = () => `س.ت — CR No.: ${esc((S.company||{}).cr)||'............'} — الرقم الضريبي — Tax No.: ${esc((S.company||{}).vat)||'............'} — ${esc((S.company||{}).phone)||'الرياض'}`;
+const pFoot = () => `<div class="pfoot">${companyFootLine()}</div>`;
 const pClientAccept = r => r.clientAccept ? `<div class="psec">موافقة العميل الإلكترونية — Electronic Customer Approval</div>
   <div style="font-size:12px;padding:8px 4px;line-height:2">✔ وافق العميل على الشروط والأحكام إلكترونياً عبر الرابط الموثّق —
   <b style="color:var(--navy)">${esc(r.clientAccept.name)}</b> — <span dir="ltr">${esc(r.clientAccept.mobile)}</span> — ${esc(r.clientAccept.at||'')}</div>` : '';
@@ -2181,7 +2193,10 @@ const pClientAccept = r => r.clientAccept ? `<div class="psec">موافقة ال
 const dmy = d => { if(!d) return '—'; const p=String(d).split('-'); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:String(d); };
 // تذييل موحّد يظهر أسفل كل صفحة مطبوعة لكل المستندات
 function renderDocFooter(docTypeName, docTypeNameEn, recordNo, date, ref){
-  return `<div class="doc-footer">${esc(docTypeName)} / ${esc(docTypeNameEn)} &nbsp;|&nbsp; ${esc(recordNo)||'—'} &nbsp;|&nbsp; ${esc(dmy(date))} &nbsp;|&nbsp; مرجع — Ref: ${esc(ref)||'—'}</div>`;
+  return `<div class="doc-footer doc-print-footer">
+   <div>${esc(docTypeName)} / ${esc(docTypeNameEn)} &nbsp;|&nbsp; ${esc(recordNo)||'—'} &nbsp;|&nbsp; ${esc(dmy(date))} &nbsp;|&nbsp; مرجع — Ref: ${esc(ref)||'—'}</div>
+   <div>${companyFootLine()}</div>
+  </div>`;
 }
 // تقرير اكتمال تركيب المعدات EICR — يُلحق بإذن التسليم عند تفعيل الخيار
 window.eicrPrint = false;
@@ -2198,7 +2213,7 @@ function buildEICR(o){
   const bl = w => `<span class="eicr-blank" style="min-width:${w}">&nbsp;</span>`;
   const sig = (title) => `<div class="sig" style="flex:1"><div class="h">${title}</div><div class="b" style="line-height:2.3">الاسم — Name: ...............<br>المسمّى — Designation: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............<br>الختم — Stamp:</div></div>`;
   return `<div class="eicr">
-    ${pHead('EICR','تقرير اكتمال تركيب المعدات / Equipment Installation Completion Report (EICR)', o.no, o.date)}
+    <div class="psec">تقرير اكتمال تركيب المعدات — Equipment Installation Completion Report (EICR)</div>
     <table class="eicr-info"><tbody>
       <tr><td class="k">العميل — Customer</td><td colspan="3">${esc(o.customer)||'—'}</td></tr>
       <tr><td class="k">PO #</td><td>${esc(o.soRef)||'—'}</td><td class="k">Invoice #</td><td>${esc(o.rel)||'—'}</td></tr>
@@ -2209,7 +2224,7 @@ function buildEICR(o){
     on behalf of (${bl('300px')})
     and we are working to our complete satisfaction.</div>
     <table class="eicr-eq"><thead><tr><th style="width:36px">S.N.</th><th>Equipment Name</th><th>Make</th><th style="width:50px">Qty.</th><th style="width:32%">Comments</th></tr></thead><tbody>${eqRows}</tbody></table>
-    <div class="sigs" style="margin-top:18px">${sig('Equipment Supplier — مورد المعدات')}${sig('Confirmed by Customer — اعتماد العميل')}</div>
+    <div class="sigs signatures-block" style="margin-top:18px">${sig('Equipment Supplier — مورد المعدات')}${sig('Confirmed by Customer — اعتماد العميل')}</div>
   </div>`;
 }
 function buildDoc(t, no){
@@ -2229,11 +2244,11 @@ function buildDoc(t, no){
      + pTotals([['المجموع — Subtotal',q.gross],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total]])
      + alert
      + `<div class="psec">الشروط العامة — General Terms</div>` + pGrid([['شروط الدفع — Payment Terms',q.pay],['مدة التوريد — Supply Duration',q.delivery],['الضمان العام — General Warranty',q.warranty],['المندوب — Representative',q.rep]])
-     + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
+     + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div class="terms-block" style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
      + wsec
      + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(q)
      + pClientAccept(q)
-     + (q.clientAccept?'':pSigs(['موافقة العميل — Customer Approval'])) + pFoot()
+     + (q.clientAccept?'':pSigs(['موافقة العميل — Customer Approval']))
      + renderDocFooter('عرض سعر','Price Quotation',no,q.date,'—');
   }
   if(t==='so'){
@@ -2243,7 +2258,7 @@ function buildDoc(t, no){
      + `<div class="psec">البنود المؤكدة (من مرجع العرض) — Confirmed Items (from Quote Reference)</div>` + pLines(o.quoteRef,'سعر الوحدة — Unit Price')
      + pTotals([['الإجمالي شامل الضريبة — Total Incl. Tax',o.total],['الدفعة المقدمة 50% — 50% Down Payment',o.advance]])
      + pGrid([['مرجع السداد — Payment Reference',o.payRef],['تأشيرة المالية — Finance Sign-off',o.fin],['مصدر التوفير — Sourcing Method',o.src],['مرجع التوفير — Sourcing Reference',o.srcRef]])
-     + pSigs(['مندوب المبيعات — Sales Representative','المالية — Finance','المدير العام — General Manager','إقرار العميل — Customer Acknowledgement']) + pFoot()
+     + pSigs(['مندوب المبيعات — Sales Representative','المالية — Finance','المدير العام — General Manager','إقرار العميل — Customer Acknowledgement'])
      + renderDocFooter('أمر بيع','Sales Order',no,o.date,o.quoteRef);
   }
   if(t==='do'){
@@ -2253,9 +2268,9 @@ function buildDoc(t, no){
      + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',o.customer],['الجوال — Mobile',o.mob],['المستلم — Recipient',o.recv],['العنوان الوطني — National Address',o.address],['مرجع أمر البيع — Sales Order Reference',o.soRef],['سداد كامل — Full Payment',o.full]])
      + `<div class="psec">الأصناف المسلَّمة — Delivered Items</div>` + pLines(so.quoteRef,'سعر الوحدة — Unit Price')
      + `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">للمعدات المركّبة يبدأ الضمان بمحضر التشغيل QLT-001 لا بهذا الإذن — For installed equipment, the warranty starts from the QLT-001 commissioning report, not this delivery order</div>`
-     + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
+     + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div class="terms-block" style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
      + pClientAccept(o)
-     + pSigs(['مندوب الشركة / السائق — Company Representative / Driver'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot()
+     + pSigs(['مندوب الشركة / السائق — Company Representative / Driver'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time']))
      + (window.eicrPrint ? buildEICR(o) : '')
      + renderDocFooter('إذن تسليم','Delivery Note',no,o.date,o.soRef);
   }
@@ -2265,9 +2280,9 @@ function buildDoc(t, no){
     return pHead('SRV-001','طلب صيانة وضمان — Maintenance & Warranty Request',no,j.date)
      + `<div class="psec">بيانات الطلب — Request Details</div>` + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',j.customer],['الرقم التسلسلي — Serial Number',j.serial],['حالة الضمان — Warranty Status',w.t],['الأولوية — Priority',j.priority],['التصنيف المالي — Financial Classification',j.fin],['الفني المكلّف — Assigned Technician',j.tech],['الحالة — Status',j.status]])
      + `<div class="psec">وصف العطل — Fault Description</div>` + `<div style="font-size:12.5px;padding:8px 4px;line-height:1.9">${esc(j.fault)||'—'}</div>`
-     + (String(j.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(j.terms)}</div>`:'')
+     + (String(j.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div class="terms-block" style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(j.terms)}</div>`:'')
      + pClientAccept(j)
-     + pSigs(['الفني المكلّف — Assigned Technician'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot()
+     + pSigs(['الفني المكلّف — Assigned Technician'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time']))
      + renderDocFooter('طلب صيانة','Maintenance Request',no,j.date,j.serial||'—');
   }
   if(t==='po'){
@@ -2280,7 +2295,7 @@ function buildDoc(t, no){
      + pTotals([['الإجمالي — Grand Total',p.total]]) + alert
      + `<div class="psec">المطابقة — Compliance</div>` + pGrid([['المتطلبات — Requirements','PCoC قبل الشحن + سابر SABER + قائمة التعبئة — Packing List']])
      + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p)
-     + pSigs(['تأكيد المورد — Supplier Confirmation']) + pFoot()
+     + pSigs(['تأكيد المورد — Supplier Confirmation'])
      + renderDocFooter('أمر شراء','Purchase Order',no,p.date,p.prRef||'—');
   }
   if(t==='pr'){
@@ -2290,14 +2305,14 @@ function buildDoc(t, no){
      + pGrid([['رقم المستند — Record No.',no],['الطالب — Requester',p.requester],['السبب — Reason',p.reason],['مرجع أمر البيع — Sales Order Reference',p.soRef],['المورد المقترح — Suggested Supplier',p.supplier],['الحالة — Status',p.status]])
      + `<div class="psec">وصف الاحتياج — Requirement Description</div>` + pGrid([['الوصف — Description',p.desc],['التكلفة التقديرية — Estimated Cost',fmt(p.est)]])
      + alert
-     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p) + pFoot()
+     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p)
      + renderDocFooter('طلب شراء','Purchase Requisition',no,p.date,p.soRef||'—');
   }
   if(t==='ins'){
     const j = S.installjobs.find(x=>x.no===no); if(!j) return '';
     return pHead('INS-001','مهمة فريق التركيب — Installation Job',no,j.date)
      + pGrid([['رقم المستند — Record No.',no],['المرجع — Reference',(j.refType||'')+' '+(j.ref||'')],['الوصف — Description',j.desc],['فريق التركيب — Installation Team',showMulti(j.crew)],['العدد المطلوب — Number Required',j.crewCount],['المبلغ المقبوض — Amount Received',fmt(j.amount)],['العهدة المرتبطة — Related Custody',j.custodyRef],['حالة التصفية — Settlement Status',j.settled],['حالة المهمة — Task Status',j.status]])
-     + pSigs(['فريق التركيب — Installation Team','مشرف العمليات — Operations Supervisor','المالية — Finance']) + pFoot()
+     + pSigs(['فريق التركيب — Installation Team','مشرف العمليات — Operations Supervisor','المالية — Finance'])
      + renderDocFooter('مهمة تركيب','Installation Job',no,j.date,((j.refType||'')+' '+(j.ref||'')).trim()||'—');
   }
   if(t==='payv'){
@@ -2307,7 +2322,7 @@ function buildDoc(t, no){
     return pHead('PAY','سند قبض — Receipt Voucher',no,p.date)
      + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',p.customer],['عرض السعر — Quotation',p.quoteRef],['طريقة الدفع — Payment Method',p.method],['المرجع/الشيك — Reference/Cheque',p.ref]])
      + pTotals([['قيمة العرض الإجمالية — Total Quote Value',q.total],['المبلغ المقبوض بهذا السند — Amount Received on This Voucher',p.amount],['إجمالي المسدَّد على العرض — Total Paid on Quote',quotePaid(p.quoteRef)],['المتبقي بعد هذا السند — Remaining After This Voucher',rem]])
-     + pSigs(['المحاسب / أمين الصندوق — Accountant / Cashier','المستلم — Recipient','العميل — Customer']) + pFoot()
+     + pSigs(['المحاسب / أمين الصندوق — Accountant / Cashier','المستلم — Recipient','العميل — Customer'])
      + renderDocFooter('سند قبض','Receipt Voucher',no,p.date,p.quoteRef||'—');
   }
   if(t==='pay'){
@@ -2316,11 +2331,85 @@ function buildDoc(t, no){
     return pHead('FIN-002','أمر صرف راتب — Payroll Voucher',no,p.date)
      + pGrid([['رقم المستند — Record No.',no],['الموظف — Employee',p.employee],['الشهر — Month',p.month],['طريقة الصرف — Disbursement Method',p.method],['الحالة — Status',p.status]])
      + pTotals([['الراتب الأساسي — Basic Salary',p.base],['إضافات/بدلات — Additions/Allowances',p.additions],['خصومات — Deductions',p.deductions],['صافي المستحق — Net Due',net]])
-     + pSigs(['المحاسب — Accountant','المدير العام — General Manager','استلمت المبلغ (الموظف) — Amount Received (Employee)']) + pFoot()
+     + pSigs(['المحاسب — Accountant','المدير العام — General Manager','استلمت المبلغ (الموظف) — Amount Received (Employee)'])
      + renderDocFooter('أمر صرف راتب','Payroll Voucher',no,p.date,'—');
   }
   return '';
 }
+
+/* ═══════════════ طباعة معزولة: نافذة مستقلة تحتوي على مستند الطباعة فقط، بمعزل عن واجهة التطبيق (لا شريط جانبي، لا قوائم، لا رابط النظام) ═══════════════ */
+const PRINT_CSS = `
+:root{--navy:#0E2342;--steel:#51647A;--red:#DA291C;--silver:#B9C2CC;--light:#EEF1F5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal','Cairo',sans-serif;color:#0A0F16;font-size:14px;background:#fff;padding-top:100px;padding-bottom:30px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:var(--steel);color:#fff;padding:7px 8px;text-align:right;font-size:11.5px;white-space:nowrap}
+td{border-bottom:1px solid var(--light);padding:6px 8px;vertical-align:middle}
+tr:nth-child(even) td{background:#F7F9FB}
+.psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
+.doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;padding-bottom:8px;border-bottom:2px solid var(--navy);margin-bottom:8px;gap:10px;flex-wrap:wrap}
+.doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
+.doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
+.doc-header-names{display:flex;flex-direction:column;gap:2px}
+.doc-header-names span{font-size:14px;font-weight:700;color:var(--navy);line-height:1.3}
+.doc-header-center{font-size:15px;font-weight:700;color:var(--navy);text-align:center;flex:1}
+.doc-header-left{width:75px;height:75px;flex-shrink:0}
+.doc-header-qr{width:75px;height:75px;object-fit:contain}
+.doc-meta-line{font-size:9px;color:#666;text-align:center;margin-bottom:10px}
+.doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#fff}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
+.pgrid .pi{display:flex;border:1px solid var(--light)}
+.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
+.pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12px;flex:1}
+.sigs{display:flex;gap:0;margin-top:18px}
+.sig{flex:1;border:1px solid var(--silver)}
+.sig .h{background:var(--navy);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:5px}
+.sig .b{padding:10px;font-size:11.5px;color:var(--steel);line-height:2.1}
+.pfoot{text-align:center;color:var(--steel);font-size:10.5px;margin-top:14px;border-top:1px solid var(--silver);padding-top:8px}
+.doc-footer{display:block;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;font-size:9px;color:#666;border-top:1px solid #ccc;padding-top:4px;text-align:center;background:#fff}
+.doc-footer div+div{margin-top:2px}
+.eicr{margin-top:14px;page-break-before:always}
+.eicr-info{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
+.eicr-info td{border:1px solid var(--steel);padding:7px 9px}
+.eicr-info .k{background:var(--light);font-weight:700;color:var(--navy);white-space:nowrap;width:110px}
+.eicr-confirm{font-weight:700;font-size:12.5px;line-height:2.4;margin:12px 2px;text-align:justify}
+.eicr-blank{display:inline-block;border-bottom:1px dotted #333;min-width:80px}
+.eicr-eq{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.eicr-eq th{background:var(--steel);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px}
+.eicr-eq td{border:1px solid var(--silver);padding:8px;height:26px}
+.imgbox{background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--silver);border-radius:8px;overflow:hidden}
+.imgbox img{object-fit:contain;width:100%;height:100%}
+.imgbox .noimg{color:var(--steel);font-size:11px;text-align:center}
+img{max-width:100%}
+[class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
+.line-item-row,.signatures-block,.approvals-block,.terms-block{page-break-inside:avoid}
+@page{size:A4;margin:10mm 8mm}
+@media print{ body{background:#fff!important} }
+`;
+// يفتح نافذة معزولة تحتوي فقط على محتوى المستند (بلا شريط جانبي ولا عناصر واجهة التطبيق ولا رابط النظام) ثم يطبعها ويغلقها تلقائياً
+function printDocument(docHtml){
+  const win = window.open('', '_blank');
+  if(!win){ alert('يرجى السماح بالنوافذ المنبثقة (Popups) لهذا الموقع لإتمام الطباعة — Please allow popups for this site to print'); return; }
+  win.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>طباعة مستند — Print Document</title>
+<style>${PRINT_CSS}</style>
+</head>
+<body>${docHtml}</body>
+</html>`);
+  win.document.close();
+  win.focus();
+  win.onload = () => { win.print(); };
+  win.onafterprint = () => { win.close(); };
+}
+window.printCurrentDoc = () => {
+  if(!printNo){ alert('اختر مستنداً أولاً — Select a document first'); return; }
+  const html = buildDoc(printType, printNo);
+  if(!html){ alert('تعذّر إنشاء المستند — Could not build the document'); return; }
+  printDocument(html);
+};
 
 /* ═══════════════ جرد المخزون ═══════════════ */
 function renderInventory(){
