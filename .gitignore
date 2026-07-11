@@ -2,3 +2,7 @@
 firebase-debug.log
 firebase-debug.*.log
 node_modules/
+
+# Python bytecode cache (generated when running skill scripts)
+__pycache__/
+*.pyc
