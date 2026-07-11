@@ -97,6 +97,18 @@ tr.clickable:hover td{background:#eef3fa}
 .sig .h{background:var(--navy);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:5px}
 .sig .b{padding:10px;font-size:11.5px;color:var(--steel);line-height:2.1}
 .pfoot{text-align:center;color:var(--steel);font-size:10.5px;margin-top:14px;border-top:1px solid var(--silver);padding-top:8px}
+/* تذييل المستند الموحّد — يظهر فقط عند الطباعة أسفل كل صفحة */
+.doc-footer{display:none}
+/* تقرير اكتمال تركيب المعدات EICR */
+.eicr{margin-top:14px}
+.eicr-info{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
+.eicr-info td{border:1px solid var(--steel);padding:7px 9px}
+.eicr-info .k{background:var(--light);font-weight:700;color:var(--navy);white-space:nowrap;width:110px}
+.eicr-confirm{font-weight:700;font-size:12.5px;line-height:2.4;margin:12px 2px;text-align:justify}
+.eicr-blank{display:inline-block;border-bottom:1px dotted #333;min-width:80px}
+.eicr-eq{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.eicr-eq th{background:var(--steel);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px}
+.eicr-eq td{border:1px solid var(--silver);padding:8px;height:26px}
 @page{size:A4;margin:12mm}
 @media print{
   #side,.no-print,.pagehead,.pagesub,.redline{display:none!important}
@@ -110,6 +122,13 @@ tr.clickable:hover td{background:#eef3fa}
   #printdoc img,.pdblock img{display:block!important;visibility:visible!important;max-width:100%}
   /* تنبيهات/تحذيرات داخلية للموظفين (اعتماد، سقف مبلغ...) لا تظهر أبداً على نسخة الطباعة/PDF التي يستلمها العميل أو المورد */
   [class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
+  /* تقرير EICR يبدأ في صفحة جديدة بعد إذن التسليم */
+  .eicr{page-break-before:always}
+  /* تذييل المستند: يظهر أسفل كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) */
+  .doc-footer{display:block!important;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;
+    font-size:9px;color:#666;border-top:1px solid #ccc;padding-top:4px;text-align:center;background:#fff;
+    print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  #printdoc,.pdblock{padding-bottom:26px}
 }
 /* لوحة كانبان للصفقات */
 .kb{display:flex;gap:10px;overflow-x:auto;align-items:flex-start;padding-bottom:8px}
@@ -749,8 +768,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.8';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه */
+const SYS_VERSION = 'V1.9';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -1949,6 +1968,10 @@ function renderDOs(){
     <div class="fld"><label>مرجع إذن الصرف — Disbursement Order Reference</label><input id="f_rel" value="${esc(f('rel'))}"></div>
     <div class="fld" style="grid-column:1/-1"><label>الشروط والأحكام (تظهر للعميل في رابط الموافقة) — Terms & Conditions (shown to customer in approval link)</label><textarea id="f_terms" placeholder="مثال: استلم العميل الأصناف كاملة وبحالة سليمة؛ أي ملاحظات تُسجَّل وقت الاستلام فقط؛ للمعدات المركّبة يبدأ الضمان بمحضر التشغيل...">${esc(f('terms'))}</textarea></div>
    </div><div id="doalert" class="alertbox" style="display:none">⚠ لا يُسمح بالتسليم النهائي قبل تأشيرة السداد الكامل</div>
+   ${row?`<div class="sharebox no-print"><label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer">
+     <input type="checkbox" id="eicrToggle" ${window.eicrPrint?'checked':''} onchange="window.eicrPrint=this.checked" style="width:17px;height:17px">
+     طباعة تقرير EICR مع الإذن — Print EICR with Delivery Note</label>
+     <p style="font-size:11.5px;color:var(--steel);margin-top:6px">عند التفعيل يُضاف «تقرير اكتمال تركيب المعدات» في صفحة مستقلة بعد الإذن عند الطباعة.</p></div>`:''}
    ${row?shareBoxHTML('dos', row):''}
    <div class="btnrow"><button class="btn" onclick="saveDO()">${row?'حفظ':'إضافة'}</button>${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>
    <div class="card"><h3>سجل الإذون (${S.dos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>أمر البيع — Sales Order</th><th>العميل — Customer</th><th>سداد كامل — Full Payment</th><th>الحالة — Status</th><th>موافقة العميل — Customer Approval</th><th class="no-print"></th></tr></thead><tbody>
@@ -2113,7 +2136,9 @@ function renderPrint(){
     <div class="fld"><label>نوع المستند — Document Type</label><select id="p_type" onchange="printType=this.value;printNo='';renderPrint()">${Object.entries(types).map(([k,[l]])=>`<option value="${k}" ${k===printType?'selected':''}>${l}</option>`).join('')}</select></div>
     <div class="fld"><label>رقم المستند — Document No.</label><select id="p_no" onchange="printNo=this.value;renderPrint()"><option value=""></option>${types[printType][1].map(n=>`<option ${n===printNo?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
     <div class="fld"><label>&nbsp;</label><button class="btn red" onclick="window.print()">🖨 طباعة / حفظ PDF</button></div>
-   </div></div>
+   </div>${printType==='do'?`<label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;margin-top:6px">
+     <input type="checkbox" ${window.eicrPrint?'checked':''} onchange="window.eicrPrint=this.checked;renderPrint()" style="width:17px;height:17px">
+     طباعة تقرير EICR مع الإذن — Print EICR with Delivery Note</label>`:''}</div>
    <div id="printdoc">${printNo ? buildDoc(printType, printNo) : '<div class="empty">اختر مستنداً لعرضه</div>'}</div>`;
 }
 function pHead(code, title, no, date){
@@ -2152,6 +2177,41 @@ const pFoot = () => `<div class="pfoot">س.ت — CR No.: ${esc((S.company||{}).
 const pClientAccept = r => r.clientAccept ? `<div class="psec">موافقة العميل الإلكترونية — Electronic Customer Approval</div>
   <div style="font-size:12px;padding:8px 4px;line-height:2">✔ وافق العميل على الشروط والأحكام إلكترونياً عبر الرابط الموثّق —
   <b style="color:var(--navy)">${esc(r.clientAccept.name)}</b> — <span dir="ltr">${esc(r.clientAccept.mobile)}</span> — ${esc(r.clientAccept.at||'')}</div>` : '';
+// تنسيق تاريخ ISO إلى DD/MM/YYYY للتذييل
+const dmy = d => { if(!d) return '—'; const p=String(d).split('-'); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:String(d); };
+// تذييل موحّد يظهر أسفل كل صفحة مطبوعة لكل المستندات
+function renderDocFooter(docTypeName, docTypeNameEn, recordNo, date, ref){
+  return `<div class="doc-footer">${esc(docTypeName)} / ${esc(docTypeNameEn)} &nbsp;|&nbsp; ${esc(recordNo)||'—'} &nbsp;|&nbsp; ${esc(dmy(date))} &nbsp;|&nbsp; مرجع — Ref: ${esc(ref)||'—'}</div>`;
+}
+// تقرير اكتمال تركيب المعدات EICR — يُلحق بإذن التسليم عند تفعيل الخيار
+window.eicrPrint = false;
+function buildEICR(o){
+  const so = S.sos.find(x=>x.no===o.soRef)||{};
+  const ls = S.lines.filter(l=>l.docNo===so.quoteRef);
+  const nRows = Math.max(10, ls.length);
+  let eqRows = '';
+  for(let i=0;i<nRows;i++){
+    const l = ls[i];
+    const p = l && S.products.find(x=>x.nameAr===l.product);
+    eqRows += `<tr><td style="text-align:center;width:36px">${i+1}</td><td>${l?esc(p?prodLabel(p):l.product):'&nbsp;'}</td><td>${l?esc(l.brand):'&nbsp;'}</td><td style="text-align:center;width:50px">${l?esc(l.qty):'&nbsp;'}</td><td>&nbsp;</td></tr>`;
+  }
+  const bl = w => `<span class="eicr-blank" style="min-width:${w}">&nbsp;</span>`;
+  const sig = (title) => `<div class="sig" style="flex:1"><div class="h">${title}</div><div class="b" style="line-height:2.3">الاسم — Name: ...............<br>المسمّى — Designation: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............<br>الختم — Stamp:</div></div>`;
+  return `<div class="eicr">
+    ${pHead('EICR','تقرير اكتمال تركيب المعدات / Equipment Installation Completion Report (EICR)', o.no, o.date)}
+    <table class="eicr-info"><tbody>
+      <tr><td class="k">العميل — Customer</td><td colspan="3">${esc(o.customer)||'—'}</td></tr>
+      <tr><td class="k">PO #</td><td>${esc(o.soRef)||'—'}</td><td class="k">Invoice #</td><td>${esc(o.rel)||'—'}</td></tr>
+      <tr><td class="k">Date #</td><td>${esc(dmy(o.date))}</td><td class="k">Ref No #</td><td>${esc(o.no)||'—'}</td></tr>
+    </tbody></table>
+    <div class="eicr-confirm">We hereby confirm that the following equipment have been installed in our premises at
+    (${bl('320px')}) by (${bl('160px')})
+    on behalf of (${bl('300px')})
+    and we are working to our complete satisfaction.</div>
+    <table class="eicr-eq"><thead><tr><th style="width:36px">S.N.</th><th>Equipment Name</th><th>Make</th><th style="width:50px">Qty.</th><th style="width:32%">Comments</th></tr></thead><tbody>${eqRows}</tbody></table>
+    <div class="sigs" style="margin-top:18px">${sig('Equipment Supplier — مورد المعدات')}${sig('Confirmed by Customer — اعتماد العميل')}</div>
+  </div>`;
+}
 function buildDoc(t, no){
   if(t==='quote'){
     const q = S.quotes.find(x=>x.no===no); if(!q) return '';
@@ -2164,7 +2224,7 @@ function buildDoc(t, no){
       return `<div style="font-size:11.5px;padding:6px 4px;border-bottom:1px solid var(--light);line-height:1.7"><b style="color:var(--navy)">${i+1}. ${esc(l.product)}:</b> ${esc(t2)}</div>`;
     }).join('') : '';
     return pHead('SLS-001','عرض سعر — Quotation',no,q.date)
-     + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['الصناعية — Industrial Area',c.industrial],['اختصاص الورشة — Workshop Specialty',c.specialty],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
+     + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['الصناعية — Industrial Area',c.industrial],['اختصاص الورشة — Workshop Specialty',c.specialty],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
      + `<div class="psec">البنود — Line Items</div>` + pLines(no,'سعر الوحدة — Unit Price')
      + pTotals([['المجموع — Subtotal',q.gross],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total]])
      + alert
@@ -2173,81 +2233,91 @@ function buildDoc(t, no){
      + wsec
      + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(q)
      + pClientAccept(q)
-     + (q.clientAccept?'':pSigs(['موافقة العميل — Customer Approval'])) + pFoot();
+     + (q.clientAccept?'':pSigs(['موافقة العميل — Customer Approval'])) + pFoot()
+     + renderDocFooter('عرض سعر','Price Quotation',no,q.date,'—');
   }
   if(t==='so'){
     const o = S.sos.find(x=>x.no===no); if(!o) return '';
     return pHead('SLS-002','أمر بيع / فاتورة مبدئية — Sales Order',no,o.date)
-     + pGrid([['مرجع العرض — Quote Reference',o.quoteRef],['العميل — Customer',o.customer],['الحالة — Status',o.status]])
+     + pGrid([['رقم المستند — Record No.',no],['مرجع العرض — Quote Reference',o.quoteRef],['العميل — Customer',o.customer],['الحالة — Status',o.status]])
      + `<div class="psec">البنود المؤكدة (من مرجع العرض) — Confirmed Items (from Quote Reference)</div>` + pLines(o.quoteRef,'سعر الوحدة — Unit Price')
      + pTotals([['الإجمالي شامل الضريبة — Total Incl. Tax',o.total],['الدفعة المقدمة 50% — 50% Down Payment',o.advance]])
      + pGrid([['مرجع السداد — Payment Reference',o.payRef],['تأشيرة المالية — Finance Sign-off',o.fin],['مصدر التوفير — Sourcing Method',o.src],['مرجع التوفير — Sourcing Reference',o.srcRef]])
-     + pSigs(['مندوب المبيعات — Sales Representative','المالية — Finance','المدير العام — General Manager','إقرار العميل — Customer Acknowledgement']) + pFoot();
+     + pSigs(['مندوب المبيعات — Sales Representative','المالية — Finance','المدير العام — General Manager','إقرار العميل — Customer Acknowledgement']) + pFoot()
+     + renderDocFooter('أمر بيع','Sales Order',no,o.date,o.quoteRef);
   }
   if(t==='do'){
     const o = S.dos.find(x=>x.no===no); if(!o) return '';
     const so = S.sos.find(x=>x.no===o.soRef)||{};
     return pHead('SLS-003','إذن تسليم — Delivery Order',no,o.date)
-     + pGrid([['مرجع أمر البيع — Sales Order Reference',o.soRef],['العميل — Customer',o.customer],['العنوان — Address',o.address],['المستلم — Recipient',o.recv],['جواله — Mobile No.',o.mob],['سداد كامل — Full Payment',o.full]])
+     + pGrid([['رقم المستند — Record No.',no],['مرجع أمر البيع — Sales Order Reference',o.soRef],['العميل — Customer',o.customer],['العنوان — Address',o.address],['المستلم — Recipient',o.recv],['جواله — Mobile No.',o.mob],['سداد كامل — Full Payment',o.full]])
      + `<div class="psec">الأصناف المسلَّمة — Delivered Items</div>` + pLines(so.quoteRef,'سعر الوحدة — Unit Price')
      + `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">للمعدات المركّبة يبدأ الضمان بمحضر التشغيل QLT-001 لا بهذا الإذن — For installed equipment, the warranty starts from the QLT-001 commissioning report, not this delivery order</div>`
      + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
      + pClientAccept(o)
-     + pSigs(['مندوب الشركة / السائق — Company Representative / Driver'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot();
+     + pSigs(['مندوب الشركة / السائق — Company Representative / Driver'].concat(o.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot()
+     + (window.eicrPrint ? buildEICR(o) : '')
+     + renderDocFooter('إذن تسليم','Delivery Note',no,o.date,o.soRef);
   }
   if(t==='srv'){
     const j = S.srv.find(x=>x.no===no); if(!j) return '';
     const w = warrantyStatus(j.serial, j.date);
     return pHead('SRV-001','طلب صيانة وضمان — Maintenance & Warranty Request',no,j.date)
-     + `<div class="psec">بيانات الطلب — Request Details</div>` + pGrid([['العميل — Customer',j.customer],['الرقم التسلسلي — Serial Number',j.serial],['حالة الضمان — Warranty Status',w.t],['الأولوية — Priority',j.priority],['التصنيف المالي — Financial Classification',j.fin],['الفني المكلّف — Assigned Technician',j.tech],['الحالة — Status',j.status]])
+     + `<div class="psec">بيانات الطلب — Request Details</div>` + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',j.customer],['الرقم التسلسلي — Serial Number',j.serial],['حالة الضمان — Warranty Status',w.t],['الأولوية — Priority',j.priority],['التصنيف المالي — Financial Classification',j.fin],['الفني المكلّف — Assigned Technician',j.tech],['الحالة — Status',j.status]])
      + `<div class="psec">وصف العطل — Fault Description</div>` + `<div style="font-size:12.5px;padding:8px 4px;line-height:1.9">${esc(j.fault)||'—'}</div>`
      + (String(j.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(j.terms)}</div>`:'')
      + pClientAccept(j)
-     + pSigs(['الفني المكلّف — Assigned Technician'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot();
+     + pSigs(['الفني المكلّف — Assigned Technician'].concat(j.clientAccept?[]:['توقيع العميل + التاريخ + الوقت — Customer Signature + Date + Time'])) + pFoot()
+     + renderDocFooter('طلب صيانة','Maintenance Request',no,j.date,j.serial||'—');
   }
   if(t==='po'){
     const p = S.pos.find(x=>x.no===no); if(!p) return '';
     const s = S.suppliers.find(x=>x.name===p.supplier)||{};
     const alert = p.total>50000?`<div class="alertbox">⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR 50,000: requires signatures from both partners</div>`:'';
     return pHead('PUR-002','أمر شراء — Purchase Order',no,p.date)
-     + pGrid([['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['المورد — Supplier',p.supplier],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
+     + pGrid([['رقم المستند — Record No.',no],['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['المورد — Supplier',p.supplier],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
      + `<div class="psec">الأصناف — Items (بسعر التكلفة — at cost)</div>` + pLines(no,'سعر التكلفة — Unit Cost')
      + pTotals([['الإجمالي — Grand Total',p.total]]) + alert
      + `<div class="psec">المطابقة — Compliance</div>` + pGrid([['المتطلبات — Requirements','PCoC قبل الشحن + سابر SABER + قائمة التعبئة — Packing List']])
      + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p)
-     + pSigs(['تأكيد المورد — Supplier Confirmation']) + pFoot();
+     + pSigs(['تأكيد المورد — Supplier Confirmation']) + pFoot()
+     + renderDocFooter('أمر شراء','Purchase Order',no,p.date,p.prRef||'—');
   }
   if(t==='pr'){
     const p = S.prs.find(x=>x.no===no); if(!p) return '';
     const alert = +p.est>5000?`<div class="alertbox">⚠ يتجاوز 5,000 ريال — يتطلب توقيع الشريكين — Exceeds SAR 5,000: requires signatures from both partners</div>`:'';
     return pHead('PUR-001','طلب شراء — Purchase Requisition',no,p.date)
-     + pGrid([['الطالب — Requester',p.requester],['السبب — Reason',p.reason],['مرجع أمر البيع — Sales Order Reference',p.soRef],['المورد المقترح — Suggested Supplier',p.supplier],['الحالة — Status',p.status]])
+     + pGrid([['رقم المستند — Record No.',no],['الطالب — Requester',p.requester],['السبب — Reason',p.reason],['مرجع أمر البيع — Sales Order Reference',p.soRef],['المورد المقترح — Suggested Supplier',p.supplier],['الحالة — Status',p.status]])
      + `<div class="psec">وصف الاحتياج — Requirement Description</div>` + pGrid([['الوصف — Description',p.desc],['التكلفة التقديرية — Estimated Cost',fmt(p.est)]])
      + alert
-     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p) + pFoot();
+     + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p) + pFoot()
+     + renderDocFooter('طلب شراء','Purchase Requisition',no,p.date,p.soRef||'—');
   }
   if(t==='ins'){
     const j = S.installjobs.find(x=>x.no===no); if(!j) return '';
     return pHead('INS-001','مهمة فريق التركيب — Installation Job',no,j.date)
-     + pGrid([['المرجع — Reference',(j.refType||'')+' '+(j.ref||'')],['الوصف — Description',j.desc],['فريق التركيب — Installation Team',showMulti(j.crew)],['العدد المطلوب — Number Required',j.crewCount],['المبلغ المقبوض — Amount Received',fmt(j.amount)],['العهدة المرتبطة — Related Custody',j.custodyRef],['حالة التصفية — Settlement Status',j.settled],['حالة المهمة — Task Status',j.status]])
-     + pSigs(['فريق التركيب — Installation Team','مشرف العمليات — Operations Supervisor','المالية — Finance']) + pFoot();
+     + pGrid([['رقم المستند — Record No.',no],['المرجع — Reference',(j.refType||'')+' '+(j.ref||'')],['الوصف — Description',j.desc],['فريق التركيب — Installation Team',showMulti(j.crew)],['العدد المطلوب — Number Required',j.crewCount],['المبلغ المقبوض — Amount Received',fmt(j.amount)],['العهدة المرتبطة — Related Custody',j.custodyRef],['حالة التصفية — Settlement Status',j.settled],['حالة المهمة — Task Status',j.status]])
+     + pSigs(['فريق التركيب — Installation Team','مشرف العمليات — Operations Supervisor','المالية — Finance']) + pFoot()
+     + renderDocFooter('مهمة تركيب','Installation Job',no,j.date,((j.refType||'')+' '+(j.ref||'')).trim()||'—');
   }
   if(t==='payv'){
     const p = S.payments.find(x=>x.no===no); if(!p) return '';
     const q = S.quotes.find(x=>x.no===p.quoteRef)||{};
     const rem = q.no ? quoteRemaining(q) : 0;
     return pHead('PAY','سند قبض — Receipt Voucher',no,p.date)
-     + pGrid([['العميل — Customer',p.customer],['عرض السعر — Quotation',p.quoteRef],['طريقة الدفع — Payment Method',p.method],['المرجع/الشيك — Reference/Cheque',p.ref]])
+     + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',p.customer],['عرض السعر — Quotation',p.quoteRef],['طريقة الدفع — Payment Method',p.method],['المرجع/الشيك — Reference/Cheque',p.ref]])
      + pTotals([['قيمة العرض الإجمالية — Total Quote Value',q.total],['المبلغ المقبوض بهذا السند — Amount Received on This Voucher',p.amount],['إجمالي المسدَّد على العرض — Total Paid on Quote',quotePaid(p.quoteRef)],['المتبقي بعد هذا السند — Remaining After This Voucher',rem]])
-     + pSigs(['المحاسب / أمين الصندوق — Accountant / Cashier','المستلم — Recipient','العميل — Customer']) + pFoot();
+     + pSigs(['المحاسب / أمين الصندوق — Accountant / Cashier','المستلم — Recipient','العميل — Customer']) + pFoot()
+     + renderDocFooter('سند قبض','Receipt Voucher',no,p.date,p.quoteRef||'—');
   }
   if(t==='pay'){
     const p = S.payroll.find(x=>x.no===no); if(!p) return '';
     const net = p.net!=null?p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0));
     return pHead('FIN-002','أمر صرف راتب — Payroll Voucher',no,p.date)
-     + pGrid([['الموظف — Employee',p.employee],['الشهر — Month',p.month],['طريقة الصرف — Disbursement Method',p.method],['الحالة — Status',p.status]])
+     + pGrid([['رقم المستند — Record No.',no],['الموظف — Employee',p.employee],['الشهر — Month',p.month],['طريقة الصرف — Disbursement Method',p.method],['الحالة — Status',p.status]])
      + pTotals([['الراتب الأساسي — Basic Salary',p.base],['إضافات/بدلات — Additions/Allowances',p.additions],['خصومات — Deductions',p.deductions],['صافي المستحق — Net Due',net]])
-     + pSigs(['المحاسب — Accountant','المدير العام — General Manager','استلمت المبلغ (الموظف) — Amount Received (Employee)']) + pFoot();
+     + pSigs(['المحاسب — Accountant','المدير العام — General Manager','استلمت المبلغ (الموظف) — Amount Received (Employee)']) + pFoot()
+     + renderDocFooter('أمر صرف راتب','Payroll Voucher',no,p.date,'—');
   }
   return '';
 }
