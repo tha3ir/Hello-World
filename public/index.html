@@ -88,7 +88,7 @@ tr.clickable:hover td{background:#eef3fa}
 .psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
 .pgrid .pi{display:flex;border:1px solid var(--light)}
-.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:10.5px;padding:6px 8px;min-width:135px;line-height:1.4}
+.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
 .pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12px;flex:1}
 #printdoc table,.pdblock table{margin-top:0}
 #printdoc th,.pdblock th{background:var(--steel)}
@@ -2224,7 +2224,7 @@ function buildDoc(t, no){
       return `<div style="font-size:11.5px;padding:6px 4px;border-bottom:1px solid var(--light);line-height:1.7"><b style="color:var(--navy)">${i+1}. ${esc(l.product)}:</b> ${esc(t2)}</div>`;
     }).join('') : '';
     return pHead('SLS-001','عرض سعر — Quotation',no,q.date)
-     + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['الصناعية — Industrial Area',c.industrial],['اختصاص الورشة — Workshop Specialty',c.specialty],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
+     + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['رقم المستند — Record No.',no],[' ',' '],['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
      + `<div class="psec">البنود — Line Items</div>` + pLines(no,'سعر الوحدة — Unit Price')
      + pTotals([['المجموع — Subtotal',q.gross],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total]])
      + alert
@@ -2239,7 +2239,7 @@ function buildDoc(t, no){
   if(t==='so'){
     const o = S.sos.find(x=>x.no===no); if(!o) return '';
     return pHead('SLS-002','أمر بيع / فاتورة مبدئية — Sales Order',no,o.date)
-     + pGrid([['رقم المستند — Record No.',no],['مرجع العرض — Quote Reference',o.quoteRef],['العميل — Customer',o.customer],['الحالة — Status',o.status]])
+     + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',o.customer],['مرجع العرض — Quote Reference',o.quoteRef],['الحالة — Status',o.status]])
      + `<div class="psec">البنود المؤكدة (من مرجع العرض) — Confirmed Items (from Quote Reference)</div>` + pLines(o.quoteRef,'سعر الوحدة — Unit Price')
      + pTotals([['الإجمالي شامل الضريبة — Total Incl. Tax',o.total],['الدفعة المقدمة 50% — 50% Down Payment',o.advance]])
      + pGrid([['مرجع السداد — Payment Reference',o.payRef],['تأشيرة المالية — Finance Sign-off',o.fin],['مصدر التوفير — Sourcing Method',o.src],['مرجع التوفير — Sourcing Reference',o.srcRef]])
@@ -2250,7 +2250,7 @@ function buildDoc(t, no){
     const o = S.dos.find(x=>x.no===no); if(!o) return '';
     const so = S.sos.find(x=>x.no===o.soRef)||{};
     return pHead('SLS-003','إذن تسليم — Delivery Order',no,o.date)
-     + pGrid([['رقم المستند — Record No.',no],['مرجع أمر البيع — Sales Order Reference',o.soRef],['العميل — Customer',o.customer],['العنوان — Address',o.address],['المستلم — Recipient',o.recv],['جواله — Mobile No.',o.mob],['سداد كامل — Full Payment',o.full]])
+     + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',o.customer],['الجوال — Mobile',o.mob],['المستلم — Recipient',o.recv],['العنوان الوطني — National Address',o.address],['مرجع أمر البيع — Sales Order Reference',o.soRef],['سداد كامل — Full Payment',o.full]])
      + `<div class="psec">الأصناف المسلَّمة — Delivered Items</div>` + pLines(so.quoteRef,'سعر الوحدة — Unit Price')
      + `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">للمعدات المركّبة يبدأ الضمان بمحضر التشغيل QLT-001 لا بهذا الإذن — For installed equipment, the warranty starts from the QLT-001 commissioning report, not this delivery order</div>`
      + (String(o.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(o.terms)}</div>`:'')
@@ -2275,7 +2275,7 @@ function buildDoc(t, no){
     const s = S.suppliers.find(x=>x.name===p.supplier)||{};
     const alert = p.total>50000?`<div class="alertbox">⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR 50,000: requires signatures from both partners</div>`:'';
     return pHead('PUR-002','أمر شراء — Purchase Order',no,p.date)
-     + pGrid([['رقم المستند — Record No.',no],['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['المورد — Supplier',p.supplier],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
+     + pGrid([['رقم المستند — Record No.',no],['المورد — Supplier',p.supplier],['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
      + `<div class="psec">الأصناف — Items (بسعر التكلفة — at cost)</div>` + pLines(no,'سعر التكلفة — Unit Cost')
      + pTotals([['الإجمالي — Grand Total',p.total]]) + alert
      + `<div class="psec">المطابقة — Compliance</div>` + pGrid([['المتطلبات — Requirements','PCoC قبل الشحن + سابر SABER + قائمة التعبئة — Packing List']])
