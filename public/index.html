@@ -78,16 +78,17 @@ tr.clickable:hover td{background:#eef3fa}
 .pline{height:3px;background:var(--red);margin:10px 0}
 .ptitle{text-align:center;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;margin-bottom:12px}
 /* ترويسة موحّدة لكل المستندات القابلة للطباعة: شعار+اسم الشركة (يمين) — عنوان المستند (وسط) — QR السجل التجاري (يسار) — هوية ITCO: تدرّج Navy→Carbon + نص أبيض + فاصل أحمر */
-.doc-print-header{background:var(--grad-primary);color:var(--itco-white);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
+.doc-print-header{background:#FFFFFF;color:var(--itco-navy);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
 .doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;gap:10px;flex-wrap:wrap}
 .doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
 .doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
 .doc-header-names{display:flex;flex-direction:column;gap:2px}
-.doc-header-names span{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--itco-white);line-height:1.3}
-.doc-header-center{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--itco-white);text-align:center;flex:1}
+.doc-header-names span{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--itco-navy);line-height:1.3}
+.doc-header-center{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--itco-navy);text-align:center;flex:1}
 .doc-header-left{width:75px;height:75px;flex-shrink:0}
 .doc-header-qr{width:75px;height:75px;object-fit:contain;background:#fff;border-radius:4px}
-.doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-white);text-align:center;margin-top:4px;opacity:.92}
+.doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-steel-blue);text-align:center;margin-top:4px}
+.doc-meta-line b{color:var(--itco-navy)}
 .psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver)}
 .pgrid .pi{display:flex;border:1px solid var(--itco-silver);background:var(--itco-white)}
@@ -135,7 +136,7 @@ tr.clickable:hover td{background:#eef3fa}
   /* تقرير EICR يبدأ في صفحة جديدة بعد إذن التسليم */
   .eicr{page-break-before:always}
   /* ترويسة المستند: تتكرر أعلى كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) — هوية ITCO: تدرّج Navy→Carbon */
-  .doc-print-header{position:fixed!important;top:0;left:0;right:0;width:100%;background:var(--grad-primary)!important}
+  .doc-print-header{position:fixed!important;top:0;left:0;right:0;width:100%;background:#FFFFFF!important}
   /* تذييل المستند: يظهر أسفل كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) — فاصل أحمر إشاري */
   .doc-footer{display:block!important;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;
     font-size:9px;color:var(--itco-steel-blue);border-top:2px solid var(--itco-red);padding-top:4px;text-align:center;background:#fff}
@@ -782,8 +783,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.1';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) */
+const SYS_VERSION = 'V2.2';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -2179,11 +2180,15 @@ function pLines(no, priceLabel){
    ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
-// tier: 'final' = الإجمالي النهائي (تدرّج Navy→Carbon، أبيض، أكبر) — 'accent' = صفوف المجموع قبل/بعد الضريبة (كحلي، أبيض) — بلا tier = خلفية بيضاء
+// tiers: subtotal (فاتح/carbon) — discount (فاتح/steel-blue) — netbeforetax (فضي متوسط/navy 700) — vat (فاتح/steel-blue)
+// — final = الإجمالي النهائي (كحلي مصمت/أبيض F2F4F7، Cairo، 800، أكبر) — بلا tier = خلفية بيضاء افتراضية
 const pTotals = rows => `<table style="margin-top:0"><tbody>${rows.map(([k,v,tier])=>{
-  const style = tier==='final' ? 'background:var(--grad-primary);color:var(--itco-white);font-family:\'Cairo\',sans-serif;font-weight:800;font-size:14px'
-    : tier==='accent' ? 'background:var(--itco-navy);color:var(--itco-white);font-family:\'Cairo\',sans-serif;font-weight:700'
-    : 'background:var(--itco-white);color:var(--itco-carbon);font-weight:700';
+  const style = tier==='final' ? 'background:var(--itco-navy);color:#F2F4F7;font-family:\'Cairo\',sans-serif;font-weight:800;font-size:14px'
+    : tier==='netbeforetax' ? 'background:#D6DCE3;color:var(--itco-navy);font-weight:700'
+    : tier==='discount' ? 'background:#EEF1F5;color:var(--itco-steel-blue);font-weight:700'
+    : tier==='vat' ? 'background:#EEF1F5;color:var(--itco-steel-blue);font-weight:700'
+    : tier==='subtotal' ? 'background:#EEF1F5;color:var(--itco-carbon);font-weight:700'
+    : 'background:#fff;color:var(--itco-carbon);font-weight:700';
   return `<tr><td style="${style};width:70%;padding:6px 8px">${k}</td><td style="${style};padding:6px 8px"><b>${fmt(v)}</b></td></tr>`;
 }).join('')}</tbody></table>`;
 const pSigs = roles => `<div class="sigs signatures-block">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم — Name: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............</div></div>`).join('')}</div>`;
@@ -2251,8 +2256,8 @@ function buildDoc(t, no){
     }).join('') : '';
     return pHead('SLS-001','عرض سعر — Quotation',no,q.date)
      + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['رقم المستند — Record No.',no],[' ',' '],['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
-     + `<div class="psec">البنود — Line Items</div>` + pLines(no,'سعر الوحدة — Unit Price')
-     + pTotals([['المجموع — Subtotal',q.gross,'accent'],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net,'accent'],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat,'accent'],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total,'final']])
+     + pLines(no,'سعر الوحدة — Unit Price')
+     + pTotals([['المجموع — Subtotal',q.gross,'subtotal'],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net,'discount'],['الصافي قبل الضريبة — Net Before Tax',q.net,'netbeforetax'],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat,'vat'],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total,'final']])
      + alert
      + `<div class="psec">الشروط العامة — General Terms</div>` + pGrid([['شروط الدفع — Payment Terms',q.pay],['مدة التوريد — Supply Duration',q.delivery],['الضمان العام — General Warranty',q.warranty],['المندوب — Representative',q.rep]])
      + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div class="terms-block" style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
@@ -2360,16 +2365,17 @@ th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-
 td{border:1px solid var(--itco-silver);padding:6px 8px;vertical-align:middle;background:var(--itco-white)}
 tr:nth-child(even) td{background:#EEF1F5}
 .psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
-.doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:var(--grad-primary);color:var(--itco-white);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
+.doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#FFFFFF;color:var(--itco-navy);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
 .doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;gap:10px;flex-wrap:wrap}
 .doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
 .doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
 .doc-header-names{display:flex;flex-direction:column;gap:2px}
-.doc-header-names span{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--itco-white);line-height:1.3}
-.doc-header-center{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--itco-white);text-align:center;flex:1}
+.doc-header-names span{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--itco-navy);line-height:1.3}
+.doc-header-center{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--itco-navy);text-align:center;flex:1}
 .doc-header-left{width:75px;height:75px;flex-shrink:0}
 .doc-header-qr{width:75px;height:75px;object-fit:contain;background:#fff;border-radius:4px}
-.doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-white);text-align:center;margin-top:4px;opacity:.92}
+.doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-steel-blue);text-align:center;margin-top:4px}
+.doc-meta-line b{color:var(--itco-navy)}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver)}
 .pgrid .pi{display:flex;border:1px solid var(--itco-silver);background:var(--itco-white)}
 .pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
