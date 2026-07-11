@@ -6,7 +6,9 @@
 <title>نظام تشغيل الأعمال</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;800&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#0E2342;--steel:#51647A;--red:#DA291C;--silver:#B9C2CC;--ink:#0A0F16;--light:#EEF1F5;--pale:#F7F9FB;--green:#1F7A3D;--amber:#B45309}
+:root{--navy:#0E2342;--steel:#51647A;--red:#DA291C;--silver:#B9C2CC;--ink:#0A0F16;--light:#EEF1F5;--pale:#F7F9FB;--green:#1F7A3D;--amber:#B45309;
+  --itco-navy:#0E2342;--itco-carbon:#0A0F16;--itco-steel-blue:#51647A;--itco-silver:#B9C2CC;--itco-white:#F2F4F7;--itco-red:#DA291C;--itco-red-dark:#8F1B12;
+  --grad-primary:linear-gradient(135deg,#0E2342 0%,#0A0F16 100%);--grad-metal:linear-gradient(135deg,#B9C2CC 0%,#8494A8 55%,#51647A 100%);--grad-accent:linear-gradient(135deg,#DA291C 0%,#8F1B12 100%)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Tajawal',sans-serif;color:var(--ink);background:var(--pale);font-size:14px}
 h1,h2,h3,.brand{font-family:'Cairo',sans-serif}
@@ -75,50 +77,55 @@ tr.clickable:hover td{background:#eef3fa}
 .ph .meta b{color:var(--red)}
 .pline{height:3px;background:var(--red);margin:10px 0}
 .ptitle{text-align:center;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;margin-bottom:12px}
-/* ترويسة موحّدة لكل المستندات القابلة للطباعة: شعار+اسم الشركة (يمين) — عنوان المستند (وسط) — QR السجل التجاري (يسار) */
-.doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;padding-bottom:8px;border-bottom:2px solid var(--navy);margin-bottom:8px;gap:10px;flex-wrap:wrap}
+/* ترويسة موحّدة لكل المستندات القابلة للطباعة: شعار+اسم الشركة (يمين) — عنوان المستند (وسط) — QR السجل التجاري (يسار) — هوية ITCO: تدرّج Navy→Carbon + نص أبيض + فاصل أحمر */
+.doc-print-header{background:var(--grad-primary);color:var(--itco-white);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
+.doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;gap:10px;flex-wrap:wrap}
 .doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
 .doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
 .doc-header-names{display:flex;flex-direction:column;gap:2px}
-.doc-header-names span{font-size:14px;font-weight:700;color:var(--navy);line-height:1.3}
-.doc-header-center{font-size:15px;font-weight:700;color:var(--navy);text-align:center;flex:1}
+.doc-header-names span{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--itco-white);line-height:1.3}
+.doc-header-center{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--itco-white);text-align:center;flex:1}
 .doc-header-left{width:75px;height:75px;flex-shrink:0}
-.doc-header-qr{width:75px;height:75px;object-fit:contain}
-.doc-meta-line{font-size:9px;color:#666;text-align:center;margin-bottom:10px}
-.psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
-.pgrid .pi{display:flex;border:1px solid var(--light)}
-.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
-.pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12px;flex:1}
+.doc-header-qr{width:75px;height:75px;object-fit:contain;background:#fff;border-radius:4px}
+.doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-white);text-align:center;margin-top:4px;opacity:.92}
+.psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver)}
+.pgrid .pi{display:flex;border:1px solid var(--itco-silver);background:var(--itco-white)}
+.pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
+.pgrid .pi .v{background:var(--itco-white);padding:6px 8px;font-weight:700;color:var(--itco-carbon);font-size:12px;flex:1}
 #printdoc table,.pdblock table{margin-top:0}
-#printdoc th,.pdblock th{background:var(--steel)}
+#printdoc th,.pdblock th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700}
+#printdoc td,.pdblock td{border:1px solid var(--itco-silver);background:var(--itco-white)}
+#printdoc tr:nth-child(even) td,.pdblock tr:nth-child(even) td{background:#EEF1F5}
 .sigs{display:flex;gap:0;margin-top:18px}
-.sig{flex:1;border:1px solid var(--silver)}
-.sig .h{background:var(--navy);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:5px}
-.sig .b{padding:10px;font-size:11.5px;color:var(--steel);line-height:2.1}
-.pfoot{text-align:center;color:var(--steel);font-size:10.5px;margin-top:14px;border-top:1px solid var(--silver);padding-top:8px}
+.sig{flex:1;border:1px solid var(--itco-silver)}
+.sig .h{background:var(--itco-navy);color:var(--itco-white);text-align:center;font-size:11.5px;font-weight:700;padding:5px}
+.sig .b{padding:10px;font-size:11.5px;color:var(--itco-carbon);line-height:2.1}
+/* الموافقات الإلكترونية: إطار فضي مدوّر بدل رأس كحلي مصمت — تمييزها عن كتل التوقيع اليدوي */
+.approvals-block .sig{border:1px solid var(--itco-silver);border-radius:6px;overflow:hidden}
+.approvals-block .sig .h{background:transparent;color:var(--itco-steel-blue);font-weight:700;text-align:right;border-bottom:1px solid var(--itco-silver)}
+.approvals-block .sig .b{color:var(--itco-carbon)}
+.pfoot{text-align:center;color:var(--itco-steel-blue);font-size:10.5px;margin-top:14px;border-top:1px solid var(--itco-silver);padding-top:8px}
 /* تذييل المستند الموحّد — يظهر فقط عند الطباعة أسفل كل صفحة */
 .doc-footer{display:none}
 /* تقرير اكتمال تركيب المعدات EICR */
 .eicr{margin-top:14px}
 .eicr-info{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
-.eicr-info td{border:1px solid var(--steel);padding:7px 9px}
-.eicr-info .k{background:var(--light);font-weight:700;color:var(--navy);white-space:nowrap;width:110px}
+.eicr-info td{border:1px solid var(--itco-steel-blue);padding:7px 9px;background:var(--itco-white)}
+.eicr-info .k{background:var(--itco-silver);font-weight:700;color:var(--itco-carbon);white-space:nowrap;width:110px}
 .eicr-confirm{font-weight:700;font-size:12.5px;line-height:2.4;margin:12px 2px;text-align:justify}
 .eicr-blank{display:inline-block;border-bottom:1px dotted #333;min-width:80px}
 .eicr-eq{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
-.eicr-eq th{background:var(--steel);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px}
-.eicr-eq td{border:1px solid var(--silver);padding:8px;height:26px}
-@page{size:A4;margin:10mm 8mm}
+.eicr-eq th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;padding:6px 8px;text-align:right;font-size:11.5px}
+.eicr-eq td{border:1px solid var(--itco-silver);padding:8px;height:26px;background:var(--itco-white)}
+@page{size:A4;margin:12mm 10mm}
 @media print{
+  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
   #side,.no-print,.pagehead,.pagesub,.redline{display:none!important}
-  body,#printdoc,#shareView,.pdblock{background:#fff!important;font-family:'Tajawal','Cairo',sans-serif!important;
-    print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  body,#printdoc,#shareView,.pdblock{background:#fff!important;font-family:'Tajawal','Cairo',sans-serif!important}
   #main{padding:0;max-width:none}
   #shareView{padding:0}
   #printdoc,.pdblock{border:none;padding:0;max-width:none;box-shadow:none}
-  th,.psec,.doc-header-names span,.pline,.sig .h,.tag,.kpi,.totrow,.pgrid .pi .k,tfoot td{
-    print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
   #printdoc img,.pdblock img{display:block!important;visibility:visible!important;max-width:100%}
   /* تنبيهات/تحذيرات داخلية للموظفين (اعتماد، سقف مبلغ...) لا تظهر أبداً على نسخة الطباعة/PDF التي يستلمها العميل أو المورد */
   [class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
@@ -127,13 +134,11 @@ tr.clickable:hover td{background:#eef3fa}
   .fab,.badge,#topbar,#backdrop,.asgpanel{display:none!important}
   /* تقرير EICR يبدأ في صفحة جديدة بعد إذن التسليم */
   .eicr{page-break-before:always}
-  /* ترويسة المستند: تتكرر أعلى كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) */
-  .doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#fff;
-    print-color-adjust:exact;-webkit-print-color-adjust:exact}
-  /* تذييل المستند: يظهر أسفل كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) */
+  /* ترويسة المستند: تتكرر أعلى كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) — هوية ITCO: تدرّج Navy→Carbon */
+  .doc-print-header{position:fixed!important;top:0;left:0;right:0;width:100%;background:var(--grad-primary)!important}
+  /* تذييل المستند: يظهر أسفل كل صفحة مطبوعة (position:fixed يتكرر على كل صفحة) — فاصل أحمر إشاري */
   .doc-footer{display:block!important;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;
-    font-size:9px;color:#666;border-top:1px solid #ccc;padding-top:4px;text-align:center;background:#fff;
-    print-color-adjust:exact;-webkit-print-color-adjust:exact}
+    font-size:9px;color:var(--itco-steel-blue);border-top:2px solid var(--itco-red);padding-top:4px;text-align:center;background:#fff}
   .doc-footer div+div{margin-top:2px}
   #printdoc,.pdblock{padding-top:100px;padding-bottom:30px}
   /* منع انقطاع صفوف البنود وكتل التوقيعات/الاعتمادات/الشروط في منتصف صفحة مطبوعة */
@@ -777,8 +782,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.0';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات */
+const SYS_VERSION = 'V2.1';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -2174,7 +2179,13 @@ function pLines(no, priceLabel){
    ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
-const pTotals = rows => `<table style="margin-top:0"><tbody>${rows.map(([k,v])=>`<tr><td style="background:var(--light);font-weight:700;color:var(--navy);width:70%">${k}</td><td><b>${fmt(v)}</b></td></tr>`).join('')}</tbody></table>`;
+// tier: 'final' = الإجمالي النهائي (تدرّج Navy→Carbon، أبيض، أكبر) — 'accent' = صفوف المجموع قبل/بعد الضريبة (كحلي، أبيض) — بلا tier = خلفية بيضاء
+const pTotals = rows => `<table style="margin-top:0"><tbody>${rows.map(([k,v,tier])=>{
+  const style = tier==='final' ? 'background:var(--grad-primary);color:var(--itco-white);font-family:\'Cairo\',sans-serif;font-weight:800;font-size:14px'
+    : tier==='accent' ? 'background:var(--itco-navy);color:var(--itco-white);font-family:\'Cairo\',sans-serif;font-weight:700'
+    : 'background:var(--itco-white);color:var(--itco-carbon);font-weight:700';
+  return `<tr><td style="${style};width:70%;padding:6px 8px">${k}</td><td style="${style};padding:6px 8px"><b>${fmt(v)}</b></td></tr>`;
+}).join('')}</tbody></table>`;
 const pSigs = roles => `<div class="sigs signatures-block">${roles.map(r=>`<div class="sig"><div class="h">${r}</div><div class="b">الاسم — Name: ...............<br>التوقيع — Signature: ...............<br>التاريخ — Date: ...............</div></div>`).join('')}</div>`;
 // اعتمادات إلكترونية في المستند المطبوع: تعرض المعتمد ووقته بدل التوقيع اليدوي
 function pApprovals(rec){
@@ -2241,7 +2252,7 @@ function buildDoc(t, no){
     return pHead('SLS-001','عرض سعر — Quotation',no,q.date)
      + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['رقم المستند — Record No.',no],[' ',' '],['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
      + `<div class="psec">البنود — Line Items</div>` + pLines(no,'سعر الوحدة — Unit Price')
-     + pTotals([['المجموع — Subtotal',q.gross],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total]])
+     + pTotals([['المجموع — Subtotal',q.gross,'accent'],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net],['الصافي قبل الضريبة — Net Before Tax',q.net,'accent'],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat,'accent'],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total,'final']])
      + alert
      + `<div class="psec">الشروط العامة — General Terms</div>` + pGrid([['شروط الدفع — Payment Terms',q.pay],['مدة التوريد — Supply Duration',q.delivery],['الضمان العام — General Warranty',q.warranty],['المندوب — Representative',q.rep]])
      + (String(q.terms||'').trim()?`<div class="psec">الشروط والأحكام — Terms & Conditions</div><div class="terms-block" style="font-size:11.5px;padding:6px 4px;line-height:1.9;white-space:pre-wrap">${esc(q.terms)}</div>`:'')
@@ -2256,7 +2267,7 @@ function buildDoc(t, no){
     return pHead('SLS-002','أمر بيع / فاتورة مبدئية — Sales Order',no,o.date)
      + pGrid([['رقم المستند — Record No.',no],['العميل — Customer',o.customer],['مرجع العرض — Quote Reference',o.quoteRef],['الحالة — Status',o.status]])
      + `<div class="psec">البنود المؤكدة (من مرجع العرض) — Confirmed Items (from Quote Reference)</div>` + pLines(o.quoteRef,'سعر الوحدة — Unit Price')
-     + pTotals([['الإجمالي شامل الضريبة — Total Incl. Tax',o.total],['الدفعة المقدمة 50% — 50% Down Payment',o.advance]])
+     + pTotals([['الإجمالي شامل الضريبة — Total Incl. Tax',o.total,'final'],['الدفعة المقدمة 50% — 50% Down Payment',o.advance]])
      + pGrid([['مرجع السداد — Payment Reference',o.payRef],['تأشيرة المالية — Finance Sign-off',o.fin],['مصدر التوفير — Sourcing Method',o.src],['مرجع التوفير — Sourcing Reference',o.srcRef]])
      + pSigs(['مندوب المبيعات — Sales Representative','المالية — Finance','المدير العام — General Manager','إقرار العميل — Customer Acknowledgement'])
      + renderDocFooter('أمر بيع','Sales Order',no,o.date,o.quoteRef);
@@ -2292,7 +2303,7 @@ function buildDoc(t, no){
     return pHead('PUR-002','أمر شراء — Purchase Order',no,p.date)
      + pGrid([['رقم المستند — Record No.',no],['المورد — Supplier',p.supplier],['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
      + `<div class="psec">الأصناف — Items (بسعر التكلفة — at cost)</div>` + pLines(no,'سعر التكلفة — Unit Cost')
-     + pTotals([['الإجمالي — Grand Total',p.total]]) + alert
+     + pTotals([['الإجمالي — Grand Total',p.total,'final']]) + alert
      + `<div class="psec">المطابقة — Compliance</div>` + pGrid([['المتطلبات — Requirements','PCoC قبل الشحن + سابر SABER + قائمة التعبئة — Packing List']])
      + `<div class="psec">الاعتمادات الإلكترونية — Electronic Approvals</div>` + pApprovals(p)
      + pSigs(['تأكيد المورد — Supplier Confirmation'])
@@ -2330,7 +2341,7 @@ function buildDoc(t, no){
     const net = p.net!=null?p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0));
     return pHead('FIN-002','أمر صرف راتب — Payroll Voucher',no,p.date)
      + pGrid([['رقم المستند — Record No.',no],['الموظف — Employee',p.employee],['الشهر — Month',p.month],['طريقة الصرف — Disbursement Method',p.method],['الحالة — Status',p.status]])
-     + pTotals([['الراتب الأساسي — Basic Salary',p.base],['إضافات/بدلات — Additions/Allowances',p.additions],['خصومات — Deductions',p.deductions],['صافي المستحق — Net Due',net]])
+     + pTotals([['الراتب الأساسي — Basic Salary',p.base],['إضافات/بدلات — Additions/Allowances',p.additions],['خصومات — Deductions',p.deductions],['صافي المستحق — Net Due',net,'final']])
      + pSigs(['المحاسب — Accountant','المدير العام — General Manager','استلمت المبلغ (الموظف) — Amount Received (Employee)'])
      + renderDocFooter('أمر صرف راتب','Payroll Voucher',no,p.date,'—');
   }
@@ -2339,52 +2350,57 @@ function buildDoc(t, no){
 
 /* ═══════════════ طباعة معزولة: نافذة مستقلة تحتوي على مستند الطباعة فقط، بمعزل عن واجهة التطبيق (لا شريط جانبي، لا قوائم، لا رابط النظام) ═══════════════ */
 const PRINT_CSS = `
-:root{--navy:#0E2342;--steel:#51647A;--red:#DA291C;--silver:#B9C2CC;--light:#EEF1F5}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Tajawal','Cairo',sans-serif;color:#0A0F16;font-size:14px;background:#fff;padding-top:100px;padding-bottom:30px}
+:root{--navy:#0E2342;--steel:#51647A;--red:#DA291C;--silver:#B9C2CC;--light:#EEF1F5;
+  --itco-navy:#0E2342;--itco-carbon:#0A0F16;--itco-steel-blue:#51647A;--itco-silver:#B9C2CC;--itco-white:#F2F4F7;--itco-red:#DA291C;--itco-red-dark:#8F1B12;
+  --grad-primary:linear-gradient(135deg,#0E2342 0%,#0A0F16 100%);--grad-metal:linear-gradient(135deg,#B9C2CC 0%,#8494A8 55%,#51647A 100%);--grad-accent:linear-gradient(135deg,#DA291C 0%,#8F1B12 100%)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+body{font-family:'Tajawal','Cairo',sans-serif;color:var(--itco-carbon);font-size:14px;background:#fff;padding-top:100px;padding-bottom:30px}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
-th{background:var(--steel);color:#fff;padding:7px 8px;text-align:right;font-size:11.5px;white-space:nowrap}
-td{border-bottom:1px solid var(--light);padding:6px 8px;vertical-align:middle}
-tr:nth-child(even) td{background:#F7F9FB}
-.psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
-.doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;padding-bottom:8px;border-bottom:2px solid var(--navy);margin-bottom:8px;gap:10px;flex-wrap:wrap}
+th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;padding:7px 8px;text-align:right;font-size:11.5px;white-space:nowrap}
+td{border:1px solid var(--itco-silver);padding:6px 8px;vertical-align:middle;background:var(--itco-white)}
+tr:nth-child(even) td{background:#EEF1F5}
+.psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
+.doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:var(--grad-primary);color:var(--itco-white);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
+.doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;gap:10px;flex-wrap:wrap}
 .doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
 .doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
 .doc-header-names{display:flex;flex-direction:column;gap:2px}
-.doc-header-names span{font-size:14px;font-weight:700;color:var(--navy);line-height:1.3}
-.doc-header-center{font-size:15px;font-weight:700;color:var(--navy);text-align:center;flex:1}
+.doc-header-names span{font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;color:var(--itco-white);line-height:1.3}
+.doc-header-center{font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;color:var(--itco-white);text-align:center;flex:1}
 .doc-header-left{width:75px;height:75px;flex-shrink:0}
-.doc-header-qr{width:75px;height:75px;object-fit:contain}
-.doc-meta-line{font-size:9px;color:#666;text-align:center;margin-bottom:10px}
-.doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#fff}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
-.pgrid .pi{display:flex;border:1px solid var(--light)}
-.pgrid .pi .k{background:var(--light);color:var(--steel);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
-.pgrid .pi .v{padding:6px 8px;font-weight:700;color:var(--navy);font-size:12px;flex:1}
+.doc-header-qr{width:75px;height:75px;object-fit:contain;background:#fff;border-radius:4px}
+.doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-white);text-align:center;margin-top:4px;opacity:.92}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver)}
+.pgrid .pi{display:flex;border:1px solid var(--itco-silver);background:var(--itco-white)}
+.pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
+.pgrid .pi .v{background:var(--itco-white);padding:6px 8px;font-weight:700;color:var(--itco-carbon);font-size:12px;flex:1}
 .sigs{display:flex;gap:0;margin-top:18px}
-.sig{flex:1;border:1px solid var(--silver)}
-.sig .h{background:var(--navy);color:#fff;text-align:center;font-size:11.5px;font-weight:700;padding:5px}
-.sig .b{padding:10px;font-size:11.5px;color:var(--steel);line-height:2.1}
-.pfoot{text-align:center;color:var(--steel);font-size:10.5px;margin-top:14px;border-top:1px solid var(--silver);padding-top:8px}
-.doc-footer{display:block;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;font-size:9px;color:#666;border-top:1px solid #ccc;padding-top:4px;text-align:center;background:#fff}
+.sig{flex:1;border:1px solid var(--itco-silver)}
+.sig .h{background:var(--itco-navy);color:var(--itco-white);text-align:center;font-size:11.5px;font-weight:700;padding:5px}
+.sig .b{padding:10px;font-size:11.5px;color:var(--itco-carbon);line-height:2.1}
+.approvals-block .sig{border:1px solid var(--itco-silver);border-radius:6px;overflow:hidden}
+.approvals-block .sig .h{background:transparent;color:var(--itco-steel-blue);font-weight:700;text-align:right;border-bottom:1px solid var(--itco-silver)}
+.approvals-block .sig .b{color:var(--itco-carbon)}
+.pfoot{text-align:center;color:var(--itco-steel-blue);font-size:10.5px;margin-top:14px;border-top:1px solid var(--itco-silver);padding-top:8px}
+.doc-footer{display:block;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;font-size:9px;color:var(--itco-steel-blue);border-top:2px solid var(--itco-red);padding-top:4px;text-align:center;background:#fff}
 .doc-footer div+div{margin-top:2px}
 .eicr{margin-top:14px;page-break-before:always}
 .eicr-info{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
-.eicr-info td{border:1px solid var(--steel);padding:7px 9px}
-.eicr-info .k{background:var(--light);font-weight:700;color:var(--navy);white-space:nowrap;width:110px}
+.eicr-info td{border:1px solid var(--itco-steel-blue);padding:7px 9px;background:var(--itco-white)}
+.eicr-info .k{background:var(--itco-silver);font-weight:700;color:var(--itco-carbon);white-space:nowrap;width:110px}
 .eicr-confirm{font-weight:700;font-size:12.5px;line-height:2.4;margin:12px 2px;text-align:justify}
 .eicr-blank{display:inline-block;border-bottom:1px dotted #333;min-width:80px}
 .eicr-eq{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
-.eicr-eq th{background:var(--steel);color:#fff;padding:6px 8px;text-align:right;font-size:11.5px}
-.eicr-eq td{border:1px solid var(--silver);padding:8px;height:26px}
-.imgbox{background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--silver);border-radius:8px;overflow:hidden}
+.eicr-eq th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;padding:6px 8px;text-align:right;font-size:11.5px}
+.eicr-eq td{border:1px solid var(--itco-silver);padding:8px;height:26px;background:var(--itco-white)}
+.imgbox{background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--itco-silver);border-radius:8px;overflow:hidden}
 .imgbox img{object-fit:contain;width:100%;height:100%}
-.imgbox .noimg{color:var(--steel);font-size:11px;text-align:center}
+.imgbox .noimg{color:var(--itco-steel-blue);font-size:11px;text-align:center}
 img{max-width:100%}
 [class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
 .line-item-row,.signatures-block,.approvals-block,.terms-block{page-break-inside:avoid}
-@page{size:A4;margin:10mm 8mm}
-@media print{ body{background:#fff!important} }
+@page{size:A4;margin:12mm 10mm}
+@media print{ body{background:#fff!important} #side,.no-print,button:not(.print-btn){display:none!important} }
 `;
 // يفتح نافذة معزولة تحتوي فقط على محتوى المستند (بلا شريط جانبي ولا عناصر واجهة التطبيق ولا رابط النظام) ثم يطبعها ويغلقها تلقائياً
 function printDocument(docHtml){
