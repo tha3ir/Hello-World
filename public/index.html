@@ -198,6 +198,7 @@ tr.clickable:hover td{background:#eef3fa}
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut,
            createUserWithEmailAndPassword, sendPasswordResetEmail, updatePassword,
            EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+  import { initializeAppCheck, ReCaptchaV3Provider } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app-check.js";
 
   const FIREBASE_CONFIG = {
     apiKey: "AIzaSyCH9ZC6knpkdZ9SGiWq5lN1EDgqmrHOKUU",
@@ -221,6 +222,11 @@ tr.clickable:hover td{background:#eef3fa}
   let db = null;
 
   const firebaseApp = initializeApp(FIREBASE_CONFIG);
+  // App Check (reCAPTCHA v3) — يُفعَّل فوراً بعد تهيئة التطبيق وقبل أي اتصال بـ Firestore/Auth، بلا حجب لتحميل الصفحة
+  initializeAppCheck(firebaseApp, {
+    provider: new ReCaptchaV3Provider('6LcHHE0tAAAAA9Hqqiy6D6a7NDDnYRhhhmrmDDl'),
+    isTokenAutoRefreshEnabled: true
+  });
   const auth = getAuth(firebaseApp);
 
   async function getDb(){
@@ -724,8 +730,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.6';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد */
+const SYS_VERSION = 'V1.7';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
