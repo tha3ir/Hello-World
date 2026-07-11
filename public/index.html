@@ -75,6 +75,16 @@ tr.clickable:hover td{background:#eef3fa}
 .ph .meta b{color:var(--red)}
 .pline{height:3px;background:var(--red);margin:10px 0}
 .ptitle{text-align:center;font-family:'Cairo';font-weight:800;color:var(--navy);font-size:17px;margin-bottom:12px}
+/* ترويسة موحّدة لكل المستندات القابلة للطباعة: شعار+اسم الشركة (يمين) — عنوان المستند (وسط) — QR السجل التجاري (يسار) */
+.phdr{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;padding-bottom:12px;border-bottom:2px solid #333;margin-bottom:14px;gap:10px;flex-wrap:wrap}
+.phdr-r{display:flex;align-items:center;gap:10px}
+.phdr-r img{max-height:65px;max-width:120px;object-fit:contain;border:none;box-shadow:none;outline:none;background:none}
+.phdr-name{font-size:15px;font-weight:700;color:var(--navy)}
+.phdr-title{font-size:16px;font-weight:700;color:var(--navy);text-align:center;flex:1}
+.phdr-l{width:75px;height:75px;flex-shrink:0}
+.phdr-l img{width:75px;height:75px;object-fit:contain}
+.pmeta{font-size:10.5px;color:var(--steel);text-align:center;margin:-8px 0 14px}
+.pmeta b{color:var(--navy)}
 .psec{background:var(--navy);color:#fff;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--light)}
 .pgrid .pi{display:flex;border:1px solid var(--light)}
@@ -95,9 +105,11 @@ tr.clickable:hover td{background:#eef3fa}
   #main{padding:0;max-width:none}
   #shareView{padding:0}
   #printdoc,.pdblock{border:none;padding:0;max-width:none;box-shadow:none}
-  th,.psec,.ph .co .n1,.pline,.sig .h,.tag,.kpi,.alertbox,.totrow,.pgrid .pi .k,tfoot td{
+  th,.psec,.phdr-name,.pline,.sig .h,.tag,.kpi,.totrow,.pgrid .pi .k,tfoot td{
     print-color-adjust:exact!important;-webkit-print-color-adjust:exact!important}
   #printdoc img,.pdblock img{display:block!important;visibility:visible!important;max-width:100%}
+  /* تنبيهات/تحذيرات داخلية للموظفين (اعتماد، سقف مبلغ...) لا تظهر أبداً على نسخة الطباعة/PDF التي يستلمها العميل أو المورد */
+  [class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
 }
 /* لوحة كانبان للصفقات */
 .kb{display:flex;gap:10px;overflow-x:auto;align-items:flex-start;padding-bottom:8px}
@@ -109,6 +121,13 @@ tr.clickable:hover td{background:#eef3fa}
 /* شارة الإشعارات */
 .bellbtn{position:relative;background:none;border:1px solid rgba(255,255,255,.4);color:#fff;font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;margin-top:8px}
 .bellbtn .cnt{position:absolute;top:-7px;left:-7px;background:var(--red);color:#fff;border-radius:50%;min-width:17px;height:17px;font-size:10.5px;display:flex;align-items:center;justify-content:center;padding:0 3px}
+/* جرس تنبيه العناصر المُعيَّنة — بجانب اسم المستخدم في الشريط الجانبي */
+.navgrp .bellbtn{margin-top:0;font-size:14px;padding:3px 8px}
+.asgpanel{position:absolute;top:100%;left:0;margin-top:6px;width:260px;max-height:320px;overflow-y:auto;background:#fff;border:1px solid var(--silver);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:2000}
+.asgitem{display:flex;align-items:center;gap:8px;padding:9px 10px;border-bottom:1px solid var(--light)}
+.asgitem:last-child{border-bottom:none}
+.asgicon{font-size:18px;flex-shrink:0}
+.asgtxt{flex:1;font-size:12px;color:var(--ink);line-height:1.5}
 /* خطأ الحقول */
 .fld input.err,.fld select.err{border-color:var(--red);outline:1px solid var(--red)}
 .flderr{color:var(--red);font-size:11px;margin-top:2px}
@@ -182,8 +201,8 @@ tr.clickable:hover td{background:#eef3fa}
   th,td{padding:9px 8px}
   .kbcol{min-width:78vw}
   #printdoc{padding:16px}
-  .ph{flex-wrap:wrap}
-  .ph .meta{min-width:100%}
+  .phdr{flex-wrap:wrap;justify-content:center;text-align:center}
+  .phdr-title{order:3;flex-basis:100%}
 }
 @media(max-width:420px){
   .formgrid{grid-template-columns:1fr}
@@ -730,8 +749,8 @@ tr.clickable:hover td{background:#eef3fa}
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
              'leads','contacts','opps','activities','campaigns','tickets','payments'];
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V1.7';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة */
+const SYS_VERSION = 'V1.8';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -755,7 +774,7 @@ async function loadState(){
   seedAdmins();
   // تحميل الصور المصغّرة المشار إليها في الحالة
   try{
-    const ids = [S.company && S.company.logo]
+    const ids = [S.company && S.company.logo, S.company && S.company.crQr]
       .concat(S.products.map(p=>p.img))
       .concat(S.users.map(u=>u.photo));
     await window.media.preload(ids);
@@ -926,7 +945,7 @@ function fldErr(k, msg){
 }
 
 /* ═══════════════ الصور المصغّرة ═══════════════ */
-function readImageAsThumb(file, maxDim=520, quality=0.78){
+function readImageAsThumb(file, maxDim=520, quality=0.78, fmt='image/jpeg'){
   return new Promise((resolve,reject)=>{
     const fr = new FileReader();
     fr.onerror = () => reject(new Error('فشل قراءة الملف'));
@@ -941,7 +960,7 @@ function readImageAsThumb(file, maxDim=520, quality=0.78){
         const ctx = cv.getContext('2d');
         ctx.fillStyle = '#fff'; ctx.fillRect(0,0,w,h); // خلفية بيضاء ثابتة
         ctx.drawImage(im,0,0,w,h);
-        resolve(cv.toDataURL('image/jpeg', quality));
+        resolve(cv.toDataURL(fmt, quality));
       };
       im.src = fr.result;
     };
@@ -956,10 +975,12 @@ const imgTag = (id, size=34) => {
   }</span>`;
 };
 // رفع صورة من عنصر إدخال ملف وتخزين المُعرّف في حقل مخفي
-window.onImgPick = async (inputEl, holderId, previewId) => {
+window.onImgPick = async (inputEl, holderId, previewId, opts) => {
   const f = inputEl.files && inputEl.files[0]; if(!f) return;
+  const o = opts || {};
   try{
-    const durl = await readImageAsThumb(f);
+    // PNG بلا فقدان لصور QR (JPEG يُتلف حواف الرموز الدقيقة ويُفقدها القابلية للمسح)
+    const durl = await readImageAsThumb(f, o.maxDim||520, o.quality||0.78, o.fmt||'image/jpeg');
     const id = await window.media.save(durl);
     document.getElementById(holderId).value = id;
     const pv = document.getElementById(previewId);
@@ -1169,12 +1190,13 @@ const VIEWS = {
    {k:'tech',l:'الفني — Technician',t:'sel',o:optEmployees},{k:'fin',l:'التصنيف المالي — Financial Classification',t:'sel',o:['ضمان','خارج الضمان']},
    {k:'status',l:'الحالة — Status',t:'sel',o:['مفتوح','مجدول','مغلق']},{k:'rating',l:'تقييم الخدمة /5 — Service Rating /5',t:'num'},{k:'notes',l:'ملاحظات — Notes',t:'text'},
    {k:'terms',l:'الشروط والأحكام (لرابط موافقة العميل) — Terms & Conditions (for customer approval link)',t:'ta',ph:'مثال: تشمل الصيانة الأعطال المشمولة بالضمان فقط؛ سوء الاستخدام والقطع الاستهلاكية غير مشمولة؛ يلتزم العميل بتوفير الوصول للمعدة...'}],
-  share:1, attach:true,
+  share:1, attach:true, assign:1,
   cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'البلاغ — Report Date'},{k:'customer',l:'العميل — Customer'},{k:'serial',l:'التسلسلي — Serial No.'},
    {k:'_w',l:'حالة الضمان (تلقائي) — Warranty Status (Auto)',f:(v,r)=>{const w=warrantyStatus(r.serial,r.date);return `<span class="tag ${w.cls}">${w.t}</span>`;}},
    {k:'priority',l:'الأولوية — Priority'},{k:'status',l:'الحالة — Status',f:tagStatus},
    {k:'_sh',l:'موافقة العميل — Customer Approval',f:(v,r)=>shareStateTag(r)},
-   {k:'_src',l:'المصدر — Source',f:(v,r)=>sourceTag(r)}],
+   {k:'_src',l:'المصدر — Source',f:(v,r)=>sourceTag(r)},
+   {k:'_asg',l:'مُعيَّن إلى — Assigned To',f:(v,r)=>r.assignedTo?esc(r.assignedTo.name):'—'}],
   note:'حالة الضمان تُكشف تلقائياً من الرقم التسلسلي عبر محاضر التشغيل QLT-001. الطلبات الواردة من الرابط العام #public-request تُستوعب تلقائياً هنا.'},
 
  evals:{icon:'⭐',title:'تقييم الموردين — Supplier Evaluation PUR-003',code:'PUR-003',ent:'evals',
@@ -1187,7 +1209,7 @@ const VIEWS = {
    {k:'_cls',l:'التصنيف الناتج — Resulting Classification',f:(v,r)=>{const s=+r.total;const c=s>=24?['معتمد','ok']:s>=18?['معتمد بشروط','mid']:['موقوف','warn'];return `<span class="tag ${c[1]}">${c[0]}</span>`;}}],
   note:'آخر تقييم يحدّث تصنيف المورد فوراً في ورقة الموردين وفي قوائم الاختيار.'},
 
- complaints:{icon:'📮',title:'الشكاوى — Complaints QLT-002',code:'QLT-002',ent:'complaints',docCode:'QLT2',attach:true,
+ complaints:{icon:'📮',title:'الشكاوى — Complaints QLT-002',code:'QLT-002',ent:'complaints',docCode:'QLT2',attach:true,assign:1,
   fields:[{k:'no',l:'رقم الشكوى — Complaint No.',t:'ro'},{k:'date',l:'التاريخ — Date',t:'date',req:1},{k:'customer',l:'العميل — Customer',t:'sel',o:optCustomers},
    {k:'cat',l:'التصنيف — Classification',t:'sel',o:['جودة منتج','تأخير توريد','تركيب','فوترة','سلوك خدمة','أخرى']},
    {k:'sev',l:'الخطورة — Severity',t:'sel',o:['منخفض','متوسط','مرتفع']},{k:'summary',l:'ملخص الشكوى — Complaint Summary',t:'text'},
@@ -1197,7 +1219,8 @@ const VIEWS = {
   cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'customer',l:'العميل — Customer'},{k:'cat',l:'التصنيف — Classification'},
    {k:'sev',l:'الخطورة — Severity',f:v=>`<span class="tag ${v==='مرتفع'?'warn':v==='متوسط'?'mid':'info'}">${v||'—'}</span>`},
    {k:'status',l:'الحالة — Status',f:tagStatus},
-   {k:'_src',l:'المصدر — Source',f:(v,r)=>sourceTag(r)}],
+   {k:'_src',l:'المصدر — Source',f:(v,r)=>sourceTag(r)},
+   {k:'_asg',l:'مُعيَّن إلى — Assigned To',f:(v,r)=>r.assignedTo?esc(r.assignedTo.name):'—'}],
   note:'شكاوى «مرتفع» لا تُغلق إلا باطلاع المدير العام. الطلبات الواردة من الرابط العام #public-request تُستوعب تلقائياً هنا.'},
 
  shipments:{icon:'🚢',title:'الشحنات — Shipments LOG-001',code:'LOG-001',ent:'shipments',docCode:'LOG1',
@@ -1411,11 +1434,48 @@ function syncBrand(){
   const bv = document.getElementById('brandVer'); if(bv) bv.textContent = SYS_VERSION;
   try{ if(typeof localStorage!=='undefined' && S.company && S.company.name) localStorage.setItem('erp:companyName', S.company.name); }catch(e){}
 }
+/* الشكاوى/طلبات الصيانة المُعيَّنة للمستخدم الحالي ولم يطّلع عليها بعد */
+function assignedNotifs(){
+  const u = currentUser(); if(!u || !u.uid) return [];
+  const out = [];
+  ['complaints','srv'].forEach(entKey => {
+    (S[entKey]||[]).forEach(r=>{
+      const a = r.assignedTo;
+      if(a && a.uid===u.uid && !a.seenByAssignee) out.push({ entKey, id:r.id, no:r.no, customer:r.customer||'—', assignedAt:a.assignedAt });
+    });
+  });
+  return out.sort((x,y)=>(y.assignedAt||0)-(x.assignedAt||0));
+}
+window.toggleAssignedPanel = () => {
+  const p = document.getElementById('asgPanel'); if(!p) return;
+  p.style.display = p.style.display==='block' ? 'none' : 'block';
+};
+window.viewAssignedItem = (entKey, recId) => {
+  const rec = S[entKey].find(x=>x.id===recId); if(!rec) return;
+  if(rec.assignedTo) rec.assignedTo.seenByAssignee = true;
+  persist();
+  const p = document.getElementById('asgPanel'); if(p) p.style.display = 'none';
+  window.setView(entKey); // يُصفّر editId داخلياً — لذا نضبطه بعده ونُعيد الرسم لفتح السجل فعلياً
+  editId = recId; render();
+};
+function assignedBellHTML(){
+  const items = assignedNotifs();
+  const n = items.length;
+  const badge = n ? `<span class="cnt">${n}</span>` : '';
+  const rows = items.length ? items.map(it=>`
+    <div class="asgitem">
+      <span class="asgicon">${it.entKey==='srv'?'🔧':'🔔'}</span>
+      <div class="asgtxt"><b>${esc(it.customer)}</b><br><span style="color:var(--steel);font-size:11px">${esc(it.no||'')} — ${fmtDMY(it.assignedAt)}</span></div>
+      <button type="button" class="btn sm" onclick="viewAssignedItem('${it.entKey}','${it.id}')">عرض — View</button>
+    </div>`).join('') : `<div style="padding:14px;color:var(--steel);font-size:12.5px;text-align:center">لا إشعارات جديدة — No new notifications</div>`;
+  return `<button class="bellbtn" onclick="toggleAssignedPanel()" aria-label="الإشعارات">🔔${badge}</button>
+   <div id="asgPanel" class="asgpanel" style="display:none">${rows}</div>`;
+}
 function renderNav(){
   const uName = curName();
   const nUnread = unreadNotifs();
   document.getElementById('nav').innerHTML =
-   (uName?`<div class="navgrp" style="color:#fff">👋 ${esc(uName)}</div>`:'') +
+   (uName?`<div class="navgrp" style="color:#fff;position:relative;display:flex;align-items:center;justify-content:space-between">👋 ${esc(uName)} ${assignedBellHTML()}</div>`:'') +
    NAVDEF.map(([g,items])=>{
     const vis = items.filter(([k])=> ADMIN_ONLY_VIEWS.includes(k) ? isAdmin() : canView(k));
     if(!vis.length) return '';
@@ -1567,6 +1627,32 @@ function copyShare(token){
   else prompt('انسخ الرابط:', url);
 }
 window.copyShare = copyShare;
+/* ═══════════════ تعيين الشكوى/طلب الصيانة لموظف ═══════════════ */
+const fmtDMY = ts => { if(!ts) return '—'; const d = new Date(ts); return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear(); };
+function assignBox(entKey, r){
+  const a = r.assignedTo;
+  const current = a ? `<div style="font-size:13px;margin-bottom:8px">
+     <b style="color:var(--navy)">${esc(a.name)}</b>
+     <span class="tag ${a.seenByAssignee?'ok':'mid'}" style="margin-right:6px">${a.seenByAssignee?'اطّلع عليها — Seen':'بانتظار الاطّلاع — Unseen'}</span>
+     <div style="color:var(--steel);font-size:11.5px;margin-top:2px">عُيِّنت بتاريخ — Assigned on: ${fmtDMY(a.assignedAt)}</div></div>` : '';
+  const opts = (S.users||[]).map(u=>`<option value="${esc(u.uid||u.id)}">${esc(u.name||u.email||'—')}</option>`).join('');
+  return `<div class="sharebox no-print"><h4>👤 تعيين إلى موظف — Assign To</h4>
+    ${current}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="asg_${entKey}_${r.id}" style="min-width:200px;padding:7px 9px;border:1px solid var(--silver);border-radius:6px;font-family:inherit"><option value="">— اختر موظفاً — Select —</option>${opts}</select>
+      <button type="button" class="btn sm" onclick="assignRecord('${entKey}','${r.id}')">تعيين — Assign</button>
+    </div></div>`;
+}
+window.assignRecord = (entKey, recId) => {
+  const rec = S[entKey].find(x=>x.id===recId); if(!rec) return;
+  const sel = document.getElementById('asg_'+entKey+'_'+recId);
+  const uid = sel && sel.value;
+  if(!uid) return alert('اختر موظفاً أولاً — Please select an employee first');
+  const u = (S.users||[]).find(x=>(x.uid||x.id)===uid); if(!u) return;
+  rec.assignedTo = { uid, name: u.name||u.email||'', assignedAt: Date.now(), seenByAssignee: false };
+  logAudit('تعيين', VIEWS[entKey].title, rec.no||rec.id, 'إلى: '+rec.assignedTo.name);
+  persist(); showToast('✅ تم التعيين بنجاح — Assigned successfully'); render();
+};
 function shareBoxHTML(ent, r){
   const conf = SHARE_CONF[ent]; if(!conf) return '';
   if(r.clientAccept){
@@ -1631,6 +1717,7 @@ function renderRegister(key){
     ${(V.approvals && row)?approvalsBox(key, row):''}
     ${(V.attach && row)?attBox(V.ent, row):''}
     ${(V.share && row)?shareBoxHTML(V.ent, row):''}
+    ${(V.assign && row)?assignBox(key, row):''}
     <div class="btnrow"><button class="btn" onclick="saveRegister('${key}')">${row?'حفظ التعديل':'إضافة السجل'}</button>
     ${row?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}</div></div>` :
     `<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">👁 لديك صلاحية استعراض فقط لهذه الشاشة.</div>`}
@@ -2032,12 +2119,17 @@ function renderPrint(){
 function pHead(code, title, no, date){
   const co = S.company || {};
   const logo = co.logo && window.media.src(co.logo);
-  const logoBox = logo ? `<div class="logo" style="padding:0;overflow:hidden"><img src="${logo}" style="width:100%;height:100%;object-fit:contain"></div>`
-                       : `<div class="logo">الشعار<br>LOGO</div>`;
-  return `<div class="ph">${logoBox}
-   <div class="co"><div class="n1">${esc(co.name)||'شركة .................................'}</div><div class="n2">${esc(co.nameEn)||'.................... Co. Ltd.'}</div></div>
-   <div class="meta">رمز النموذج — Form Code: <b>${code}</b><br>رقم السجل — Record No.: <b>${esc(no)}</b><br>التاريخ — Date: ${esc(date)} — ${SYS_VERSION}</div></div>
-   <div class="pline"></div><div class="ptitle">${title}</div>`;
+  const logoImg = logo ? `<img src="${logo}">` : '';
+  const qr = co.crQr && window.media.src(co.crQr);
+  const qrBox = qr ? `<img src="${qr}">` : '';
+  return `<div class="phdr">
+    <div class="phdr-r">${logoImg}
+     <div><div class="phdr-name">${esc(co.name)||'شركة .................................'}</div><div class="phdr-name">${esc(co.nameEn)||'.................... Co. Ltd.'}</div></div>
+    </div>
+    <div class="phdr-title">${title}</div>
+    <div class="phdr-l">${qrBox}</div>
+   </div>
+   <div class="pmeta">رمز النموذج — Form Code: <b>${code}</b> &nbsp;·&nbsp; رقم السجل — Record No.: <b>${esc(no)}</b> &nbsp;·&nbsp; التاريخ — Date: ${esc(date)} — ${SYS_VERSION}</div>`;
 }
 const pGrid = pairs => `<div class="pgrid">${pairs.map(([k,v])=>`<div class="pi"><div class="k">${k}</div><div class="v">${esc(v)||'—'}</div></div>`).join('')}</div>`;
 function pLines(no, priceLabel){
@@ -2064,7 +2156,7 @@ function buildDoc(t, no){
   if(t==='quote'){
     const q = S.quotes.find(x=>x.no===no); if(!q) return '';
     const c = S.customers.find(x=>x.name===q.customer)||{};
-    const alert = (q.total>20000||+q.disc>5)?`<div class="alertbox">⚠ هذا العرض يتطلب اعتماد المدير العام قبل الإرسال — This quote requires General Manager approval before sending</div>`:'';
+    const alert = (q.total>20000||+q.disc>5)?`<div class="alertbox" data-no-print="true">⚠ هذا العرض يتطلب اعتماد المدير العام قبل الإرسال — This quote requires General Manager approval before sending</div>`:'';
     const ls = S.lines.filter(l=>l.docNo===no);
     const wsec = ls.length ? `<div class="psec">شروط ضمان المنتجات — Product Warranty Terms</div>` + ls.map((l,i)=>{
       const p = S.products.find(x=>x.nameAr===l.product);
@@ -2673,6 +2765,13 @@ function renderCompany(){
       <input type="file" accept="image/*" onchange="onImgPick(this,'f_logo','pv_logo')">
       <div style="font-size:11.5px;color:var(--steel);margin-top:6px">يُفضَّل شعار مربّع بخلفية بيضاء.</div></div>
     </div></div>
+   <div class="card"><h3>كيو آر كود السجل التجاري — Commercial Register QR Code</h3>
+    <div style="display:flex;align-items:center;gap:14px">
+     <div id="pv_crqr">${c.crQr?`<img src="${window.media.src(c.crQr)||''}" style="width:75px;height:75px;object-fit:contain;border:1px solid var(--silver);border-radius:8px">`:'<span style="color:var(--steel)">لا يوجد QR</span>'}</div>
+     <div><input type="hidden" id="f_crQr" value="${esc(c.crQr||'')}">
+      <input type="file" accept="image/*" onchange="onImgPick(this,'f_crQr','pv_crqr',{maxDim:400,quality:0.95,fmt:'image/png'})">
+      <div style="font-size:11.5px;color:var(--steel);margin-top:6px">يظهر أعلى يسار كل مستند مطبوع بجانب عنوان المستند.</div></div>
+    </div></div>
    <div class="card"><h3>البيانات</h3><div class="formgrid">
     ${F.map(([k,l])=>`<div class="fld"><label>${l}</label><input id="co_${k}" value="${esc(c[k]||'')}"></div>`).join('')}
    </div>
@@ -2682,12 +2781,16 @@ window.saveCompany = () => {
   const c = S.company || (S.company={});
   ['name','nameEn','cr','vat','phone','email','website','address'].forEach(k=>{ c[k] = document.getElementById('co_'+k).value; });
   c.logo = document.getElementById('f_logo').value;
+  c.crQr = document.getElementById('f_crQr').value;
   persist(); alert('حُفظت بيانات الشركة'); render();
-  // مزامنة بيانات العرض العامة (اسم + شعار مصغّر + هاتف) لصفحة الطلب العام #public-request — لا بيانات حسّاسة
+  // مزامنة بيانات العرض العامة (اسم + شعار مصغّر + هاتف + QR) لصفحة الطلب العام #public-request — لا بيانات حسّاسة
   try{
+    const crQrData = c.crQr ? (window.media.src(c.crQr) || '') : '';
+    if(crQrData.length > 400000){ alert('⚠ صورة QR كبيرة جداً لمزامنتها مع الصفحة العامة (الحد 400,000 حرف) — ستظهر في المستندات المطبوعة فقط'); }
     window.publicProfile.save({
       name: c.name || '', nameEn: c.nameEn || '', phone: c.phone || '',
-      logo: c.logo ? (window.media.src(c.logo) || '') : ''
+      logo: c.logo ? (window.media.src(c.logo) || '') : '',
+      crQr: crQrData.length <= 400000 ? crQrData : ''
     });
   }catch(e){}
 };

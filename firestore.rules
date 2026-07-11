@@ -76,11 +76,12 @@ service cloud.firestore {
     match /publicProfile/main {
       allow read: if true;
       allow write: if request.auth != null
-        && request.resource.data.keys().hasOnly(['name','nameEn','logo','phone'])
+        && request.resource.data.keys().hasOnly(['name','nameEn','logo','phone','crQr'])
         && isOptStr(request.resource.data, 'name', 200)
         && isOptStr(request.resource.data, 'nameEn', 200)
         && isOptStr(request.resource.data, 'phone', 40)
-        && isOptStr(request.resource.data, 'logo', 400000);
+        && isOptStr(request.resource.data, 'logo', 400000)
+        && isOptStr(request.resource.data, 'crQr', 400000);
     }
   }
 }
