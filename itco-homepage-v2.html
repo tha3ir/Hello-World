@@ -191,29 +191,32 @@
 
     /* interior sits behind exterior; revealed through the door opening */
     .layer-interior { z-index: 1; transform: scale(0.62); opacity: 0; }
-    .layer-exterior { z-index: 2; transform-origin: 50% 62%; } /* door center = camera target */
+    .layer-exterior { z-index: 2; transform-origin: 38.7% 62.5%; } /* door center = camera target */
 
-    /* door panels (HTML for real 3D rotateY) */
+    /* 3-fold door panels (HTML for real 3D rotateY) — navy with tall
+       observation windows, matching the reference booth photos.
+       Physical left/top used (not logical) — panels map onto LTR SVG coords. */
     .door {
-      position: absolute; z-index: 3; inset-block-start: 39.5%; height: 45.5%;
-      width: 12.9%; background: var(--grad-metallic);
+      position: absolute; z-index: 3; top: 38.3%; height: 48.4%;
+      display: flex; will-change: transform; backface-visibility: hidden;
+    }
+    .door .pane {
+      flex: 1; position: relative;
+      background: linear-gradient(180deg, #16305A 0%, #0E2342 75%);
       border: 1px solid var(--steel);
-      transition: none; will-change: transform;
-      backface-visibility: hidden;
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-      padding-top: 12%;
+      box-shadow: inset 0 0 0 2px rgba(185,194,204,0.14);
     }
-    .door::after { /* hazard kick plate ≤12px */
-      content: ""; position: absolute; inset-inline: 0; inset-block-end: 0; height: 9px;
-      background: repeating-linear-gradient(135deg, var(--red) 0 10px, var(--navy) 10px 20px);
+    .door .pane::before { /* tall rounded window (per reference photos) */
+      content: ""; position: absolute; left: 18%; right: 18%; top: 8%; height: 60%;
+      border-radius: 8px; border: 2px solid #8494A8;
+      background: linear-gradient(160deg, rgba(185,194,204,0.9) 0%, rgba(132,148,168,0.6) 55%, rgba(14,35,66,0.55) 100%);
     }
-    .door .porthole {
-      width: 56%; aspect-ratio: 1 / 1.6; border-radius: 3px;
-      background: rgba(14,35,66,0.85); border: 2px solid var(--steel);
-      box-shadow: inset 0 0 14px rgba(160,216,239,0.25);
+    .door .pane::after { /* signal-red beltline */
+      content: ""; position: absolute; left: 8%; right: 8%; bottom: 13%; height: 3px;
+      background: var(--red);
     }
-    .door-l { inset-inline-start: 37.1%; transform-origin: left center; }
-    .door-r { inset-inline-start: 50.0%; transform-origin: right center; }
+    .door-l { left: 15.8%;  width: 15.28%; transform-origin: left center; }
+    .door-r { left: 31.08%; width: 30.56%; transform-origin: right center; }
 
     svg { display: block; }
     .booth-layer svg { width: 100%; height: 100%; overflow: visible; }
@@ -477,21 +480,15 @@
         <div class="booth-layer layer-interior" id="layerInterior">
           <svg viewBox="0 0 620 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
-              <linearGradient id="iWall" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0" stop-color="#EDF0F3"/><stop offset="1" stop-color="#B9C2CC"/>
+              <linearGradient id="iLed" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFDF5"/><stop offset="1" stop-color="#FFF6E0"/>
               </linearGradient>
-              <linearGradient id="iLed" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#FFF6E0" stop-opacity=".15"/>
-                <stop offset=".5" stop-color="#FFFDF5"/>
-                <stop offset="1" stop-color="#FFF6E0" stop-opacity=".15"/>
-              </linearGradient>
-              <radialGradient id="iCone" cx="50%" cy="0%" r="85%">
-                <stop offset="0" stop-color="#FFFDF5" stop-opacity=".5"/>
-                <stop offset="1" stop-color="#FFFDF5" stop-opacity="0"/>
-              </radialGradient>
               <radialGradient id="iMist" cx="50%" cy="50%" r="50%">
                 <stop offset="0" stop-color="#B9C2CC" stop-opacity=".9"/>
                 <stop offset="1" stop-color="#B9C2CC" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="iHead" cx="50%" cy="50%" r="50%">
+                <stop offset="0" stop-color="#FFFDF5"/><stop offset="1" stop-color="#FFFDF5" stop-opacity="0"/>
               </radialGradient>
               <linearGradient id="iCar" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0" stop-color="#51647A"/><stop offset="1" stop-color="#0E2342"/>
@@ -502,93 +499,129 @@
               </filter>
             </defs>
 
-            <!-- interior walls: clean light gray/white panels -->
-            <rect x="0" y="0" width="620" height="480" fill="url(#iWall)"/>
-            <!-- side wall perspective panels -->
-            <polygon points="0,0 90,60 90,420 0,480" fill="#B9C2CC"/>
-            <polygon points="620,0 530,60 530,420 620,480" fill="#B9C2CC"/>
-            <rect x="90" y="60" width="440" height="360" fill="#EDF0F3" stroke="#B9C2CC" stroke-width="2"/>
-            <!-- wall panel seams -->
-            <g stroke="#B9C2CC" stroke-width="1.4">
-              <line x1="200" y1="60" x2="200" y2="420"/><line x1="310" y1="60" x2="310" y2="420"/>
-              <line x1="420" y1="60" x2="420" y2="420"/>
+            <!-- room shell: one-point perspective (per reference interior photo) -->
+            <polygon points="20,20 600,20 450,130 170,130" fill="#F2F4F7"/>
+            <polygon points="20,20 170,130 170,340 20,470" fill="#EDF0F3"/>
+            <polygon points="600,20 450,130 450,340 600,470" fill="#E6EBF0"/>
+            <rect x="170" y="130" width="280" height="210" fill="#F7F9FB" stroke="#D8DEE5" stroke-width="1.5"/>
+            <polygon points="20,470 170,340 450,340 600,470" fill="#C6CFD8"/>
+
+            <!-- ceiling: full-width quilted filter bank (per photo) -->
+            <polygon points="66,44 554,44 436,118 184,118" fill="#FFFFFF" stroke="#C9D1DA" stroke-width="1.5"/>
+            <g stroke="#D8DEE5" stroke-width="1.2">
+              <line x1="127" y1="44" x2="215" y2="118"/>
+              <line x1="188" y1="44" x2="247" y2="118"/>
+              <line x1="249" y1="44" x2="278" y2="118"/>
+              <line x1="310" y1="44" x2="310" y2="118"/>
+              <line x1="371" y1="44" x2="342" y2="118"/>
+              <line x1="432" y1="44" x2="373" y2="118"/>
+              <line x1="493" y1="44" x2="405" y2="118"/>
+              <line x1="98"  y1="64" x2="522" y2="64"/>
+              <line x1="128" y1="83" x2="492" y2="83"/>
+              <line x1="156" y1="100" x2="464" y2="100"/>
             </g>
-            <!-- side wall glass observation panels -->
-            <rect x="20" y="140" width="52" height="180" fill="#51647A" opacity=".3" transform="skewY(12)"/>
-            <rect x="548" y="70" width="52" height="180" fill="#51647A" opacity=".3" transform="skewY(-12)"/>
-
-            <!-- ceiling plenum + filters -->
-            <rect x="90" y="60" width="440" height="24" fill="#51647A"/>
-            <g stroke="#0E2342" stroke-width="1.2" opacity=".5">
-              <line x1="120" y1="60" x2="120" y2="84"/><line x1="160" y1="60" x2="160" y2="84"/>
-              <line x1="200" y1="60" x2="200" y2="84"/><line x1="240" y1="60" x2="240" y2="84"/>
-              <line x1="280" y1="60" x2="280" y2="84"/><line x1="320" y1="60" x2="320" y2="84"/>
-              <line x1="360" y1="60" x2="360" y2="84"/><line x1="400" y1="60" x2="400" y2="84"/>
-              <line x1="440" y1="60" x2="440" y2="84"/><line x1="480" y1="60" x2="480" y2="84"/>
+            <!-- filter clips -->
+            <g fill="#8494A8">
+              <circle cx="188" cy="64" r="1.6"/><circle cx="249" cy="64" r="1.6"/><circle cx="310" cy="64" r="1.6"/><circle cx="371" cy="64" r="1.6"/><circle cx="432" cy="64" r="1.6"/>
+              <circle cx="216" cy="83" r="1.6"/><circle cx="278" cy="83" r="1.6"/><circle cx="341" cy="83" r="1.6"/><circle cx="404" cy="83" r="1.6"/>
             </g>
 
-            <!-- light cones from ceiling LEDs -->
-            <polygon points="150,90 110,360 260,360 210,90" fill="url(#iCone)"/>
-            <polygon points="410,90 360,360 510,360 470,90" fill="url(#iCone)"/>
+            <!-- angled corner light banks — louvered fixtures (per photo) -->
+            <g>
+              <polygon points="34,66 170,152 170,224 34,158" fill="#FAFBFC" stroke="#D8DEE5" stroke-width="1.5"/>
+              <polygon class="led" points="52,88 118,130 118,152 52,112" fill="url(#iLed)" filter="url(#iGlow)"/>
+              <polygon class="led" points="52,124 118,166 118,188 52,148" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.5s"/>
+              <g stroke="#B9C2CC" stroke-width="1">
+                <line x1="68" y1="97" x2="68" y2="122"/><line x1="86" y1="108" x2="86" y2="133"/><line x1="104" y1="119" x2="104" y2="144"/>
+                <line x1="68" y1="133" x2="68" y2="158"/><line x1="86" y1="144" x2="86" y2="169"/><line x1="104" y1="155" x2="104" y2="180"/>
+              </g>
+            </g>
+            <g>
+              <polygon points="586,66 450,152 450,224 586,158" fill="#FAFBFC" stroke="#D8DEE5" stroke-width="1.5"/>
+              <polygon class="led" points="568,88 502,130 502,152 568,112" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.3s"/>
+              <polygon class="led" points="568,124 502,166 502,188 568,148" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.8s"/>
+              <g stroke="#B9C2CC" stroke-width="1">
+                <line x1="552" y1="97" x2="552" y2="122"/><line x1="534" y1="108" x2="534" y2="133"/><line x1="516" y1="119" x2="516" y2="144"/>
+                <line x1="552" y1="133" x2="552" y2="158"/><line x1="534" y1="144" x2="534" y2="169"/><line x1="516" y1="155" x2="516" y2="180"/>
+              </g>
+            </g>
 
-            <!-- ceiling LED strips (warm white, pulsing) -->
-            <rect class="led" x="140" y="86" width="120" height="8" rx="4" fill="url(#iLed)" filter="url(#iGlow)"/>
-            <rect class="led" x="360" y="86" width="120" height="8" rx="4" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.6s"/>
-            <!-- side wall LED rails -->
-            <rect class="led" x="96" y="120" width="6" height="200" rx="3" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.3s"/>
-            <rect class="led" x="518" y="120" width="6" height="200" rx="3" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.9s"/>
+            <!-- vertical wall light strips near entry (per photo) -->
+            <polygon class="led" points="66,230 78,238 78,408 66,420" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.2s"/>
+            <polygon class="led" points="100,252 110,258 110,392 100,400" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.7s"/>
+            <polygon class="led" points="554,230 542,238 542,408 554,420" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.4s"/>
+            <polygon class="led" points="520,252 510,258 510,392 520,400" fill="url(#iLed)" filter="url(#iGlow)" style="animation-delay:.9s"/>
 
-            <!-- downdraft airflow: ceiling → floor -->
+            <!-- rear wall seams + personnel door -->
+            <g stroke="#E3E8EE" stroke-width="1.4">
+              <line x1="240" y1="130" x2="240" y2="340"/><line x1="310" y1="130" x2="310" y2="340"/><line x1="380" y1="130" x2="380" y2="340"/>
+            </g>
+            <rect x="398" y="212" width="40" height="128" fill="#F2F4F7" stroke="#D8DEE5" stroke-width="1.5"/>
+            <rect x="406" y="228" width="24" height="44" rx="10" fill="#DDE4EA" stroke="#C9D1DA" stroke-width="1"/>
+
+            <!-- floor grating: full floor (per photo) -->
+            <g stroke="#8494A8" stroke-width="1.2" opacity=".8">
+              <line x1="170" y1="340" x2="450" y2="340"/>
+              <line x1="138" y1="368" x2="482" y2="368"/>
+              <line x1="100" y1="400" x2="520" y2="400"/>
+              <line x1="56"  y1="437" x2="564" y2="437"/>
+              <line x1="210" y1="340" x2="98"  y2="470"/>
+              <line x1="260" y1="340" x2="212" y2="470"/>
+              <line x1="310" y1="340" x2="310" y2="470"/>
+              <line x1="360" y1="340" x2="408" y2="470"/>
+              <line x1="410" y1="340" x2="522" y2="470"/>
+            </g>
+            <!-- center extraction strip -->
+            <polygon points="238,340 382,340 434,470 186,470" fill="#AEBAC6" opacity=".55"/>
+
+            <!-- downdraft airflow (drawn behind car) -->
             <g stroke="#A0D8EF" stroke-width="2.2" fill="none" opacity=".85">
-              <line class="flow"    x1="170" y1="96" x2="170" y2="356"/>
-              <line class="flow f2" x1="250" y1="96" x2="250" y2="356"/>
-              <line class="flow f3" x1="370" y1="96" x2="370" y2="356"/>
-              <line class="flow f2" x1="450" y1="96" x2="450" y2="356"/>
+              <line class="flow"    x1="205" y1="135" x2="205" y2="330"/>
+              <line class="flow f2" x1="262" y1="128" x2="262" y2="300"/>
+              <line class="flow f3" x1="358" y1="128" x2="358" y2="300"/>
+              <line class="flow f2" x1="415" y1="135" x2="415" y2="330"/>
             </g>
             <g fill="#A0D8EF" opacity=".85">
-              <polygon points="170,362 164,352 176,352"/>
-              <polygon points="250,362 244,352 256,352"/>
-              <polygon points="370,362 364,352 376,352"/>
-              <polygon points="450,362 444,352 456,352"/>
+              <polygon points="205,336 199,326 211,326"/>
+              <polygon points="415,336 409,326 421,326"/>
+            </g>
+
+            <!-- car: front view, centered on grating (per photo) -->
+            <g>
+              <ellipse cx="310" cy="378" rx="118" ry="12" fill="#51647A" opacity=".4"/>
+              <path d="M206,372 L206,302 Q206,264 236,252 Q268,236 310,236 Q352,236 384,252 Q414,264 414,302 L414,372 Q414,378 404,378 L216,378 Q206,378 206,372 Z"
+                    fill="url(#iCar)" stroke="#51647A" stroke-width="2"/>
+              <path d="M244,258 Q310,244 376,258 L366,290 Q310,280 254,290 Z" fill="#B9C2CC" opacity=".85"/>
+              <rect x="198" y="284" width="14" height="10" rx="3" fill="#51647A"/>
+              <rect x="408" y="284" width="14" height="10" rx="3" fill="#51647A"/>
+              <circle cx="253" cy="310" r="14" fill="url(#iHead)"/>
+              <circle cx="367" cy="310" r="14" fill="url(#iHead)"/>
+              <rect x="238" y="302" width="30" height="15" rx="7" fill="#FFFDF5" filter="url(#iGlow)" opacity=".95"/>
+              <rect x="352" y="302" width="30" height="15" rx="7" fill="#FFFDF5" filter="url(#iGlow)" opacity=".95"/>
+              <rect x="276" y="322" width="68" height="18" rx="5" fill="#0A0F16" opacity=".85"/>
+              <g stroke="#51647A" stroke-width="1.5"><line x1="280" y1="328" x2="340" y2="328"/><line x1="280" y1="334" x2="340" y2="334"/></g>
+              <rect x="222" y="348" width="176" height="16" rx="7" fill="#16305A" stroke="#51647A" stroke-width="1.5"/>
+              <rect x="292" y="350" width="36" height="12" rx="2" fill="#B9C2CC"/>
+              <rect x="224" y="366" width="30" height="12" rx="5" fill="#0A0F16"/>
+              <rect x="366" y="366" width="30" height="12" rx="5" fill="#0A0F16"/>
+            </g>
+
+            <!-- spray gun arm + mist -->
+            <g>
+              <rect x="430" y="266" width="54" height="9" rx="4" fill="#51647A" transform="rotate(8 430 266)"/>
+              <rect x="420" y="258" width="22" height="22" rx="4" fill="#0E2342" stroke="#51647A" stroke-width="2"/>
+              <polygon points="420,269 404,265 404,273" fill="#51647A"/>
+            </g>
+            <g>
+              <circle class="mist"    cx="398" cy="278" r="15" fill="url(#iMist)"/>
+              <circle class="mist m2" cx="392" cy="286" r="12" fill="url(#iMist)"/>
+              <circle class="mist m3" cx="402" cy="270" r="17" fill="url(#iMist)"/>
+              <circle class="mist m4" cx="388" cy="278" r="11" fill="url(#iMist)"/>
             </g>
 
             <!-- airflow labels -->
-            <text x="310" y="46" text-anchor="middle" fill="#51647A" font-family="Cairo, sans-serif" font-weight="700" font-size="16">تدفق هواء نظيف ↓</text>
-            <text x="310" y="466" text-anchor="middle" fill="#51647A" font-family="Cairo, sans-serif" font-weight="700" font-size="14">هواء ملوث يخرج ↓</text>
-
-            <!-- spray gun arm (from right wall) -->
-            <g>
-              <rect x="470" y="200" width="60" height="10" rx="4" fill="#51647A"/>
-              <rect x="452" y="192" width="26" height="26" rx="4" fill="#0E2342" stroke="#51647A" stroke-width="2"/>
-              <polygon points="452,205 434,201 434,209" fill="#51647A"/>
-            </g>
-            <!-- paint mist puffs -->
-            <g>
-              <circle class="mist"    cx="424" cy="205" r="16" fill="url(#iMist)"/>
-              <circle class="mist m2" cx="418" cy="212" r="13" fill="url(#iMist)"/>
-              <circle class="mist m3" cx="428" cy="198" r="18" fill="url(#iMist)"/>
-              <circle class="mist m4" cx="414" cy="204" r="12" fill="url(#iMist)"/>
-            </g>
-
-            <!-- car silhouette (navy/steel, being painted) -->
-            <g transform="translate(158,282)">
-              <ellipse cx="150" cy="76" rx="158" ry="12" fill="#51647A" opacity=".35"/>
-              <path d="M12,66 Q18,38 62,32 Q88,2 158,0 Q222,2 246,32 Q282,38 278,66 L268,72 Q264,58 250,58 Q238,58 234,72 L72,72 Q68,58 54,58 Q40,58 36,72 Z"
-                    fill="url(#iCar)" stroke="#51647A" stroke-width="2"/>
-              <path d="M80,30 Q104,10 158,10 Q206,10 226,30 Z" fill="#0A0F16" opacity=".5"/>
-              <circle cx="54" cy="72" r="17" fill="#0A0F16" stroke="#51647A" stroke-width="3"/>
-              <circle cx="250" cy="72" r="17" fill="#0A0F16" stroke="#51647A" stroke-width="3"/>
-            </g>
-
-            <!-- floor grating (extraction) -->
-            <rect x="90" y="420" width="440" height="30" fill="#51647A"/>
-            <g stroke="#0E2342" stroke-width="3">
-              <line x1="110" y1="424" x2="130" y2="446"/><line x1="150" y1="424" x2="170" y2="446"/>
-              <line x1="190" y1="424" x2="210" y2="446"/><line x1="230" y1="424" x2="250" y2="446"/>
-              <line x1="270" y1="424" x2="290" y2="446"/><line x1="310" y1="424" x2="330" y2="446"/>
-              <line x1="350" y1="424" x2="370" y2="446"/><line x1="390" y1="424" x2="410" y2="446"/>
-              <line x1="430" y1="424" x2="450" y2="446"/><line x1="470" y1="424" x2="490" y2="446"/>
-            </g>
+            <text x="310" y="34" text-anchor="middle" fill="#51647A" font-family="Cairo, sans-serif" font-weight="700" font-size="15">تدفق هواء نظيف ↓</text>
+            <text x="310" y="466" text-anchor="middle" fill="#51647A" font-family="Cairo, sans-serif" font-weight="700" font-size="13">هواء ملوث يخرج ↓</text>
           </svg>
         </div>
 
@@ -596,16 +629,14 @@
         <div class="booth-layer layer-exterior" id="layerExterior">
           <svg viewBox="0 0 620 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
-              <linearGradient id="eWall" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="eCabin" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#EDF0F3"/><stop offset="1" stop-color="#D9DFE6"/>
+              </linearGradient>
+              <linearGradient id="eMetal" x1="0" y1="0" x2="1" y2="0">
                 <stop offset="0" stop-color="#B9C2CC"/><stop offset=".55" stop-color="#8494A8"/><stop offset="1" stop-color="#51647A"/>
               </linearGradient>
-              <linearGradient id="eSide" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#51647A"/><stop offset="1" stop-color="#0E2342"/>
-              </linearGradient>
-              <linearGradient id="eLed" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#FFF6E0" stop-opacity=".2"/>
-                <stop offset=".5" stop-color="#FFFDF5"/>
-                <stop offset="1" stop-color="#FFF6E0" stop-opacity=".2"/>
+              <linearGradient id="eMetalV" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#B9C2CC"/><stop offset="1" stop-color="#51647A"/>
               </linearGradient>
               <filter id="eGlow" x="-60%" y="-60%" width="220%" height="220%">
                 <feGaussianBlur stdDeviation="5" result="b"/>
@@ -617,87 +648,101 @@
             </defs>
 
             <!-- ground shadow -->
-            <ellipse cx="310" cy="452" rx="270" ry="16" fill="#0A0F16" opacity=".55"/>
+            <ellipse cx="300" cy="464" rx="285" ry="13" fill="#0A0F16" opacity=".5"/>
 
-            <!-- right depth face (isometric hint) -->
-            <polygon points="530,120 585,148 585,438 530,452" fill="url(#eSide)" stroke="#51647A" stroke-width="1.5"/>
-            <!-- roof top face -->
-            <polygon points="90,120 530,120 585,148 145,148" fill="#8494A8" stroke="#51647A" stroke-width="1.5"/>
+            <!-- ===== main cabin — white panels + ribbed roof (per reference photos) ===== -->
+            <polygon points="70,140 410,140 446,114 106,114" fill="url(#eMetal)" stroke="#51647A" stroke-width="1.5"/>
+            <g stroke="#8494A8" stroke-width="1">
+              <line x1="100" y1="140" x2="136" y2="114"/><line x1="130" y1="140" x2="166" y2="114"/>
+              <line x1="160" y1="140" x2="196" y2="114"/><line x1="190" y1="140" x2="226" y2="114"/>
+              <line x1="220" y1="140" x2="256" y2="114"/><line x1="250" y1="140" x2="286" y2="114"/>
+              <line x1="280" y1="140" x2="316" y2="114"/><line x1="310" y1="140" x2="346" y2="114"/>
+              <line x1="340" y1="140" x2="376" y2="114"/><line x1="370" y1="140" x2="406" y2="114"/>
+            </g>
 
-            <!-- roof intake unit (AHU) with fan -->
+            <!-- cabin front face -->
+            <rect x="70" y="140" width="340" height="290" fill="url(#eCabin)" stroke="#8494A8" stroke-width="2"/>
+            <g stroke="#C9D1DA" stroke-width="1.4">
+              <line x1="84" y1="140" x2="84" y2="430"/><line x1="396" y1="140" x2="396" y2="430"/>
+            </g>
+            <!-- corner trim hinges (per photo) -->
+            <g fill="#8494A8">
+              <rect x="66" y="200" width="8" height="16" rx="2"/><rect x="66" y="300" width="8" height="16" rx="2"/>
+              <rect x="406" y="200" width="8" height="16" rx="2"/><rect x="406" y="300" width="8" height="16" rx="2"/>
+            </g>
+
+            <!-- header band with wordmark (swap text for brand-kit wordmark SVG) -->
+            <rect x="84" y="150" width="312" height="28" fill="#FFFFFF" stroke="#C9D1DA" stroke-width="1.5"/>
+            <text x="240" y="170" text-anchor="middle" fill="#0E2342" font-family="Oswald, sans-serif" font-weight="700" font-size="19" letter-spacing="3">ITC<tspan fill="#DA291C">O</tspan></text>
+            <text x="322" y="169" fill="#51647A" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="1">PB-4500</text>
+
+            <!-- door frame (opening transparent — interior shows through) -->
+            <rect x="96" y="182" width="288" height="236" fill="none" stroke="#8494A8" stroke-width="5"/>
+
+            <!-- hazard skirt (≤12px) -->
+            <rect x="70" y="418" width="340" height="12" fill="#0E2342"/>
+            <rect x="70" y="418" width="340" height="12" fill="url(#hz)"/>
+
+            <!-- entry ramps (steel, per photos) -->
             <g>
-              <rect x="250" y="64" width="120" height="56" rx="4" fill="#51647A" stroke="#0E2342" stroke-width="2"/>
-              <g stroke="#0E2342" stroke-width="1.6" opacity=".65">
-                <line x1="262" y1="76" x2="358" y2="76"/><line x1="262" y1="88" x2="358" y2="88"/>
-                <line x1="262" y1="100" x2="358" y2="100"/><line x1="262" y1="112" x2="358" y2="112"/>
-              </g>
-              <!-- clean air intake arrows -->
-              <g stroke="#A0D8EF" stroke-width="2.2" fill="none" opacity=".9">
-                <line class="flow"    x1="285" y1="10" x2="285" y2="58"/>
-                <line class="flow f2" x1="310" y1="4"  x2="310" y2="58"/>
-                <line class="flow f3" x1="335" y1="10" x2="335" y2="58"/>
-              </g>
-              <g fill="#A0D8EF" opacity=".9">
-                <polygon points="285,62 279,52 291,52"/>
-                <polygon points="310,62 304,52 316,52"/>
-                <polygon points="335,62 329,52 341,52"/>
+              <polygon points="150,430 196,430 210,466 136,466" fill="url(#eMetalV)" stroke="#51647A" stroke-width="1.5"/>
+              <polygon points="284,430 330,430 344,466 270,466" fill="url(#eMetalV)" stroke="#51647A" stroke-width="1.5"/>
+              <g stroke="#8494A8" stroke-width="1" opacity=".7">
+                <line x1="146" y1="442" x2="202" y2="442"/><line x1="141" y1="454" x2="206" y2="454"/>
+                <line x1="280" y1="442" x2="336" y2="442"/><line x1="275" y1="454" x2="340" y2="454"/>
               </g>
             </g>
 
-            <!-- exhaust stack + steam shimmer -->
-            <g>
-              <rect x="468" y="42" width="30" height="82" rx="3" fill="#51647A" stroke="#0E2342" stroke-width="2"/>
-              <rect x="462" y="34" width="42" height="10" rx="3" fill="#0E2342"/>
-              <g fill="#B9C2CC">
-                <ellipse class="steam"    cx="483" cy="26" rx="10" ry="5" opacity=".5"/>
-                <ellipse class="steam s2" cx="487" cy="24" rx="8"  ry="4" opacity=".4"/>
-                <ellipse class="steam s3" cx="479" cy="25" rx="9"  ry="4" opacity=".45"/>
-              </g>
+            <!-- ===== mechanical / AHU unit at the side (per photos) ===== -->
+            <rect x="420" y="198" width="128" height="232" fill="url(#eCabin)" stroke="#8494A8" stroke-width="2"/>
+            <line x1="420" y1="308" x2="548" y2="308" stroke="#C9D1DA" stroke-width="1.5"/>
+            <line x1="484" y1="198" x2="484" y2="430" stroke="#C9D1DA" stroke-width="1.5"/>
+            <!-- louver grille -->
+            <g stroke="#8494A8" stroke-width="1.6">
+              <line x1="432" y1="330" x2="472" y2="330"/><line x1="432" y1="340" x2="472" y2="340"/>
+              <line x1="432" y1="350" x2="472" y2="350"/><line x1="432" y1="360" x2="472" y2="360"/>
+              <line x1="432" y1="370" x2="472" y2="370"/>
             </g>
-
-            <!-- front face — 4 wall rects AROUND the transparent door opening
-                 door opening: x 230..390 · y 190..408 -->
-            <rect x="90"  y="120" width="140" height="332" fill="url(#eWall)" stroke="#51647A" stroke-width="2"/>
-            <rect x="390" y="120" width="140" height="332" fill="url(#eWall)" stroke="#51647A" stroke-width="2"/>
-            <rect x="230" y="120" width="160" height="70"  fill="url(#eWall)" stroke="#51647A" stroke-width="2"/>
-            <rect x="230" y="408" width="160" height="44"  fill="url(#eWall)" stroke="#51647A" stroke-width="2"/>
-
-            <!-- corrugated wall seams -->
-            <g stroke="#51647A" stroke-width="1.2" opacity=".6">
-              <line x1="120" y1="120" x2="120" y2="452"/><line x1="155" y1="120" x2="155" y2="452"/>
-              <line x1="190" y1="120" x2="190" y2="452"/><line x1="420" y1="120" x2="420" y2="452"/>
-              <line x1="455" y1="120" x2="455" y2="452"/><line x1="490" y1="120" x2="490" y2="452"/>
+            <!-- control panel (navy) -->
+            <rect x="430" y="218" width="30" height="42" rx="2" fill="#0E2342" stroke="#51647A" stroke-width="1.5"/>
+            <circle cx="438" cy="228" r="2.4" fill="#DA291C"/><circle cx="448" cy="228" r="2.4" fill="#B9C2CC"/>
+            <rect x="436" y="238" width="18" height="6" fill="#51647A"/>
+            <rect x="436" y="248" width="18" height="6" fill="#51647A"/>
+            <!-- burner box (Signal Red accent, per photo) -->
+            <rect x="498" y="238" width="34" height="24" rx="2" fill="#DA291C" stroke="#8F1B12" stroke-width="2"/>
+            <rect x="504" y="244" width="10" height="12" fill="#8F1B12"/>
+            <!-- exhaust cylinder on unit top (per photo) -->
+            <rect x="500" y="150" width="28" height="52" rx="4" fill="url(#eMetal)" stroke="#51647A" stroke-width="1.5"/>
+            <rect x="496" y="196" width="36" height="10" rx="2" fill="#8494A8"/>
+            <!-- tall exhaust duct/stack (per photos) -->
+            <rect x="552" y="88" width="30" height="342" fill="url(#eMetal)" stroke="#51647A" stroke-width="1.5"/>
+            <g stroke="#8494A8" stroke-width="1">
+              <line x1="552" y1="130" x2="582" y2="130"/><line x1="552" y1="180" x2="582" y2="180"/>
+              <line x1="552" y1="230" x2="582" y2="230"/><line x1="552" y1="280" x2="582" y2="280"/>
+              <line x1="552" y1="330" x2="582" y2="330"/><line x1="552" y1="380" x2="582" y2="380"/>
             </g>
-
-            <!-- door frame -->
-            <rect x="226" y="186" width="168" height="226" fill="none" stroke="#0E2342" stroke-width="5"/>
-
-            <!-- exterior LED strip above door (idle glow) -->
-            <rect class="led" x="240" y="168" width="140" height="7" rx="3.5" fill="url(#eLed)" filter="url(#eGlow)"/>
-
-            <!-- ITCO wall branding — swap for brand-kit wordmark SVG -->
-            <g transform="translate(110,150)">
-              <text x="0" y="24" fill="#0E2342" font-family="Oswald, sans-serif" font-weight="700" font-size="26" letter-spacing="2">ITC<tspan fill="#DA291C">O</tspan></text>
-              <rect x="0" y="32" width="56" height="2" fill="#DA291C"/>
-              <text x="0" y="50" fill="#0E2342" font-family="'IBM Plex Mono', monospace" font-size="8" letter-spacing="1.5" opacity=".7">REF PB-4500</text>
+            <rect x="546" y="78" width="42" height="12" rx="2" fill="#51647A"/>
+            <!-- steam shimmer from stack -->
+            <g fill="#B9C2CC">
+              <ellipse class="steam"    cx="567" cy="64" rx="10" ry="5" opacity=".5"/>
+              <ellipse class="steam s2" cx="572" cy="60" rx="8"  ry="4" opacity=".4"/>
+              <ellipse class="steam s3" cx="562" cy="62" rx="9"  ry="4" opacity=".45"/>
             </g>
-            <!-- warning plate near door -->
-            <g transform="translate(400,196)">
-              <rect x="0" y="0" width="76" height="30" rx="2" fill="#0E2342"/>
-              <text x="38" y="19" text-anchor="middle" fill="#B9C2CC" font-family="'IBM Plex Mono', monospace" font-size="9" letter-spacing="1">380V/3-PH</text>
+            <!-- clean-air intake into AHU roof -->
+            <g stroke="#A0D8EF" stroke-width="2.2" fill="none" opacity=".9">
+              <line class="flow"    x1="440" y1="150" x2="440" y2="192"/>
+              <line class="flow f2" x1="462" y1="144" x2="462" y2="192"/>
             </g>
-
-            <!-- hazard skirt at base (≤12px) -->
-            <rect x="90" y="440" width="440" height="12" fill="#0E2342"/>
-            <rect x="90" y="440" width="440" height="12" fill="url(#hz)"/>
-
-            <!-- exterior clean-air label -->
-            <text x="310" y="152" text-anchor="middle" fill="#0E2342" font-family="Cairo, sans-serif" font-weight="700" font-size="13" opacity=".8">سحب هواء نظيف من السقف</text>
+            <g fill="#A0D8EF" opacity=".9">
+              <polygon points="440,196 434,186 446,186"/>
+              <polygon points="462,196 456,186 468,186"/>
+            </g>
+            <text x="452" y="132" text-anchor="middle" fill="#B9C2CC" font-family="Cairo, sans-serif" font-weight="700" font-size="12">سحب هواء نظيف</text>
           </svg>
 
-          <!-- 3D door panels (open on approach) -->
-          <div class="door door-l" id="doorL" aria-hidden="true"><span class="porthole"></span></div>
-          <div class="door door-r" id="doorR" aria-hidden="true"><span class="porthole"></span></div>
+          <!-- 3-fold door panels (open on approach) — 3 windows per photos -->
+          <div class="door door-l" id="doorL" aria-hidden="true"><span class="pane"></span></div>
+          <div class="door door-r" id="doorR" aria-hidden="true"><span class="pane"></span><span class="pane"></span></div>
         </div>
       </div>
 
