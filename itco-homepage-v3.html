@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ITCO — تجهيز الورش المتكامل | شركة تقنيات التصنيع المحدودة</title>
+  <meta name="description" content="شركة تقنيات التصنيع المحدودة (ITCO) — تجهيز ورش السيارات المتكامل: كبائن دهان، روافع، محطات تحضير، ضواغط هواء، أجهزة ضبط زوايا وأنظمة شفط عوادم." />
+
+  <!-- ITCO BRAND FONTS — exact families from Brand Guidelines V1.0 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow:wght@400;500;600;700&family=Cairo:wght@700;800;900&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =====================================================================
+       ITCO BRAND TOKENS — extracted from ITCO_Brand_Guidelines.dc.html V1.0
+       ===================================================================== */
+    :root {
+      /* 03 — COLOR SYSTEM */
+      --navy:      #0E2342;   /* Industrial Navy — primary base */
+      --carbon:    #0A0F16;   /* Carbon Ink — text, deep surfaces */
+      --steel:     #51647A;   /* Steel Blue — secondary UI, icons, rules */
+      --silver:    #B9C2CC;   /* Steel Silver — light surfaces, metallic */
+      --red:       #DA291C;   /* Signal Red — accent ONLY */
+      --red-press: #8F1B12;
+      --card:      #122B4F;
+      --text:      #F2F4F7;
+      --muted:     #7E8CA0;
+      --border:    rgba(185,194,204,0.18);
+      --booth-white:#EDF0F3;
+
+      /* 04 — GRADIENTS */
+      --grad-primary:  linear-gradient(135deg, #0E2342 0%, #0A0F16 100%);
+      --grad-metallic: linear-gradient(135deg, #B9C2CC 0%, #8494A8 55%, #51647A 100%);
+      --grad-accent:   linear-gradient(135deg, #DA291C 0%, #8F1B12 100%);
+
+      /* 05 — TYPOGRAPHY */
+      --f-display-en: 'Oswald', sans-serif;
+      --f-body-en:    'Barlow', sans-serif;
+      --f-mono:       'IBM Plex Mono', monospace;
+      --f-display-ar: 'Cairo', sans-serif;
+      --f-body-ar:    'Tajawal', sans-serif;
+
+      /* 09 — WEBSITE GUIDELINES */
+      --container: 1200px;
+      --gutter:    24px;
+      --header-h:  72px;
+      --cta-h:     44px;
+      --r-cta:     4px;
+      --r-card:    6px;
+      --dur:       180ms;   /* motion 150–200ms ease-out only */
+      --ease:      ease-out;
+
+      --airflow:   #A0D8EF; /* airflow visualization color — from the brief */
+    }
+
+    /* ------------------------- base ------------------------- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--f-body-ar); background: var(--navy); color: var(--text);
+      font-size: 16px; line-height: 1.9; overflow-x: hidden; text-align: right;
+    }
+    h1,h2,h3,h4 { font-family: var(--f-display-ar); font-weight: 800; line-height: 1.3; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    button { font: inherit; }
+    :focus-visible { outline: 2px solid var(--silver); outline-offset: 3px; }
+
+    .container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+    .section { padding: clamp(64px, 8vw, 110px) 0; position: relative; }
+    .mono { font-family: var(--f-mono); font-weight: 500; letter-spacing: 0.08em; direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+    .eyebrow { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .eyebrow .bar { width: 22px; height: 2px; background: var(--red); flex-shrink: 0; }
+    .eyebrow .en { font-family: var(--f-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.18em; color: var(--silver); direction: ltr; unicode-bidi: isolate; }
+    .eyebrow .ar { font-size: 14px; color: var(--muted); }
+    .section-head h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); margin-bottom: 12px; }
+    .section-head p { color: var(--silver); max-width: 640px; }
+
+    .bp-grid::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background:
+        repeating-linear-gradient(0deg, rgba(81,100,122,0.16) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(90deg, rgba(81,100,122,0.16) 0 1px, transparent 1px 40px);
+    }
+    .hazard { height: 8px; background: repeating-linear-gradient(135deg, var(--red) 0 12px, var(--navy) 12px 24px); }
+
+    /* ------------------------- buttons ------------------------- */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      height: var(--cta-h); padding: 0 26px; border-radius: var(--r-cta);
+      font-family: var(--f-display-ar); font-weight: 700; font-size: 0.98rem;
+      cursor: pointer; border: 1px solid transparent; white-space: nowrap;
+      transition: filter var(--dur) var(--ease), background var(--dur) var(--ease),
+                  border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+    .btn-cta { background: var(--grad-accent); color: #fff; }
+    .btn-cta:hover { filter: brightness(1.12); }
+    .btn-cta:active { background: var(--red-press); filter: none; }
+    .btn-line { background: transparent; border-color: var(--steel); color: var(--silver); }
+    .btn-line:hover { border-color: var(--silver); color: #fff; }
+    .btn-block { width: 100%; }
+
+    /* ------------------------- logo lockup ------------------------- */
+    .lockup { display: flex; align-items: center; gap: 14px; }
+    .lockup .gear { width: 34px; height: 34px; color: var(--red); flex-shrink: 0; }
+    .lockup .word { font-family: var(--f-display-en); font-weight: 700; font-size: 26px; letter-spacing: 0.06em; color: #fff; direction: ltr; unicode-bidi: isolate; line-height: 1; }
+    .lockup .word i { font-style: normal; color: var(--red); }
+    .lockup .sub { display: flex; flex-direction: column; gap: 3px; border-inline-start: 2px solid var(--red); padding-inline-start: 12px; }
+    .lockup .sub .en { font-family: var(--f-body-en); font-weight: 600; font-size: 9px; letter-spacing: 0.22em; color: var(--silver); direction: ltr; unicode-bidi: isolate; }
+    .lockup .sub .ar { font-family: var(--f-display-ar); font-weight: 700; font-size: 12px; color: var(--silver); }
+
+    /* =====================================================================
+       HEADER — Carbon Ink 72px · glass effect on scroll (brief) — the
+       translucent state keeps Carbon Ink as its base per brand rules
+       ===================================================================== */
+    .nav {
+      position: fixed; inset-block-start: 0; inset-inline: 0; z-index: 100;
+      height: var(--header-h); background: var(--carbon);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--dur) var(--ease);
+    }
+    .nav.scrolled {
+      background: rgba(10,15,22,0.82);
+      -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; gap: 20px; }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a { font-weight: 500; font-size: 0.95rem; color: var(--silver); padding: 8px 14px; transition: color var(--dur) var(--ease); }
+    .nav-links a:hover { color: #fff; }
+    .nav-side { display: flex; align-items: center; gap: 16px; }
+    .lang { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--silver); cursor: pointer; }
+    .nav-toggle { display: none; background: none; border: 0; cursor: pointer; padding: 8px; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--silver); margin: 5px 0; }
+
+    /* =====================================================================
+       HERO — INTERACTIVE WORKSHOP FLOOR
+       Desktop: isometric SVG scene, 6 clickable product zones.
+       Mobile (≤768px): horizontal snap carousel of product cards.
+       No scroll takeover — the page scrolls freely.
+       ===================================================================== */
+    .hero {
+      position: relative; overflow: hidden;
+      background: var(--grad-primary);
+      padding: calc(var(--header-h) + 44px) 0 40px;
+    }
+    .hero.bp-grid::before { opacity: 1; }
+    .hero-top { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 14px; margin-bottom: 22px; }
+    .hero-top .eyebrow { margin-bottom: 0; }
+    .hero-top .eyebrow .en { color: var(--red); }
+    .hero-top h1 { font-size: clamp(1.9rem, 4.2vw, 3.2rem); font-weight: 900; }
+    .hero-top .sub { color: var(--silver); font-size: clamp(0.95rem, 1.5vw, 1.15rem); max-width: 640px; }
+    .hero-top .actions { display: flex; gap: 12px; margin-top: 6px; flex-wrap: wrap; justify-content: center; }
+
+    /* --- workshop scene --- */
+    .workshop { position: relative; z-index: 1; }
+    .scene-wrap {
+      position: relative; margin-inline: auto; max-width: 1040px;
+      transition: transform 200ms var(--ease), opacity 200ms var(--ease);
+      will-change: transform;
+    }
+    .scene-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .scene-hint {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 6px; font-size: 11px; letter-spacing: 0.16em; color: var(--steel);
+    }
+    .scene-hint .ar { font-family: var(--f-body-ar); font-size: 13px; letter-spacing: 0; color: var(--muted); }
+
+    /* zones */
+    .zone { cursor: pointer; }
+    .zone .halo, .zone .zlabel { opacity: 0; transition: opacity 200ms var(--ease); pointer-events: none; }
+    .zone:hover .halo, .zone:focus-visible .halo,
+    .zone:hover .zlabel, .zone:focus-visible .zlabel { opacity: 1; }
+    .zone { outline-offset: 6px; }
+    /* dim non-selected zones while zoomed */
+    .scene-sel .zone { transition: opacity 200ms var(--ease); }
+    .scene-sel .zone:not(.sel) { opacity: 0.22; }
+    .scene-sel .zone:not(.sel) .halo, .scene-sel .zone:not(.sel) .zlabel { opacity: 0 !important; }
+
+    /* --- idle animations (all transform/opacity only) --- */
+    @keyframes glowPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+    .idle-glow { animation: glowPulse 3s var(--ease) infinite; }
+    @keyframes liftCar {
+      0%, 12%  { transform: translateY(0); }
+      42%, 66% { transform: translateY(-46px); }
+      92%, 100%{ transform: translateY(0); }
+    }
+    .lift-car { animation: liftCar 8s ease-in-out infinite; will-change: transform; }
+    @keyframes compPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.012); } }
+    .comp-body { animation: compPulse 2.2s ease-in-out infinite; transform-origin: center; will-change: transform; }
+    @keyframes hoseFlow { to { stroke-dashoffset: -60; } }
+    .hose-flow { stroke-dasharray: 5 9; animation: hoseFlow 1.6s linear infinite; }
+    @keyframes smokeUp {
+      0%   { transform: translateY(0) scale(.6); opacity: 0; }
+      25%  { opacity: .5; }
+      100% { transform: translateY(-34px) scale(1.4); opacity: 0; }
+    }
+    .smoke { animation: smokeUp 3s linear infinite; }
+    .smoke.s2 { animation-delay: 1.5s; }
+    @keyframes floatDot {
+      0%   { transform: translateY(0); opacity: 0; }
+      20%  { opacity: .8; }
+      80%  { opacity: .8; }
+      100% { transform: translateY(26px); opacity: 0; }
+    }
+    .airdot { animation: floatDot 2.6s linear infinite; }
+    .airdot.a2 { animation-delay: .9s; } .airdot.a3 { animation-delay: 1.7s; }
+
+    /* =====================================================================
+       DETAIL PANEL — slides from the physical LEFT (RTL page)
+       Mobile: bottom sheet.
+       ===================================================================== */
+    .backdrop {
+      position: fixed; inset: 0; inset-block-start: var(--header-h); z-index: 94;
+      background: rgba(10,15,22,0.55); opacity: 0; pointer-events: none;
+      transition: opacity 200ms var(--ease);
+    }
+    .backdrop.show { opacity: 1; pointer-events: auto; }
+    .panel {
+      position: fixed; z-index: 95; inset-block-start: var(--header-h); inset-block-end: 0;
+      left: 0; width: min(400px, 94vw);
+      background: var(--card); border-inline-end: 1px solid var(--border);
+      transform: translateX(-105%); transition: transform 200ms var(--ease);
+      display: flex; flex-direction: column; padding: 30px 28px; overflow-y: auto;
+      will-change: transform;
+    }
+    .panel.open { transform: translateX(0); }
+    .panel-close {
+      position: absolute; inset-block-start: 18px; inset-inline-end: 18px;
+      width: 38px; height: 38px; border-radius: var(--r-cta);
+      background: transparent; border: 1px solid var(--steel); color: var(--silver);
+      font-size: 20px; line-height: 1; cursor: pointer;
+      transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+    }
+    .panel-close:hover { border-color: var(--silver); color: #fff; }
+    .panel .ref { font-size: 11px; letter-spacing: 0.14em; color: var(--red); margin-bottom: 10px; }
+    .panel h3 { font-size: 1.5rem; margin-bottom: 4px; }
+    .panel .en { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--steel); direction: ltr; unicode-bidi: isolate; align-self: flex-start; margin-bottom: 16px; }
+    .panel .desc { color: var(--silver); font-size: 0.95rem; margin-bottom: 22px; }
+    .panel .rows { display: flex; flex-direction: column; margin-bottom: 26px; }
+    .panel .row { display: grid; grid-template-columns: 104px 1fr; gap: 14px; padding: 12px 0; border-top: 1px solid rgba(185,194,204,0.12); align-items: baseline; }
+    .panel .row .k { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.1em; color: var(--red); direction: ltr; unicode-bidi: isolate; }
+    .panel .row .v { font-size: 0.92rem; color: var(--silver); line-height: 1.7; }
+    .panel .btn { margin-top: auto; }
+
+    /* =====================================================================
+       MOBILE CAROUSEL (hero alternative ≤768px)
+       ===================================================================== */
+    .carousel { display: none; }
+
+    /* =====================================================================
+       SECTIONS (unchanged structure from V2)
+       ===================================================================== */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--r-card);
+      padding: 30px 28px;
+      transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease);
+    }
+    .card:hover { border-color: rgba(185,194,204,0.4); transform: translateY(-3px); }
+    .card .ico { width: 44px; height: 44px; color: var(--silver); margin-bottom: 18px; }
+    .card .ico svg { width: 100%; height: 100%; stroke-width: 2; }
+    .card h3 { font-size: 1.18rem; margin-bottom: 8px; }
+    .card p { color: var(--silver); font-size: 0.95rem; }
+    .card .ref { display: block; margin-top: 14px; font-size: 10px; color: var(--steel); }
+
+    .prod { overflow: hidden; padding: 0; display: flex; flex-direction: column; }
+    .prod-visual { height: 150px; background: var(--navy); position: relative; display: grid; place-items: center; border-bottom: 2px solid var(--red); }
+    .prod-visual svg { width: 70px; height: 70px; color: var(--silver); transition: transform var(--dur) var(--ease); }
+    .prod:hover .prod-visual svg { transform: scale(1.06); }
+    .prod-ref { position: absolute; inset-block-start: 12px; inset-inline-start: 14px; font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--red); direction: ltr; }
+    .prod-body { padding: 22px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
+    .prod-body h3 { font-size: 1.14rem; }
+    .prod-body .en { font-family: var(--f-mono); font-size: 9px; letter-spacing: 0.1em; color: var(--steel); direction: ltr; unicode-bidi: isolate; align-self: flex-start; }
+    .prod-body p { color: var(--silver); font-size: 0.9rem; flex: 1; }
+    .prod-body .btn { margin-top: 12px; align-self: stretch; }
+
+    .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-card); padding: 26px 24px; position: relative; }
+    .step .num { font-family: var(--f-mono); font-weight: 500; font-size: 12px; letter-spacing: 0.14em; color: var(--red); direction: ltr; display: block; margin-bottom: 14px; }
+    .step h3 { font-size: 1.05rem; margin-bottom: 6px; }
+    .step p { color: var(--silver); font-size: 0.88rem; }
+    .step::after { content: ""; position: absolute; inset-inline-start: 0; inset-block-start: 0; width: 2px; height: 0; background: var(--red); transition: height var(--dur) var(--ease); }
+    .step:hover::after { height: 100%; }
+
+    .specs { background: var(--carbon); }
+    .spec-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .spec { border: 1px solid var(--border); border-radius: var(--r-card); padding: 26px 22px; background: rgba(18,43,79,0.4); }
+    .spec .k { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--red); direction: ltr; unicode-bidi: isolate; display: block; margin-bottom: 12px; }
+    .spec .v { font-family: var(--f-display-ar); font-weight: 800; font-size: 1.7rem; line-height: 1.2; }
+    .spec .v .mono { font-size: 1.5rem; letter-spacing: 0.02em; }
+    .spec .l { color: var(--silver); font-size: 0.9rem; margin-top: 6px; }
+
+    .logos { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 44px; }
+    .logo-cell {
+      flex: 1 1 160px; height: 62px; border: 1px solid var(--border); border-radius: var(--r-card);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      font-family: var(--f-display-ar); font-weight: 700; font-size: 0.95rem; color: var(--muted);
+      background: var(--card); transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+    }
+    .logo-cell:hover { color: var(--silver); border-color: rgba(185,194,204,0.4); }
+    .logo-cell svg { width: 22px; height: 22px; color: var(--steel); }
+    .quote { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-card); padding: 40px 36px; max-width: 820px; margin-inline: auto; position: relative; }
+    .quote::before { content: ""; position: absolute; inset-inline-start: 0; inset-block: 24px; width: 2px; background: var(--red); }
+    .quote blockquote { font-size: 1.2rem; line-height: 2; margin-bottom: 22px; }
+    .quote .who { display: flex; align-items: center; gap: 12px; }
+    .quote .who .avatar { width: 48px; height: 48px; border-radius: var(--r-cta); background: var(--grad-metallic); color: var(--carbon); display: grid; place-items: center; font-family: var(--f-display-ar); font-weight: 800; }
+    .quote .who strong { display: block; font-family: var(--f-display-ar); }
+    .quote .who span { color: var(--muted); font-size: 0.88rem; }
+
+    .contact-wrap { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 16px; align-items: stretch; }
+    .contact-info { background: var(--carbon); border: 1px solid var(--border); border-radius: var(--r-card); padding: 38px 34px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+    .contact-info h2 { font-size: clamp(1.5rem, 2.6vw, 2rem); margin-bottom: 12px; }
+    .contact-info > p { color: var(--silver); margin-bottom: 28px; }
+    .contact-rows { display: flex; flex-direction: column; gap: 16px; margin-bottom: 30px; }
+    .contact-rows li { display: flex; align-items: center; gap: 12px; }
+    .contact-rows .ico { width: 42px; height: 42px; border: 1px solid var(--border); border-radius: var(--r-cta); display: grid; place-items: center; color: var(--silver); flex-shrink: 0; }
+    .contact-rows .ico svg { width: 20px; height: 20px; }
+    .contact-rows small { display: block; color: var(--muted); font-size: 0.78rem; }
+    .wa-btn { margin-top: auto; display: inline-flex; align-items: center; justify-content: center; gap: 10px; height: var(--cta-h); border-radius: var(--r-cta); background: #25D366; color: #fff; font-family: var(--f-display-ar); font-weight: 700; transition: filter var(--dur) var(--ease); }
+    .wa-btn:hover { filter: brightness(1.1); }
+    .wa-btn svg { width: 20px; height: 20px; }
+
+    .form { background: var(--card); border: 1px solid var(--border); border-radius: var(--r-card); padding: 38px 34px; }
+    .f-row { margin-bottom: 18px; }
+    .f-row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    label { display: block; font-family: var(--f-display-ar); font-weight: 700; font-size: 0.9rem; margin-bottom: 7px; }
+    label .req { color: var(--red); }
+    input, select {
+      width: 100%; height: var(--cta-h); font-family: var(--f-body-ar); font-size: 0.98rem;
+      color: var(--text); background: var(--navy); border: 1px solid var(--steel); border-radius: var(--r-cta);
+      padding: 0 14px; transition: border-color var(--dur) var(--ease);
+    }
+    input::placeholder { color: var(--muted); }
+    input:focus, select:focus { outline: none; border-color: var(--silver); }
+    .hint { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
+    .sent { display: none; align-items: center; gap: 10px; border: 1px solid var(--steel); border-inline-start: 2px solid var(--red); border-radius: var(--r-cta); padding: 12px 14px; margin-bottom: 18px; font-weight: 500; background: var(--navy); }
+    .sent.show { display: flex; }
+    .sent svg { width: 20px; height: 20px; color: var(--silver); flex-shrink: 0; }
+
+    footer { background: var(--carbon); border-top: 1px solid var(--border); position: relative; }
+    .foot-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: 36px; padding: 60px 0 44px; }
+    .foot-brand p { color: var(--muted); font-size: 0.9rem; max-width: 300px; margin-top: 16px; }
+    .foot-col h4 { font-size: 1rem; margin-bottom: 16px; }
+    .foot-col ul { display: flex; flex-direction: column; gap: 10px; }
+    .foot-col a { color: var(--muted); font-size: 0.92rem; transition: color var(--dur) var(--ease); }
+    .foot-col a:hover { color: var(--silver); }
+    .foot-social { display: flex; gap: 8px; margin-top: 4px; }
+    .foot-social a { width: 38px; height: 38px; border: 1px solid var(--border); border-radius: var(--r-cta); display: grid; place-items: center; color: var(--silver); transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+    .foot-social a:hover { border-color: var(--silver); color: #fff; }
+    .foot-social svg { width: 18px; height: 18px; }
+    .foot-bottom { border-top: 1px solid var(--border); padding: 20px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .foot-bottom span { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.14em; color: var(--steel); }
+    .foot-bottom .ar-note { font-family: var(--f-body-ar); font-size: 12px; letter-spacing: 0; color: var(--steel); }
+    .gear-watermark { position: absolute; inset-inline-end: -60px; inset-block-end: -60px; width: 240px; height: 240px; color: var(--steel); opacity: 0.08; pointer-events: none; }
+
+    .wa-float {
+      position: fixed; inset-block-end: 22px; inset-inline-end: 22px; z-index: 90;
+      width: 56px; height: 56px; border-radius: 50%; background: #25D366;
+      display: grid; place-items: center; box-shadow: 0 8px 30px rgba(10,15,22,0.5);
+      transition: filter var(--dur) var(--ease);
+    }
+    .wa-float:hover { filter: brightness(1.1); }
+    .wa-float svg { width: 30px; height: 30px; color: #fff; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity 200ms var(--ease), transform 200ms var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* =====================================================================
+       RESPONSIVE — brand breakpoints 1200 / 768 / 480
+       ===================================================================== */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-toggle { display: block; }
+      .grid-3, .spec-table, .steps { grid-template-columns: 1fr 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; }
+      .foot-grid { grid-template-columns: 1fr 1fr; }
+
+      /* hero: replace isometric scene with product carousel */
+      .workshop { display: none; }
+      .carousel {
+        display: flex; gap: 12px; overflow-x: auto; padding: 8px var(--gutter) 20px;
+        scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+      }
+      .car-card {
+        flex: 0 0 78%; scroll-snap-align: center;
+        background: var(--card); border: 1px solid var(--border); border-radius: var(--r-card);
+        padding: 22px 20px; display: flex; flex-direction: column; gap: 8px; cursor: pointer;
+        transition: border-color var(--dur) var(--ease);
+      }
+      .car-card:hover { border-color: rgba(185,194,204,0.4); }
+      .car-card .ref { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--red); direction: ltr; align-self: flex-start; }
+      .car-card svg { width: 52px; height: 52px; color: var(--silver); margin: 6px 0; }
+      .car-card h3 { font-size: 1.1rem; }
+      .car-card p { color: var(--silver); font-size: 0.85rem; }
+      .car-card .tap { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+
+      /* panel becomes a bottom sheet */
+      .panel {
+        left: 0; right: 0; width: auto; inset-block-start: auto; inset-block-end: 0;
+        max-height: 78vh; border-inline-end: 0; border-top: 1px solid var(--border);
+        border-radius: var(--r-card) var(--r-card) 0 0;
+        transform: translateY(105%);
+      }
+      .panel.open { transform: translateY(0); }
+    }
+    @media (max-width: 480px) {
+      .grid-3, .spec-table, .steps, .foot-grid, .f-row.two { grid-template-columns: 1fr; }
+      .lockup .sub { display: none; }
+      .car-card { flex-basis: 86%; }
+    }
+
+    /* reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
+      .reveal { opacity: 1; transform: none; }
+      .scene-wrap { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#home" class="lockup" aria-label="ITCO — الصفحة الرئيسية">
+        <svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 22v-2"/><path d="m17 20.66-1-1.73"/><path d="M11 10.27 7 3.34"/><path d="m20.66 17-1.73-1"/><path d="m3.34 7 1.73 1"/><path d="M14 12h8"/><path d="M2 12h2"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m17 3.34-1 1.73"/><path d="m7 20.66 1-1.73"/></svg>
+        <span class="word">ITC<i>O</i></span>
+        <span class="sub">
+          <span class="en">INDUSTRIAL TECHNOLOGIES CO. LTD.</span>
+          <span class="ar">شركة تقنيات التصنيع المحدودة</span>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="القائمة الرئيسية">
+        <a href="#home">الرئيسية</a>
+        <a href="#products">المنتجات</a>
+        <a href="#specs">المواصفات</a>
+        <a href="#clients">المشاريع</a>
+        <a href="#contact">اتصل بنا</a>
+      </nav>
+      <div class="nav-side">
+        <span class="lang" role="button" tabindex="0">EN</span>
+        <a href="#contact" class="btn btn-cta">اطلب عرض سعر</a>
+        <button class="nav-toggle" id="navToggle" aria-label="فتح القائمة" aria-expanded="false"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO — INTERACTIVE WORKSHOP ==================== -->
+  <section class="hero bp-grid" id="home">
+    <div class="container hero-top">
+      <div class="eyebrow">
+        <span class="bar"></span>
+        <span class="en">— COMPLETE WORKSHOP EQUIPMENT · RIYADH</span>
+      </div>
+      <h1>تجهيز الورش المتكامل<br>من كبينة الدهان إلى ضبط الزوايا</h1>
+      <p class="sub">ست منظومات أساسية تعمل كخط إنتاج واحد — توريد وتركيب وتشغيل بواسطة مهندسينا. انقر على أي جهاز في المشهد لاستعراض مواصفاته.</p>
+      <div class="actions">
+        <a href="#contact" class="btn btn-cta">اطلب عرض سعر</a>
+        <a href="#products" class="btn btn-line">تصفح المنتجات</a>
+      </div>
+    </div>
+
+    <!-- ===== desktop: isometric workshop scene ===== -->
+    <div class="workshop container">
+      <div class="scene-wrap" id="sceneWrap">
+        <svg id="workshopSvg" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" role="group" aria-label="مشهد تفاعلي لأرضية ورشة متكاملة يضم ست مناطق: فرن الدهان، رافعة السيارة، محطة التحضير، ضاغط الهواء، جهاز ضبط الزوايا، ونظام شفط العوادم.">
+          <defs>
+            <linearGradient id="wCabin" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#FFFFFF"/><stop offset=".7" stop-color="#EDF0F3"/><stop offset="1" stop-color="#D9DFE6"/>
+            </linearGradient>
+            <linearGradient id="wMetal" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#B9C2CC"/><stop offset=".55" stop-color="#8494A8"/><stop offset="1" stop-color="#51647A"/>
+            </linearGradient>
+            <linearGradient id="wMetalV" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#B9C2CC"/><stop offset="1" stop-color="#51647A"/>
+            </linearGradient>
+            <linearGradient id="wCar" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#51647A"/><stop offset="1" stop-color="#0E2342"/>
+            </linearGradient>
+            <radialGradient id="wWarm" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#FFF6E0" stop-opacity=".55"/><stop offset="1" stop-color="#FFF6E0" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="wGlow" x="-60%" y="-60%" width="220%" height="220%">
+              <feGaussianBlur stdDeviation="4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <pattern id="whz" width="20" height="10" patternUnits="userSpaceOnUse" patternTransform="skewX(-35)">
+              <rect width="10" height="10" fill="#DA291C"/><rect x="10" width="10" height="10" fill="#0E2342"/>
+            </pattern>
+          </defs>
+
+          <!-- ===== workshop floor (blueprint grid diamond) ===== -->
+          <polygon points="500,96 985,330 500,556 15,330" fill="#0B1B33" stroke="#51647A" stroke-width="1.5" opacity=".95"/>
+          <g stroke="rgba(81,100,122,.35)" stroke-width="1">
+            <line x1="420" y1="135" x2="905" y2="369"/><line x1="340" y1="174" x2="825" y2="408"/>
+            <line x1="260" y1="212" x2="745" y2="446"/><line x1="180" y1="251" x2="665" y2="484"/>
+            <line x1="100" y1="290" x2="585" y2="523"/>
+            <line x1="580" y1="135" x2="95" y2="369"/><line x1="660" y1="174" x2="175" y2="408"/>
+            <line x1="740" y1="212" x2="255" y2="446"/><line x1="820" y1="251" x2="335" y2="484"/>
+            <line x1="900" y1="290" x2="415" y2="523"/>
+          </g>
+
+          <!-- ===== overhead shop lights (warm, flicker-free) ===== -->
+          <g aria-hidden="true">
+            <line x1="310" y1="0" x2="310" y2="34" stroke="#51647A" stroke-width="2"/>
+            <line x1="500" y1="0" x2="500" y2="22" stroke="#51647A" stroke-width="2"/>
+            <line x1="690" y1="0" x2="690" y2="34" stroke="#51647A" stroke-width="2"/>
+            <rect x="270" y="34" width="80" height="8" rx="4" fill="#FFF6E0" filter="url(#wGlow)"/>
+            <rect x="460" y="22" width="80" height="8" rx="4" fill="#FFF6E0" filter="url(#wGlow)"/>
+            <rect x="650" y="34" width="80" height="8" rx="4" fill="#FFF6E0" filter="url(#wGlow)"/>
+            <ellipse cx="310" cy="60" rx="70" ry="20" fill="url(#wWarm)"/>
+            <ellipse cx="500" cy="48" rx="70" ry="20" fill="url(#wWarm)"/>
+            <ellipse cx="690" cy="60" rx="70" ry="20" fill="url(#wWarm)"/>
+          </g>
+
+          <!-- ================================================================
+               ZONE A — PAINT BOOTH (back-left) · فرن الدهان
+               Reference-photo styling: white cabin, header band, navy 3-window
+               fold door, hazard skirt, exhaust stack.
+               ================================================================ -->
+          <g class="zone" id="zone-booth" data-product="booth" data-origin="27% 40%" tabindex="0" role="button" aria-label="فرن الدهان — اعرض المواصفات">
+            <ellipse class="halo" cx="265" cy="342" rx="160" ry="26" fill="rgba(218,41,28,.16)" stroke="#DA291C" stroke-width="1.5"/>
+            <g transform="translate(120,128)">
+              <!-- side face -->
+              <polygon points="290,20 330,44 330,196 290,214" fill="#D9DFE6" stroke="#8494A8" stroke-width="1.5"/>
+              <!-- roof -->
+              <polygon points="0,20 290,20 330,44 40,44" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.5"/>
+              <!-- stack -->
+              <rect x="296" y="-40" width="18" height="64" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.2"/>
+              <rect x="292" y="-46" width="26" height="8" rx="2" fill="#51647A"/>
+              <ellipse class="smoke" cx="305" cy="-56" rx="8" ry="4" fill="#B9C2CC"/>
+              <ellipse class="smoke s2" cx="309" cy="-54" rx="6" ry="3" fill="#B9C2CC"/>
+              <!-- front face -->
+              <rect x="0" y="20" width="290" height="194" fill="url(#wCabin)" stroke="#8494A8" stroke-width="2"/>
+              <!-- header band -->
+              <rect x="12" y="30" width="266" height="22" fill="#FFFFFF" stroke="#C9D1DA" stroke-width="1.2"/>
+              <text x="145" y="46" text-anchor="middle" fill="#0E2342" font-family="Oswald, sans-serif" font-weight="700" font-size="14" letter-spacing="2.5">ITC<tspan fill="#DA291C">O</tspan></text>
+              <!-- warm glow leaking from inside (idle) -->
+              <rect class="idle-glow" x="26" y="66" width="238" height="128" fill="url(#wWarm)"/>
+              <!-- navy 3-fold door with 3 windows -->
+              <rect x="22" y="58" width="246" height="144" fill="#0E2342" stroke="#51647A" stroke-width="2"/>
+              <line x1="104" y1="58" x2="104" y2="202" stroke="#51647A" stroke-width="1.5"/>
+              <line x1="186" y1="58" x2="186" y2="202" stroke="#51647A" stroke-width="1.5"/>
+              <g fill="#8494A8" opacity=".85">
+                <rect x="40" y="70" width="46" height="92" rx="6"/>
+                <rect x="122" y="70" width="46" height="92" rx="6"/>
+                <rect x="204" y="70" width="46" height="92" rx="6"/>
+              </g>
+              <g fill="#DA291C">
+                <rect x="34" y="178" width="58" height="3"/>
+                <rect x="116" y="178" width="58" height="3"/>
+                <rect x="198" y="178" width="58" height="3"/>
+              </g>
+              <!-- hazard skirt -->
+              <rect x="0" y="202" width="290" height="12" fill="#0E2342"/>
+              <rect x="0" y="202" width="290" height="12" fill="url(#whz)"/>
+              <!-- airflow particles inside door glass (idle) -->
+              <g fill="#A0D8EF">
+                <circle class="airdot"    cx="63"  cy="84" r="2"/>
+                <circle class="airdot a2" cx="145" cy="84" r="2"/>
+                <circle class="airdot a3" cx="227" cy="84" r="2"/>
+              </g>
+            </g>
+            <g class="zlabel">
+              <rect x="185" y="78" width="160" height="34" rx="3" fill="#0A0F16" stroke="#DA291C" stroke-width="1.5"/>
+              <text x="265" y="101" text-anchor="middle" fill="#F2F4F7" font-family="Cairo, sans-serif" font-weight="700" font-size="16">فرن الدهان</text>
+            </g>
+          </g>
+
+          <!-- ================================================================
+               ZONE F — EXHAUST EXTRACTION (back-right) · نظام شفط العوادم
+               ================================================================ -->
+          <g class="zone" id="zone-exhaust" data-product="exhaust" data-origin="76% 34%" tabindex="0" role="button" aria-label="نظام شفط العوادم — اعرض المواصفات">
+            <ellipse class="halo" cx="762" cy="300" rx="130" ry="24" fill="rgba(218,41,28,.16)" stroke="#DA291C" stroke-width="1.5"/>
+            <g transform="translate(640,96)">
+              <!-- ceiling rail -->
+              <rect x="0" y="0" width="244" height="10" rx="3" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.2"/>
+              <rect x="20" y="10" width="10" height="8" fill="#51647A"/>
+              <rect x="150" y="10" width="10" height="8" fill="#51647A"/>
+              <!-- extraction fan unit -->
+              <rect x="188" y="14" width="52" height="60" rx="3" fill="url(#wCabin)" stroke="#8494A8" stroke-width="1.5"/>
+              <g stroke="#8494A8" stroke-width="1.4">
+                <line x1="196" y1="28" x2="232" y2="28"/><line x1="196" y1="38" x2="232" y2="38"/>
+                <line x1="196" y1="48" x2="232" y2="48"/><line x1="196" y1="58" x2="232" y2="58"/>
+              </g>
+              <!-- hanging hoses with flowing extraction -->
+              <path d="M25,18 C25,80 60,90 60,150 L60,186" fill="none" stroke="#0E2342" stroke-width="9" stroke-linecap="round"/>
+              <path class="hose-flow" d="M25,18 C25,80 60,90 60,150 L60,186" fill="none" stroke="#A0D8EF" stroke-width="2.4"/>
+              <rect x="50" y="186" width="20" height="16" rx="3" fill="#DA291C"/>
+              <path d="M155,18 C155,70 120,85 120,140 L120,170" fill="none" stroke="#0E2342" stroke-width="9" stroke-linecap="round"/>
+              <path class="hose-flow" d="M155,18 C155,70 120,85 120,140 L120,170" fill="none" stroke="#A0D8EF" stroke-width="2.4" style="animation-delay:.7s"/>
+              <rect x="110" y="170" width="20" height="16" rx="3" fill="#DA291C"/>
+              <!-- faint fumes near nozzles -->
+              <ellipse class="smoke" cx="60" cy="180" rx="9" ry="4" fill="#B9C2CC"/>
+              <ellipse class="smoke s2" cx="120" cy="164" rx="8" ry="4" fill="#B9C2CC"/>
+            </g>
+            <g class="zlabel">
+              <rect x="662" y="26" width="200" height="34" rx="3" fill="#0A0F16" stroke="#DA291C" stroke-width="1.5"/>
+              <text x="762" y="49" text-anchor="middle" fill="#F2F4F7" font-family="Cairo, sans-serif" font-weight="700" font-size="16">نظام شفط العوادم</text>
+            </g>
+          </g>
+
+          <!-- ================================================================
+               ZONE C — PREP STATION (center) · محطة التحضير
+               ================================================================ -->
+          <g class="zone" id="zone-prep" data-product="prep" data-origin="51% 45%" tabindex="0" role="button" aria-label="محطة التحضير — اعرض المواصفات">
+            <ellipse class="halo" cx="512" cy="330" rx="118" ry="22" fill="rgba(218,41,28,.16)" stroke="#DA291C" stroke-width="1.5"/>
+            <g transform="translate(424,196)">
+              <!-- side wings -->
+              <polygon points="0,14 22,0 22,112 0,132" fill="#D9DFE6" stroke="#8494A8" stroke-width="1.5"/>
+              <polygon points="176,0 198,14 198,132 176,112" fill="#D9DFE6" stroke="#8494A8" stroke-width="1.5"/>
+              <!-- back wall -->
+              <rect x="22" y="0" width="154" height="112" fill="url(#wCabin)" stroke="#8494A8" stroke-width="1.5"/>
+              <!-- inspection LED strips (defect detection) -->
+              <rect class="idle-glow" x="42" y="14" width="8" height="84" rx="4" fill="#FFFDF5" filter="url(#wGlow)"/>
+              <rect class="idle-glow" x="95" y="14" width="8" height="84" rx="4" fill="#FFFDF5" filter="url(#wGlow)" style="animation-delay:.6s"/>
+              <rect class="idle-glow" x="148" y="14" width="8" height="84" rx="4" fill="#FFFDF5" filter="url(#wGlow)" style="animation-delay:1.2s"/>
+              <!-- solvent-resistant workbench -->
+              <rect x="10" y="112" width="178" height="14" rx="2" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.5"/>
+              <rect x="22" y="126" width="10" height="22" fill="#51647A"/>
+              <rect x="166" y="126" width="10" height="22" fill="#51647A"/>
+            </g>
+            <g class="zlabel">
+              <rect x="432" y="150" width="160" height="34" rx="3" fill="#0A0F16" stroke="#DA291C" stroke-width="1.5"/>
+              <text x="512" y="173" text-anchor="middle" fill="#F2F4F7" font-family="Cairo, sans-serif" font-weight="700" font-size="16">محطة التحضير</text>
+            </g>
+          </g>
+
+          <!-- ================================================================
+               ZONE D — AIR COMPRESSOR (mid-right) · ضاغط الهواء
+               ================================================================ -->
+          <g class="zone" id="zone-compressor" data-product="compressor" data-origin="81% 66%" tabindex="0" role="button" aria-label="ضاغط الهواء — اعرض المواصفات">
+            <ellipse class="halo" cx="806" cy="430" rx="105" ry="20" fill="rgba(218,41,28,.16)" stroke="#DA291C" stroke-width="1.5"/>
+            <g transform="translate(722,338)"><g class="comp-body">
+              <!-- motor + head -->
+              <rect x="42" y="0" width="52" height="30" rx="4" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.5"/>
+              <rect x="52" y="-10" width="12" height="10" fill="#51647A"/>
+              <rect x="72" y="-10" width="12" height="10" fill="#51647A"/>
+              <!-- gauge -->
+              <circle cx="120" cy="16" r="12" fill="#EDF0F3" stroke="#51647A" stroke-width="2"/>
+              <line x1="120" y1="16" x2="127" y2="9" stroke="#DA291C" stroke-width="2"/>
+              <!-- 500L horizontal tank -->
+              <rect x="0" y="30" width="168" height="54" rx="27" fill="#16305A" stroke="#51647A" stroke-width="2"/>
+              <text x="84" y="63" text-anchor="middle" fill="#B9C2CC" font-family="'IBM Plex Mono', monospace" font-size="11" letter-spacing="1">500 L</text>
+              <!-- legs + wheels -->
+              <rect x="20" y="84" width="8" height="14" fill="#51647A"/>
+              <circle cx="140" cy="94" r="9" fill="#0A0F16" stroke="#51647A" stroke-width="2.5"/>
+            </g></g>
+            <g class="zlabel">
+              <rect x="726" y="272" width="160" height="34" rx="3" fill="#0A0F16" stroke="#DA291C" stroke-width="1.5"/>
+              <text x="806" y="295" text-anchor="middle" fill="#F2F4F7" font-family="Cairo, sans-serif" font-weight="700" font-size="16">ضاغط الهواء</text>
+            </g>
+          </g>
+
+          <!-- ================================================================
+               ZONE B — CAR LIFT (front-left) · رافعة السيارة
+               2-post lift, car raising loop (8s)
+               ================================================================ -->
+          <g class="zone" id="zone-lift" data-product="lift" data-origin="25% 76%" tabindex="0" role="button" aria-label="رافعة السيارة — اعرض المواصفات">
+            <ellipse class="halo" cx="252" cy="508" rx="150" ry="24" fill="rgba(218,41,28,.16)" stroke="#DA291C" stroke-width="1.5"/>
+            <g transform="translate(130,350)">
+              <!-- crossbar + posts -->
+              <rect x="0" y="0" width="244" height="10" rx="3" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.5"/>
+              <rect x="6" y="10" width="16" height="148" fill="url(#wMetalV)" stroke="#51647A" stroke-width="1.5"/>
+              <rect x="222" y="10" width="16" height="148" fill="url(#wMetalV)" stroke="#51647A" stroke-width="1.5"/>
+              <rect x="0" y="152" width="30" height="8" rx="2" fill="#51647A"/>
+              <rect x="214" y="152" width="30" height="8" rx="2" fill="#51647A"/>
+              <!-- raised car (loops) -->
+              <g class="lift-car">
+                <!-- lift arms -->
+                <rect x="22" y="118" width="42" height="7" rx="3" fill="#51647A"/>
+                <rect x="180" y="118" width="42" height="7" rx="3" fill="#51647A"/>
+                <!-- side-view car -->
+                <g transform="translate(32,58)">
+                  <path d="M6,52 Q10,32 40,28 Q58,6 104,4 Q146,6 162,28 Q186,32 182,52 L176,58 Q172,48 162,48 Q152,48 148,58 L46,58 Q42,48 32,48 Q22,48 18,58 Z"
+                        fill="url(#wCar)" stroke="#51647A" stroke-width="2"/>
+                  <path d="M52,26 Q68,12 104,12 Q136,12 148,26 Z" fill="#0A0F16" opacity=".5"/>
+                  <circle cx="34" cy="58" r="12" fill="#0A0F16" stroke="#51647A" stroke-width="2.5"/>
+                  <circle cx="164" cy="58" r="12" fill="#0A0F16" stroke="#51647A" stroke-width="2.5"/>
+                </g>
+              </g>
+            </g>
+            <g class="zlabel">
+              <rect x="172" y="306" width="160" height="34" rx="3" fill="#0A0F16" stroke="#DA291C" stroke-width="1.5"/>
+              <text x="252" y="329" text-anchor="middle" fill="#F2F4F7" font-family="Cairo, sans-serif" font-weight="700" font-size="16">رافعة السيارة</text>
+            </g>
+          </g>
+
+          <!-- ================================================================
+               ZONE E — WHEEL ALIGNMENT (front-right) · جهاز ضبط الزوايا
+               ================================================================ -->
+          <g class="zone" id="zone-alignment" data-product="alignment" data-origin="56% 84%" tabindex="0" role="button" aria-label="جهاز ضبط الزوايا — اعرض المواصفات">
+            <ellipse class="halo" cx="560" cy="508" rx="140" ry="22" fill="rgba(218,41,28,.16)" stroke="#DA291C" stroke-width="1.5"/>
+            <g transform="translate(444,398)">
+              <!-- platform -->
+              <polygon points="14,58 176,58 200,86 -10,86" fill="url(#wMetal)" stroke="#51647A" stroke-width="1.5"/>
+              <!-- turn plates -->
+              <circle cx="46" cy="72" r="12" fill="#0E2342" stroke="#8494A8" stroke-width="2"/>
+              <circle cx="144" cy="72" r="12" fill="#0E2342" stroke="#8494A8" stroke-width="2"/>
+              <!-- ramps -->
+              <polygon points="-10,86 30,86 18,108 -26,108" fill="url(#wMetalV)" stroke="#51647A" stroke-width="1.2"/>
+              <polygon points="160,86 200,86 216,108 172,108" fill="url(#wMetalV)" stroke="#51647A" stroke-width="1.2"/>
+              <!-- console: pole + 21" touchscreen -->
+              <rect x="222" y="6" width="8" height="80" fill="#51647A"/>
+              <rect x="196" y="-24" width="62" height="40" rx="3" fill="#0E2342" stroke="#51647A" stroke-width="2"/>
+              <g stroke="#A0D8EF" stroke-width="1.6" opacity=".85">
+                <line x1="204" y1="-14" x2="250" y2="-14"/>
+                <line x1="204" y1="-6" x2="238" y2="-6"/>
+                <line x1="204" y1="2" x2="244" y2="2"/>
+              </g>
+              <rect x="216" y="86" width="22" height="8" rx="2" fill="#51647A"/>
+            </g>
+            <g class="zlabel">
+              <rect x="466" y="336" width="188" height="34" rx="3" fill="#0A0F16" stroke="#DA291C" stroke-width="1.5"/>
+              <text x="560" y="359" text-anchor="middle" fill="#F2F4F7" font-family="Cairo, sans-serif" font-weight="700" font-size="16">جهاز ضبط الزوايا</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="scene-hint">
+        <span class="mono">WORKSHOP FLOOR — INTERACTIVE</span>
+        <span class="ar">· انقر على أي جهاز لعرض مواصفاته</span>
+      </div>
+    </div>
+
+    <!-- ===== mobile: product carousel (same panel behavior) ===== -->
+    <div class="carousel" id="carousel" aria-label="منتجات الورشة">
+      <!-- cards injected by JS from PRODUCTS data -->
+    </div>
+  </section>
+
+  <!-- ===== detail panel + backdrop ===== -->
+  <div class="backdrop" id="backdrop"></div>
+  <aside class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="panelTitle">
+    <button class="panel-close" id="panelClose" aria-label="إغلاق اللوحة">×</button>
+    <span class="ref mono" id="panelRef">REF</span>
+    <h3 id="panelTitle">—</h3>
+    <span class="en" id="panelEn">—</span>
+    <p class="desc" id="panelDesc">—</p>
+    <div class="rows" id="panelRows"></div>
+    <a href="#contact" class="btn btn-cta" id="panelCta">اطلب عرض سعر</a>
+  </aside>
+
+  <!-- ==================== WHY US ==================== -->
+  <section class="section" id="why">
+    <div class="container">
+      <div class="eyebrow reveal">
+        <span class="bar"></span><span class="en">01 — WHY ITCO</span><span class="ar">لماذا نحن</span>
+      </div>
+      <div class="section-head reveal" style="margin-bottom:40px">
+        <h2>معدات ثقيلة. هندسة دقيقة.</h2>
+        <p>توريد وتركيب كبائن الدهان ومعدات الورش في جميع أنحاء المملكة — بمواصفات دقيقة وتسليم وتشغيل بواسطة مهندسينا.</p>
+      </div>
+      <div class="grid-3">
+        <article class="card reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V5z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>معتمدة دولياً</h3>
+          <p>مطابقة لمعايير <span class="mono">NFPA 33</span> و <span class="mono">ISO</span> العالمية لأنظمة الدهان والسلامة من الحرائق.</p>
+          <span class="ref mono">CERTIFIED · NFPA 33 / ISO 16750</span>
+        </article>
+        <article class="card reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+          <h3>تركيب وصيانة داخل المملكة</h3>
+          <p>فريق هندسي سعودي يتولّى التركيب والتشغيل والصيانة الدورية في جميع المناطق ودول الخليج.</p>
+          <span class="ref mono">RIYADH · EXIT 16 · AS-SULAY</span>
+        </article>
+        <article class="card reveal">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <h3>ضمان شامل وقطع غيار</h3>
+          <p>ضمان كامل على المعدات وتوفّر دائم لقطع الغيار الأصلية لاستمرارية عمل ورشتك دون توقف.</p>
+          <span class="ref mono">FULL WARRANTY · OEM PARTS</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PRODUCTS GRID (6 cards) ==================== -->
+  <section class="section" id="products" style="padding-top:0">
+    <div class="container">
+      <div class="eyebrow reveal">
+        <span class="bar"></span><span class="en">02 — EQUIPMENT RANGE</span><span class="ar">المنتجات</span>
+      </div>
+      <div class="section-head reveal" style="margin-bottom:40px">
+        <h2>ست منظومات لورشة متكاملة</h2>
+        <p>من الطلاء إلى الميكانيكا — خط تجهيز كامل بمرجعية فنية واحدة.</p>
+      </div>
+      <div class="grid-3" id="prodGrid">
+        <!-- 6 cards injected by JS from PRODUCTS data -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PROCESS ==================== -->
+  <section class="section" id="process" style="padding-top:0">
+    <div class="container">
+      <div class="eyebrow reveal">
+        <span class="bar"></span><span class="en">03 — HOW IT WORKS</span><span class="ar">آلية العمل</span>
+      </div>
+      <div class="section-head reveal" style="margin-bottom:40px">
+        <h2>من الاستشارة إلى التشغيل</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><span class="num mono">STEP 01</span><h3>الاستشارة والقياس</h3><p>زيارة ميدانية لتحديد الاحتياج ومساحة الورشة والمواصفات المطلوبة.</p></div>
+        <div class="step reveal"><span class="num mono">STEP 02</span><h3>التصنيع والشحن</h3><p>تصنيع المعدات وفق مقاساتك وشحنها بأمان إلى موقعك في الوقت المحدد.</p></div>
+        <div class="step reveal"><span class="num mono">STEP 03</span><h3>التركيب الاحترافي</h3><p>تركيب كامل بواسطة مهندسين معتمدين مع اختبار جميع الأنظمة.</p></div>
+        <div class="step reveal"><span class="num mono">STEP 04</span><h3>التدريب والدعم الفني</h3><p>تدريب فريقك على التشغيل الأمثل ودعم فني متواصل بعد التسليم.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TECH SPECS ==================== -->
+  <section class="section specs bp-grid" id="specs">
+    <div class="container" style="position:relative">
+      <div class="eyebrow reveal">
+        <span class="bar"></span><span class="en">04 — TECHNICAL SPECIFICATIONS · REF PB-4500</span><span class="ar">المواصفات التقنية</span>
+      </div>
+      <div class="section-head reveal" style="margin-bottom:40px">
+        <h2>أداء هندسي يمكن الاعتماد عليه</h2>
+      </div>
+      <div class="spec-table">
+        <div class="spec reveal">
+          <span class="k">AIRFLOW</span>
+          <div class="v"><span class="mono">30,000</span></div>
+          <div class="l">تدفق الهواء العمودي — <span class="mono">m³/h</span></div>
+        </div>
+        <div class="spec reveal">
+          <span class="k">LIGHTING</span>
+          <div class="v"><span class="mono">1,000+</span></div>
+          <div class="l">إضاءة <span class="mono">LED</span> — <span class="mono">Lux</span></div>
+        </div>
+        <div class="spec reveal">
+          <span class="k">LIFT CAPACITY</span>
+          <div class="v"><span class="mono">4,000</span></div>
+          <div class="l">طاقة رفع الرافعة — كجم</div>
+        </div>
+        <div class="spec reveal">
+          <span class="k">ACCURACY</span>
+          <div class="v"><span class="mono">±0.01°</span></div>
+          <div class="l">دقة ضبط الزوايا</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== CLIENTS ==================== -->
+  <section class="section" id="clients">
+    <div class="container">
+      <div class="eyebrow reveal">
+        <span class="bar"></span><span class="en">05 — TRUSTED BY</span><span class="ar">عملاؤنا</span>
+      </div>
+      <div class="section-head reveal" style="margin-bottom:40px">
+        <h2>موثوق من كبرى الورش والمعارض</h2>
+      </div>
+      <div class="logos reveal">
+        <div class="logo-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 16H9m10 0h3v-3.15a1 1 0 0 0-.84-.99L16 11l-2.7-3.6a1 1 0 0 0-.8-.4H5.24a2 2 0 0 0-1.8 1.1l-.8 1.63A6 6 0 0 0 2 12.42V16h2"/><circle cx="6.5" cy="16.5" r="2.5"/><circle cx="16.5" cy="16.5" r="2.5"/></svg> أوتو برو</div>
+        <div class="logo-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/></svg> الخليج موتورز</div>
+        <div class="logo-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg> مركز التميّز</div>
+        <div class="logo-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-6"/></svg> نجم الصيانة</div>
+        <div class="logo-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M2 12h20M12 2v20"/><circle cx="12" cy="12" r="10"/></svg> الرواد للسيارات</div>
+      </div>
+      <figure class="quote reveal">
+        <blockquote>«جهّزنا الورشة كاملة من ITCO — كبينة الدهان والرافعتين وجهاز الزوايا. تعامل هندسي محترف من القياس إلى التشغيل، والدعم بعد البيع ممتاز.»</blockquote>
+        <figcaption class="who">
+          <span class="avatar" aria-hidden="true">أ</span>
+          <span>
+            <strong>أحمد العتيبي</strong>
+            <span>صاحب ورشة سمكرة ودهان — الرياض</span>
+          </span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ==================== CONTACT ==================== -->
+  <section class="section" id="contact" style="padding-top:0">
+    <div class="container">
+      <div class="eyebrow reveal">
+        <span class="bar"></span><span class="en">06 — REQUEST A QUOTE</span><span class="ar">اتصل بنا</span>
+      </div>
+      <div class="contact-wrap">
+        <div class="contact-info bp-grid reveal">
+          <h2 style="position:relative">احصل على عرض سعر مجاني</h2>
+          <p style="position:relative">أخبرنا باحتياجك وسيتواصل معك مهندس مبيعات خلال ساعات عمل قليلة.</p>
+          <ul class="contact-rows" style="position:relative">
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.5-1.1a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2Z"/></svg></span>
+              <span><span class="mono" style="font-size:0.95rem">+966 11 000 0000</span><small>الأحد – الخميس · 8ص – 6م</small></span>
+            </li>
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></span>
+              <span><span class="mono" style="font-size:0.95rem">SALES@ITCO.SA</span><small>ITCO.SA</small></span>
+            </li>
+            <li>
+              <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg></span>
+              <span>الرياض — مخرج ١٦، السلي<small>ص.ب ٨٤٩١٢ الرياض ١١٦٧١</small></span>
+            </li>
+          </ul>
+          <a href="https://wa.me/966110000000" class="wa-btn" target="_blank" rel="noopener" style="position:relative">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.13c-.24.68-1.42 1.32-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.46-3.86-4.6-4.04-.13-.18-1.1-1.47-1.1-2.8 0-1.33.7-1.98.94-2.25.24-.27.53-.34.71-.34.18 0 .35 0 .5.01.16.01.38-.06.6.46.23.53.77 1.86.84 2 .07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.27.66 1.09 1.42 1.76.98.87 1.8 1.14 2.06 1.27.27.13.42.11.58-.07.16-.18.66-.77.84-1.04.18-.27.35-.22.6-.13.24.09 1.55.73 1.81.86.27.13.44.2.5.31.07.11.07.63-.17 1.31Z"/></svg>
+            تواصل عبر واتساب مباشرة
+          </a>
+        </div>
+
+        <form class="form reveal" id="quoteForm" novalidate>
+          <div class="sent" id="formSent" role="alert">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            تم استلام طلبك بنجاح — سيتواصل معك مهندس مبيعات قريباً.
+          </div>
+          <div class="f-row">
+            <label for="name">الاسم <span class="req">*</span></label>
+            <input type="text" id="name" name="name" placeholder="الاسم الكامل" required autocomplete="name" />
+          </div>
+          <div class="f-row two">
+            <div>
+              <label for="phone">رقم الجوال <span class="req">*</span></label>
+              <input type="tel" id="phone" name="phone" placeholder="05XXXXXXXX" required autocomplete="tel" inputmode="tel" dir="ltr" />
+            </div>
+            <div>
+              <label for="city">المدينة <span class="req">*</span></label>
+              <input type="text" id="city" name="city" placeholder="الرياض" required autocomplete="address-level2" />
+            </div>
+          </div>
+          <div class="f-row">
+            <label for="ptype">المعدّة المطلوبة</label>
+            <select id="ptype" name="ptype">
+              <option value="">اختر المنتج المناسب</option>
+              <option value="booth">فرن الدهان — PB-4500</option>
+              <option value="lift">رافعة السيارة — CL-4000</option>
+              <option value="prep">محطة التحضير — PS-1800</option>
+              <option value="compressor">ضاغط الهواء — AC-500</option>
+              <option value="alignment">جهاز ضبط الزوايا — WA-3D</option>
+              <option value="exhaust">نظام شفط العوادم — EE-1200</option>
+              <option value="all">تجهيز ورشة متكاملة</option>
+            </select>
+            <p class="hint">لست متأكداً؟ اختر «تجهيز ورشة متكاملة» وسيساعدك مهندسنا في التخطيط.</p>
+          </div>
+          <button type="submit" class="btn btn-cta btn-block">إرسال الطلب</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="hazard" aria-hidden="true"></div>
+    <div class="container" style="position:relative;overflow:hidden">
+      <svg class="gear-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 22v-2"/><path d="m17 20.66-1-1.73"/><path d="M11 10.27 7 3.34"/><path d="m20.66 17-1.73-1"/><path d="m3.34 7 1.73 1"/><path d="M14 12h8"/><path d="M2 12h2"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m17 3.34-1 1.73"/><path d="m7 20.66 1-1.73"/></svg>
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a href="#home" class="lockup">
+            <svg class="gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 22v-2"/><path d="m17 20.66-1-1.73"/><path d="M11 10.27 7 3.34"/><path d="m20.66 17-1.73-1"/><path d="m3.34 7 1.73 1"/><path d="M14 12h8"/><path d="M2 12h2"/><path d="m20.66 7-1.73 1"/><path d="m3.34 17 1.73-1"/><path d="m17 3.34-1 1.73"/><path d="m7 20.66 1-1.73"/></svg>
+            <span class="word">ITC<i>O</i></span>
+            <span class="sub">
+              <span class="en">INDUSTRIAL TECHNOLOGIES CO. LTD.</span>
+              <span class="ar">شركة تقنيات التصنيع المحدودة</span>
+            </span>
+          </a>
+          <p>توريد وتركيب كبائن الدهان والروافع ومعدات الإطارات للورش في جميع أنحاء المملكة ودول الخليج.</p>
+        </div>
+        <div class="foot-col">
+          <h4>روابط سريعة</h4>
+          <ul>
+            <li><a href="#home">الرئيسية</a></li>
+            <li><a href="#products">المنتجات</a></li>
+            <li><a href="#specs">المواصفات</a></li>
+            <li><a href="#clients">المشاريع</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>منتجاتنا</h4>
+          <ul>
+            <li><a href="#products">كبائن الدهان</a></li>
+            <li><a href="#products">الروافع</a></li>
+            <li><a href="#products">ضواغط الهواء</a></li>
+            <li><a href="#products">أجهزة ضبط الزوايا</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h4>تواصل معنا</h4>
+          <ul>
+            <li><a href="tel:+966110000000" class="mono" style="font-size:0.9rem">+966 11 000 0000</a></li>
+            <li><a href="mailto:sales@itco.sa" class="mono" style="font-size:0.9rem">SALES@ITCO.SA</a></li>
+            <li><a href="#" class="mono" style="font-size:0.9rem">ITCO.SA</a></li>
+          </ul>
+          <div class="foot-social">
+            <a href="#" aria-label="تويتر / X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7 8 8.3 12H16l-5-7-6 7H2l7.5-8.6L1.5 2H9l4.5 6.5L18.9 2Zm-1.1 18h1.7L7.3 3.8H5.5L17.8 20Z"/></svg></a>
+            <a href="#" aria-label="لينكدإن"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21H21v-5.4c0-1.3 0-2.95-1.8-2.95s-2.08 1.4-2.08 2.85V21H13z"/></svg></a>
+            <a href="#" aria-label="إنستغرام"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="20" x="2" y="2" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5v.01"/></svg></a>
+          </div>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 ITCO · INDUSTRIAL TECHNOLOGIES CO. LTD.</span>
+        <span class="ar-note">شركة تقنيات التصنيع المحدودة — الرياض، المملكة العربية السعودية</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- floating WhatsApp -->
+  <a href="https://wa.me/966110000000" class="wa-float" target="_blank" rel="noopener" aria-label="تواصل عبر واتساب">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.13c-.24.68-1.42 1.32-1.95 1.36-.5.05-.96.24-3.23-.67-2.73-1.08-4.46-3.86-4.6-4.04-.13-.18-1.1-1.47-1.1-2.8 0-1.33.7-1.98.94-2.25.24-.27.53-.34.71-.34.18 0 .35 0 .5.01.16.01.38-.06.6.46.23.53.77 1.86.84 2 .07.13.11.29.02.47-.09.18-.13.29-.27.45-.13.16-.28.36-.4.48-.13.13-.27.28-.12.54.15.27.66 1.09 1.42 1.76.98.87 1.8 1.14 2.06 1.27.27.13.42.11.58-.07.16-.18.66-.77.84-1.04.18-.27.35-.22.6-.13.24.09 1.55.73 1.81.86.27.13.44.2.5.31.07.11.07.63-.17 1.31Z"/></svg>
+  </a>
+
+  <script>
+    /* ==================================================================
+       PRODUCT DATA — one source of truth for zones, grid cards,
+       mobile carousel, and the detail panel.
+       ================================================================== */
+    const PRODUCTS = {
+      booth: {
+        ref: 'REF PB-4500', name: 'فرن الدهان', en: 'FULL DOWNDRAFT PAINT BOOTH',
+        desc: 'كبينة دهان بتدفق هواء عمودي كامل مع مرشحات مزدوجة وإضاءة سقفية وجانبية.',
+        specs: [
+          ['AIRFLOW',  'تدفق هواء عمودي 30,000 m³/h'],
+          ['LIGHTING', 'إضاءة LED بشدة +1,000 Lux'],
+          ['CERTIFIED','معتمد NFPA 33 و ISO 16750'],
+        ],
+        icon: '<path d="M3 20h18"/><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/>'
+      },
+      lift: {
+        ref: 'REF CL-4000', name: 'رافعة السيارة', en: 'TWO-POST CAR LIFT',
+        desc: 'رافعة عمودين بذراعين متماثلين لأعمال الميكانيكا وخدمة ما تحت المركبة.',
+        specs: [
+          ['CAPACITY', 'طاقة رفع تصل إلى 4,000 كجم'],
+          ['HEIGHT',   'ارتفاع رفع 1,800 مم'],
+          ['SAFETY',   'نظام قفل ميكانيكي تلقائي'],
+        ],
+        icon: '<path d="M12 3v12"/><path d="m8 11 4 4 4-4"/><path d="M4 21h16"/><path d="M4 3v18"/><path d="M20 3v18"/>'
+      },
+      prep: {
+        ref: 'REF PS-1800', name: 'محطة التحضير', en: 'PREP STATION',
+        desc: 'منطقة تجهيز وصنفرة معزولة تفصل أعمال التحضير عن الطلاء النهائي.',
+        specs: [
+          ['LIGHTING', 'إضاءة LED متخصصة لكشف العيوب'],
+          ['VENTILATION','نظام تهوية مدمج'],
+          ['SURFACES', 'أسطح عمل مقاومة للمذيبات'],
+        ],
+        icon: '<path d="M9 11V6a3 3 0 0 1 6 0v5"/><path d="M5 11h14l-1 9a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2z"/>'
+      },
+      compressor: {
+        ref: 'REF AC-500', name: 'ضاغط الهواء', en: 'INDUSTRIAL AIR COMPRESSOR',
+        desc: 'ضاغط هواء صناعي يغذي كامل خطوط الورشة بضغط تشغيل ثابت.',
+        specs: [
+          ['PRESSURE', 'ضغط تشغيل 8–10 بار'],
+          ['TANK',     'خزان بسعة 500 لتر'],
+          ['MOTOR',    'محرك 7.5 كيلوواط ثلاثي الأطوار'],
+        ],
+        icon: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/><path d="M12 3v2"/>'
+      },
+      alignment: {
+        ref: 'REF WA-3D', name: 'جهاز ضبط الزوايا', en: '3D WHEEL ALIGNMENT',
+        desc: 'منظومة ضبط زوايا ثلاثية الأبعاد بكاميرات عالية الدقة وتقارير فورية.',
+        specs: [
+          ['ACCURACY', 'دقة قياس ±0.01 درجة'],
+          ['COVERAGE', 'يدعم جميع أنواع المركبات'],
+          ['DISPLAY',  'شاشة لمس 21 بوصة'],
+        ],
+        icon: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>'
+      },
+      exhaust: {
+        ref: 'REF EE-1200', name: 'نظام شفط العوادم', en: 'EXHAUST EXTRACTION SYSTEM',
+        desc: 'شفط عوادم مباشر من مصدر الانبعاث يحافظ على هواء نظيف داخل الورشة.',
+        specs: [
+          ['EXTRACTION','شفط مباشر من أنبوب العادم'],
+          ['AIRFLOW',  'تدفق هواء 1,200 m³/h'],
+          ['HEAD',     'نظام رأس عائم مرن'],
+        ],
+        icon: '<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>'
+      },
+    };
+
+    /* ==================================================================
+       DETAIL PANEL — open / close, zone zoom, dim others
+       ================================================================== */
+    (function () {
+      const panel     = document.getElementById('panel');
+      const backdrop  = document.getElementById('backdrop');
+      const closeBtn  = document.getElementById('panelClose');
+      const sceneWrap = document.getElementById('sceneWrap');
+      const svg       = document.getElementById('workshopSvg');
+      let activeZone  = null;
+      let lastFocus   = null;
+
+      function fillPanel(key) {
+        const p = PRODUCTS[key];
+        document.getElementById('panelRef').textContent   = p.ref;
+        document.getElementById('panelTitle').textContent = p.name;
+        document.getElementById('panelEn').textContent    = p.en;
+        document.getElementById('panelDesc').textContent  = p.desc;
+        document.getElementById('panelRows').innerHTML = p.specs.map(([k, v]) =>
+          `<div class="row"><span class="k">${k}</span><span class="v">${v}</span></div>`).join('');
+      }
+
+      window.openProduct = function (key, zoneEl) {
+        fillPanel(key);
+        lastFocus = document.activeElement;
+        panel.classList.add('open');
+        backdrop.classList.add('show');
+        if (zoneEl && sceneWrap) {
+          activeZone = zoneEl;
+          zoneEl.classList.add('sel');
+          svg.classList.add('scene-sel');
+          sceneWrap.style.transformOrigin = zoneEl.dataset.origin;
+          sceneWrap.style.transform = 'scale(1.85)';
+        }
+        closeBtn.focus();
+      };
+
+      window.closeProduct = function () {
+        panel.classList.remove('open');
+        backdrop.classList.remove('show');
+        if (activeZone) {
+          activeZone.classList.remove('sel');
+          svg.classList.remove('scene-sel');
+          sceneWrap.style.transform = 'scale(1)';
+          activeZone = null;
+        }
+        if (lastFocus) { lastFocus.focus(); lastFocus = null; }
+      };
+
+      closeBtn.addEventListener('click', closeProduct);
+      backdrop.addEventListener('click', closeProduct);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeProduct(); });
+
+      /* zones: click + keyboard activation */
+      document.querySelectorAll('.zone').forEach(z => {
+        z.addEventListener('click', () => openProduct(z.dataset.product, z));
+        z.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProduct(z.dataset.product, z); }
+        });
+      });
+    })();
+
+    /* ==================================================================
+       BUILD products grid (6 cards) + mobile carousel from PRODUCTS
+       ================================================================== */
+    (function () {
+      const grid = document.getElementById('prodGrid');
+      const carousel = document.getElementById('carousel');
+      const entries = Object.entries(PRODUCTS);
+
+      grid.innerHTML = entries.map(([key, p]) => `
+        <article class="card prod reveal">
+          <div class="prod-visual">
+            <span class="prod-ref mono">${p.ref}</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg>
+          </div>
+          <div class="prod-body">
+            <h3>${p.name}</h3>
+            <span class="en">${p.en}</span>
+            <p>${p.desc}</p>
+            <button type="button" class="btn btn-line" data-product="${key}">المواصفات التقنية</button>
+          </div>
+        </article>`).join('');
+
+      carousel.innerHTML = entries.map(([key, p]) => `
+        <div class="car-card" data-product="${key}" role="button" tabindex="0" aria-label="${p.name} — اعرض المواصفات">
+          <span class="ref">${p.ref}</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${p.icon}</svg>
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <span class="tap">اضغط لعرض المواصفات ←</span>
+        </div>`).join('');
+
+      document.querySelectorAll('[data-product]').forEach(el => {
+        if (el.classList.contains('zone')) return; /* zones already wired */
+        el.addEventListener('click', () => openProduct(el.dataset.product, null));
+        el.addEventListener('keydown', (e) => {
+          if ((e.key === 'Enter' || e.key === ' ') && el.classList.contains('car-card')) {
+            e.preventDefault(); openProduct(el.dataset.product, null);
+          }
+        });
+      });
+    })();
+
+    /* ==================================================================
+       SCROLL: nav glass + hero parallax entrance/exit (rAF, passive)
+       ================================================================== */
+    (function () {
+      const nav = document.getElementById('nav');
+      const hero = document.querySelector('.hero');
+      const wrap = document.getElementById('sceneWrap');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let ticking = false;
+
+      function update() {
+        ticking = false;
+        const y = window.scrollY;
+        nav.classList.toggle('scrolled', y > 24);
+        if (reduced || !wrap || wrap.style.transform.includes('1.85')) return;
+        const h = hero.offsetHeight;
+        /* entrance: 0.97 → 1 over first 30% · exit: fade over last 40% */
+        const enter = Math.min(1, y / (h * 0.3));
+        const exit  = Math.max(0, 1 - Math.max(0, y - h * 0.6) / (h * 0.4));
+        wrap.style.transform = `scale(${0.97 + enter * 0.03})`;
+        wrap.style.opacity = exit;
+      }
+      window.addEventListener('scroll', () => {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    })();
+
+    /* ---------- mobile menu ---------- */
+    (function () {
+      const toggle = document.getElementById('navToggle');
+      const links = document.querySelector('.nav-links');
+      toggle.addEventListener('click', () => {
+        const open = links.style.display === 'flex';
+        if (open) {
+          links.style.display = '';
+          toggle.setAttribute('aria-expanded', 'false');
+        } else {
+          Object.assign(links.style, {
+            display: 'flex', position: 'fixed', insetInline: '0',
+            insetBlockStart: 'var(--header-h)', flexDirection: 'column', alignItems: 'stretch',
+            background: 'var(--carbon)', padding: '16px 24px', gap: '2px',
+            borderBottom: '1px solid var(--border)'
+          });
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+      });
+      links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+        if (window.innerWidth <= 768) { links.style.display = ''; toggle.setAttribute('aria-expanded', 'false'); }
+      }));
+    })();
+
+    /* ---------- section reveal: 200ms ease-out (brand motion) ---------- */
+    (function () {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+      document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    })();
+
+    /* ---------- quote form (client-side demo) ---------- */
+    (function () {
+      const form = document.getElementById('quoteForm');
+      const sent = document.getElementById('formSent');
+      form.addEventListener('submit', (ev) => {
+        ev.preventDefault();
+        let firstInvalid = null;
+        form.querySelectorAll('[required]').forEach(f => {
+          const bad = !f.value.trim();
+          f.style.borderColor = bad ? 'var(--red)' : '';
+          if (bad && !firstInvalid) firstInvalid = f;
+        });
+        if (firstInvalid) { firstInvalid.focus(); return; }
+        sent.classList.add('show');
+        sent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        form.reset();
+        setTimeout(() => sent.classList.remove('show'), 6000);
+      });
+    })();
+  </script>
+</body>
+</html>
