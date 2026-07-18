@@ -854,8 +854,8 @@ const COA_MAP_LABELS = {
   payroll:'الرواتب — Payroll', expenses:'المصروفات التشغيلية — Operating Expenses', petty:'العهد النثرية — Petty Cash'
 };
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.5';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل — V2.5 (المراحل 3–5) لوحة مؤشرات ADM-MAN-004 محسوبة حياً لكل دور مقابل الأهداف + الدليل التفاعلي ADM-MAN-005 مدمجاً بالكامل (قواعد ذهبية، 6 إجراءات بجداول خطوة/مسؤول/مهلة/نموذج بقيم حية، فهرس النماذج الـ14 بروابط وحداتها، المشاكل الشائعة) + صفحة مصفوفة RACI مع سجل انتقال الصلاحيات وتحرير المدير + شريط مساعدة سياقية في كل صفحة (ما الصفحة؟ من المسؤول؟ الخطوة التالية + رابط للدليل) + لوحة المتابعة الدورية الأسبوعية/الشهرية/الربع سنوية بحالة محفوظة */
+const SYS_VERSION = 'V2.6';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل — V2.5 (المراحل 3–5) لوحة مؤشرات ADM-MAN-004 محسوبة حياً لكل دور مقابل الأهداف + الدليل التفاعلي ADM-MAN-005 مدمجاً بالكامل (قواعد ذهبية، 6 إجراءات بجداول خطوة/مسؤول/مهلة/نموذج بقيم حية، فهرس النماذج الـ14 بروابط وحداتها، المشاكل الشائعة) + صفحة مصفوفة RACI مع سجل انتقال الصلاحيات وتحرير المدير + شريط مساعدة سياقية في كل صفحة (ما الصفحة؟ من المسؤول؟ الخطوة التالية + رابط للدليل) + لوحة المتابعة الدورية الأسبوعية/الشهرية/الربع سنوية بحالة محفوظة — V2.6 حزمة تجربة الاستخدام: تمرير لأعلى مع كل تنقل + قائمة جانبية ببطاقات ملونة لكل قسم + مفضلة (⭐) بقائمة وصول سريع محفوظة محلياً + طباعة مباشرة من صفحة كل مستند (نافذة معزولة) مع أزرار إلغاء/خروج بمركز الطباعة + تصدير حر لكل النماذج (Word/PDF/Excel-CSV) + شارات RACI ملونة بشرح كامل (R منفذ/A مسؤول/C مُستشار/I مُطلَع) + مخططات تدفق مصغرة بكل قسم + سيناريو تفاعلي شامل لرحلة الصفقة في الدليل + التكلفة الفعلية Landed Cost تلقائياً من فاتورة الشراء والشحنة (حذف حقل التكلفة اليدوي، الضريبة مستردة لا تُحمَّل) + محرر صور المنتج (تكبير/إزاحة/اقتصاص) قبل الحفظ + تكبير صور المنتجات في المستندات المطبوعة + جدول تسعير B2B بعرض السعر (قبل/بعد الخصم للوحدة والإجمالي) مع افتتاحية بيعية احترافية */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -1114,13 +1114,78 @@ window.onImgPick = async (inputEl, holderId, previewId, opts) => {
   const f = inputEl.files && inputEl.files[0]; if(!f) return;
   const o = opts || {};
   try{
-    // PNG بلا فقدان لصور QR (JPEG يُتلف حواف الرموز الدقيقة ويُفقدها القابلية للمسح)
-    const durl = await readImageAsThumb(f, o.maxDim||520, o.quality||0.78, o.fmt||'image/jpeg');
-    const id = await window.media.save(durl);
-    document.getElementById(holderId).value = id;
-    const pv = document.getElementById(previewId);
-    if(pv) pv.innerHTML = `<span class="imgbox" style="display:inline-flex;width:120px;height:120px"><img src="${durl}" alt=""></span>`;
+    // PNG بلا فقدان لصور QR (JPEG يُتلف حواف الرموز الدقيقة ويُفقدها القابلية للمسح) — بلا محرر حفاظاً على قابلية المسح
+    if(o.fmt==='image/png'){
+      const durl = await readImageAsThumb(f, o.maxDim||520, o.quality||0.78, o.fmt);
+      const id = await window.media.save(durl);
+      document.getElementById(holderId).value = id;
+      const pv = document.getElementById(previewId);
+      if(pv) pv.innerHTML = `<span class="imgbox" style="display:inline-flex;width:120px;height:120px"><img src="${durl}" alt=""></span>`;
+      return;
+    }
+    // بقية الصور: محرر تكبير/تحريك/اقتصاص قبل الحفظ النهائي
+    openImgEditor(f, holderId, previewId, o);
   }catch(e){ alert('تعذّر رفع الصورة: '+e.message); }
+  inputEl.value = '';
+};
+
+/* ═══ محرر الصور: معاينة مربعة مع تكبير/تصغير وإزاحة أفقية/رأسية ثم اقتصاص وحفظ ═══ */
+let _imged = null;
+function openImgEditor(file, holderId, previewId, opts){
+  const fr = new FileReader();
+  fr.onerror = () => alert('فشل قراءة الملف');
+  fr.onload = () => {
+    const im = new Image();
+    im.onerror = () => alert('صورة غير صالحة');
+    im.onload = () => {
+      _imged = { im, holderId, previewId, opts:opts||{}, zoom:1, ox:0, oy:0 };
+      let box = document.getElementById('imgedModal');
+      if(!box){ box = document.createElement('div'); box.id='imgedModal'; document.body.appendChild(box); }
+      box.style.cssText = 'position:fixed;inset:0;background:rgba(10,15,22,.75);z-index:5000;display:flex;align-items:center;justify-content:center;padding:16px';
+      box.innerHTML = `<div style="background:#fff;border-radius:12px;padding:18px;max-width:360px;width:100%">
+        <h3 style="color:var(--navy);font-family:'Cairo';font-size:15px;margin-bottom:10px">✂ تحرير الصورة قبل الحفظ</h3>
+        <canvas id="imgedCv" width="300" height="300" style="width:100%;border:1px solid var(--silver);border-radius:8px;background:#fff"></canvas>
+        <div style="font-size:11.5px;color:var(--steel);margin:8px 0 2px">تكبير / تصغير — Zoom</div>
+        <input type="range" min="100" max="300" value="100" style="width:100%" oninput="imgedSet('zoom',this.value)">
+        <div style="font-size:11.5px;color:var(--steel);margin:6px 0 2px">إزاحة أفقية — Horizontal</div>
+        <input type="range" min="-100" max="100" value="0" style="width:100%" oninput="imgedSet('ox',this.value)">
+        <div style="font-size:11.5px;color:var(--steel);margin:6px 0 2px">إزاحة رأسية — Vertical</div>
+        <input type="range" min="-100" max="100" value="0" style="width:100%" oninput="imgedSet('oy',this.value)">
+        <div class="btnrow" style="margin-top:12px">
+          <button class="btn red" onclick="imgedSave()">✔ اقتصاص وحفظ</button>
+          <button class="btn ghost" onclick="imgedClose()">إلغاء</button>
+        </div></div>`;
+      imgedDraw();
+    };
+    im.src = fr.result;
+  };
+  fr.readAsDataURL(file);
+}
+function imgedDraw(){
+  if(!_imged) return;
+  const cv = document.getElementById('imgedCv'); if(!cv) return;
+  const ctx = cv.getContext('2d');
+  const {im, zoom, ox, oy} = _imged;
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,300,300);
+  const scale = Math.max(300/im.width, 300/im.height) * zoom;
+  const w = im.width*scale, h = im.height*scale;
+  const x = (300-w)/2 + (ox/100)*(Math.max(0,(w-300))/2 + 30);
+  const y = (300-h)/2 + (oy/100)*(Math.max(0,(h-300))/2 + 30);
+  ctx.drawImage(im, x, y, w, h);
+}
+window.imgedSet = (k, v) => { if(_imged){ _imged[k] = k==='zoom' ? (+v/100) : +v; imgedDraw(); } };
+window.imgedClose = () => { const b=document.getElementById('imgedModal'); if(b) b.style.display='none'; _imged=null; };
+window.imgedSave = async () => {
+  if(!_imged) return;
+  try{
+    const cv = document.getElementById('imgedCv');
+    const durl = cv.toDataURL('image/jpeg', _imged.opts.quality||0.82);
+    const id = await window.media.save(durl);
+    document.getElementById(_imged.holderId).value = id;
+    const pv = document.getElementById(_imged.previewId);
+    if(pv) pv.innerHTML = `<span class="imgbox" style="display:inline-flex;width:120px;height:120px"><img src="${durl}" alt=""></span>`;
+  }catch(e){ alert('تعذّر حفظ الصورة: '+e.message); }
+  window.imgedClose();
 };
 
 /* ═══════════════ المرفقات العامة على السجلات ═══════════════ */
@@ -1181,6 +1246,29 @@ function nextNo(code){
 
 /* ═══════════════ منطق الأعمال المشتق ═══════════════ */
 const stockQty = name => S.stock.reduce((a,m)=> a + (m.product===name ? (m.type==='وارد'? +m.qty : -m.qty) : 0), 0);
+/* ═══ التكلفة الفعلية Landed Cost: من آخر أمر شراء + تحميل مصاريف الشحنة (شحن/جمارك/تخليص — الضريبة مستردة فلا تُحمَّل)
+   لا إدخال يدوي لسعر التكلفة: فاتورة الشراء هي المصدر، وحقل cost القديم يبقى احتياطاً للمنتجات بلا مشتريات ═══ */
+function lastBuyLine(name){
+  let best = null;
+  S.pos.filter(p=>p.status!=='ملغي').forEach(p=>{
+    S.lines.filter(l=>l.docNo===p.no && l.product===name).forEach(l=>{
+      if(!best || (p.date||'') >= (best.po.date||'')) best = {po:p, line:l};
+    });
+  });
+  return best;
+}
+function landedCost(name){
+  const b = lastBuyLine(name);
+  const p = S.products.find(x=>x.nameAr===name);
+  if(!b) return (p && +p.cost) || 0;
+  const unit = +( (b.line.override!==''&&b.line.override!=null) ? b.line.override : b.line.defPrice ) || 0;
+  const sh = S.shipments.find(s=>s.poRef===b.po.no);
+  if(!sh || !(+sh.goods>0)) return unit;
+  const base = (+sh.goods||0)+(+sh.freight||0);
+  const duty = base*0.05;
+  const landed = base + duty + (+sh.clr||0); // بلا ضريبة القيمة المضافة — مستردة كضريبة مدخلات
+  return Math.round(unit * (landed/(+sh.goods)) * 100)/100;
+}
 const quoteLines = no => S.lines.filter(l=>l.docNo===no);
 const lineTotal = l => (+l.qty||0) * (l.override!==''&&l.override!=null ? +l.override : +l.defPrice||0);
 function quoteTotals(no, disc){
@@ -1235,7 +1323,7 @@ const VIEWS = {
    {k:'code',l:'الرمز — Code',t:'ro'},{k:'nameAr',l:'اسم المنتج (عربي) — Product Name (Arabic)',t:'text',req:1},{k:'nameEn',l:'الاسم (إنجليزي) — Name (English)',t:'text'},
    {k:'cat',l:'الفئة — Category',t:'sel',o:()=>S.categories,plus:true},
    {k:'brand',l:'الماركة/المنشأ — Brand/Origin',t:'text'},{k:'unit',l:'الوحدة — Unit',t:'sel',o:['قطعة','طقم','متر','لتر']},
-   {k:'cost',l:'سعر التكلفة — Cost Price',t:'num'},{k:'price',l:'سعر البيع — Selling Price',t:'num'},
+   {k:'price',l:'سعر البيع — Selling Price',t:'num'},
    {k:'min',l:'الحد الأدنى للمخزون — Minimum Stock Level',t:'num'},{k:'supplier',l:'المورد الرئيسي — Main Supplier',t:'sel',o:optSupAll},
    {k:'warranty',l:'الضمان (أشهر) — Warranty (months)',t:'num'},
    {k:'wterms',l:'شروط الضمان وتفاصيله — Warranty Terms & Details',t:'text',ph:'مثال: يشمل الأجزاء الميكانيكية والكهربائية والحساسات؛ لا يشمل سوء الاستخدام أو الفلاتر الاستهلاكية؛ يبدأ من محضر التشغيل'},
@@ -1246,7 +1334,8 @@ const VIEWS = {
    {k:'code',l:'الرمز — Code'},{k:'nameAr',l:'المنتج — Product',f:(v,r)=>`<span dir="auto">${esc(prodLabel(r))}</span>`},{k:'cat',l:'الفئة — Category'},
    {k:'_npd',l:'قرار ADM-PRC-001',f:(v,r)=> r.npdOk===false?`<span class="tag warn">⚠ بانتظار قرار الشريكين (${psigCount(r)}/2)</span>`:'<span class="tag ok">معتمد ✓</span>'},
    {k:'cost',l:'التكلفة — Cost',f:fmt},{k:'price',l:'البيع — Sale',f:fmt},
-   {k:'_margin',l:'الهامش — Margin',f:(v,r)=> r.cost>0? ((r.price-r.cost)/r.cost*100).toFixed(0)+'%':'—'},
+   {k:'_lc',l:'التكلفة الفعلية (تلقائي) — Landed Cost',f:(v,r)=>{const c=landedCost(r.nameAr);return c>0?`<b>${fmt(c)}</b>`:'<span class="tag info">بانتظار أول شراء</span>';}},
+   {k:'_margin',l:'الهامش — Margin',f:(v,r)=>{const c=landedCost(r.nameAr);return c>0&&r.price>0? ((r.price-c)/c*100).toFixed(0)+'%':'—';}},
    {k:'_stock',l:'الرصيد — Balance',f:(v,r)=>fmt(stockQty(r.nameAr))},
    {k:'_alert',l:'التنبيه — Alert',f:(v,r)=>{const q=stockQty(r.nameAr); return (r.min!==''&&q<=+r.min)?'<span class="tag warn">⚠ منخفض</span>':'<span class="tag ok">جيد</span>';}}]},
 
@@ -1611,24 +1700,54 @@ function assignedBellHTML(){
   return `<button class="bellbtn" onclick="toggleAssignedPanel()" aria-label="الإشعارات">🔔${badge}</button>
    <div id="asgPanel" class="asgpanel" style="display:none">${rows}</div>`;
 }
+/* ألوان الأقسام: كل قسم ببطاقة موحدة بلونه المميز — والمفضلة (⭐) في قائمة ثابتة أعلى الشريط */
+const NAV_COLORS = {
+  '':'#B9C2CC','CRM — إدارة العملاء':'#7C5CBF','قواعد البيانات':'#3D8BFF','دورة المبيعات':'#1F7A3D',
+  'المشتريات والمخزون':'#B45309','الجودة والخدمة':'#0E9AA7','التركيب والرواتب':'#8F6ED5',
+  'المالية والإدارة':'#DA291C','النظام الداخلي':'#51647A','التقارير':'#C08B2D','الإعدادات':'#6B7B8D','المخرجات':'#4C6E91'
+};
+function getFavs(){ try{ return JSON.parse(localStorage.getItem('erp:favs'))||[]; }catch(e){ return []; } }
+window.toggleFav = k => {
+  let f = getFavs();
+  f = f.includes(k) ? f.filter(x=>x!==k) : f.concat([k]);
+  try{ localStorage.setItem('erp:favs', JSON.stringify(f)); }catch(e){}
+  renderNav();
+};
+function navBtn(k, l, nUnread, fav){
+  return `<div style="display:flex;align-items:center">
+    <button class="navbtn ${view===k?'active':''}" style="flex:1" onclick="setView('${k}')">${l}${k==='notifs'&&nUnread?` <span class="tag warn" style="font-size:10px;padding:0 6px">${nUnread}</span>`:''}</button>
+    <span onclick="toggleFav('${k}')" title="${fav?'إزالة من المفضلة':'إضافة للمفضلة'}" style="cursor:pointer;padding:0 8px;font-size:13px;color:${fav?'#FFD54A':'rgba(255,255,255,.35)'}">${fav?'★':'☆'}</span></div>`;
+}
 function renderNav(){
   const uName = curName();
   const nUnread = unreadNotifs();
+  const favs = getFavs();
+  const allItems = {}; NAVDEF.forEach(([g,items])=>items.forEach(([k,l])=>allItems[k]=l));
+  const visFavs = favs.filter(k=> allItems[k] && (ADMIN_ONLY_VIEWS.includes(k) ? isAdmin() : canView(k)));
+  const favBox = visFavs.length ? `<div style="margin:6px 8px;border-radius:10px;background:rgba(255,213,74,.10);border-right:4px solid #FFD54A;padding:2px 0 4px">
+    <div class="navgrp" style="color:#FFD54A">⭐ المفضلة — Quick Access</div>
+    ${visFavs.map(k=>navBtn(k, allItems[k], nUnread, true)).join('')}</div>` : '';
   document.getElementById('nav').innerHTML =
    (uName?`<div class="navgrp" style="color:#fff;position:relative;display:flex;align-items:center;justify-content:space-between">👋 ${esc(uName)} ${assignedBellHTML()}</div>`:'') +
+   favBox +
    NAVDEF.map(([g,items])=>{
     const vis = items.filter(([k])=> ADMIN_ONLY_VIEWS.includes(k) ? isAdmin() : canView(k));
     if(!vis.length) return '';
-    return (g?`<div class="navgrp">${g}</div>`:'') +
-      vis.map(([k,l])=>`<button class="navbtn ${view===k?'active':''}" onclick="setView('${k}')">${l}${k==='notifs'&&nUnread?` <span class="tag warn" style="font-size:10px;padding:0 6px">${nUnread}</span>`:''}</button>`).join('');
+    const clr = NAV_COLORS[g]||'#B9C2CC';
+    return `<div style="margin:6px 8px;border-radius:10px;background:rgba(255,255,255,.05);border-right:4px solid ${clr};padding:2px 0 4px">`+
+      (g?`<div class="navgrp" style="color:${clr};font-weight:700">${g}</div>`:'') +
+      vis.map(([k,l])=>navBtn(k, l, nUnread, favs.includes(k))).join('') + `</div>`;
   }).join('');
   syncBrand();
   syncTopbar();
 }
+let prevView = 'dash'; // الصفحة الأصل قبل دخول شاشة الطباعة — لأزرار الإلغاء والخروج
 window.setView = v => {
   const allowed = ADMIN_ONLY_VIEWS.includes(v) ? isAdmin() : canView(v);
   if(!allowed){ alert('لا تملك صلاحية الوصول لهذه الشاشة'); return; }
+  if(v==='print' && view!=='print') prevView = view;
   view=v; editId=null; tmpLines=[]; closeNav(); render();
+  window.scrollTo(0,0); // الانتقال لأعلى الصفحة فوراً مع كل تنقل
 };
 window.getView = () => view;
 
@@ -1844,11 +1963,12 @@ function renderRegister(key){
   const formHtml = V.fields.map(f=>`<div class="fld"><label>${f.l}${f.req?' *':''}</label>${fieldInput(f, row?row[f.k]:(defaults[f.k]??''))}</div>`).join('');
   const tableRows = rows.length ? [...rows].reverse().map(r=>{
     const tds = V.cols.map(c=>`<td>${c.f? c.f(r[c.k], r) : esc(r[c.k]??'—')||'—'}</td>`).join('');
-    const printBtn = V.docType ? `<button class="btn sm ghost" onclick="event.stopPropagation();goPrint('${V.docType}','${r.no}')">🖨</button> ` : '';
+    const printBtn = V.docType ? `<button class="btn sm ghost" title="طباعة/PDF من هذه الصفحة" onclick="event.stopPropagation();goPrint('${V.docType}','${r.no}')">🖨</button> <button class="btn sm ghost" title="تصدير Word" onclick="event.stopPropagation();exportDocWord('${V.docType}','${r.no}')">📄</button> ` : '';
     return `<tr class="clickable" onclick="editRow('${key}','${r.id}')">${tds}<td class="no-print">${printBtn}${editable?`<button class="btn sm red" onclick="event.stopPropagation();delRow('${key}','${r.id}')">حذف</button>`:''}</td></tr>`;
   }).join('') : `<tr><td colspan="${V.cols.length+1}" class="empty">لا سجلات بعد${editable?' — أضف أول سجل من النموذج أعلاه':''}</td></tr>`;
-  const printAction = (V.docType && row) ? `<button class="btn red sm no-print" onclick="goPrint('${V.docType}','${row.no}')">🖨 طباعة المستند</button>` : '';
-  const reportAction = (key==='payroll') ? `<button class="btn ghost sm no-print" onclick="printPayrollReport()">📄 تقرير الرواتب</button>` : '';
+  const printAction = (V.docType && row) ? `<button class="btn red sm no-print" onclick="goPrint('${V.docType}','${row.no}')">🖨 طباعة / PDF</button> <button class="btn ghost sm no-print" onclick="exportDocWord('${V.docType}','${row.no}')">📄 Word</button>` : '';
+  const csvAction = `<button class="btn ghost sm no-print" onclick="exportRegCSV('${key}')">⬇ Excel/CSV</button>`;
+  const reportAction = csvAction + ((key==='payroll') ? ` <button class="btn ghost sm no-print" onclick="printPayrollReport()">📄 تقرير الرواتب</button>` : '');
   document.getElementById('main').innerHTML = `
    ${headHtml(V.icon+' '+V.title, 'رمز النموذج: '+V.code, reportAction+printAction)}
    ${editable ? `<div class="card"><h3>${row?'تعديل السجل':'سجل جديد'}</h3>
@@ -1949,6 +2069,23 @@ function HELP_MAP(){ const o=S.ops; return {
  raci:{what:'مصفوفة الأدوار R/A/C/I لكل عملية + سجل انتقال الصلاحيات',who:'اعتماد أي تغيير: الشريكان',next:'كل تعديل يُسجَّل تلقائياً في سجل التغييرات',g:'ADM-MAN-001'},
  guide:{what:'الدليل الكامل ADM-MAN-005 مدمجاً: القواعد، الإجراءات، النماذج، المشاكل الشائعة',who:'للجميع',next:'من أي صفحة: زر «الدليل» في شريط المساعدة يصلك للقسم المعني',g:'HOME'}
 };}
+/* مخطط تدفق مصغّر لكل قسم: سلسلة مراحل بأسهم — المرحلة الحالية مميزة */
+const FLOW_MAP = {
+  leads:['استفسار','تأهيل','معاينة','عرض سعر'], quotes:['عرض سعر','متابعة','قبول','أمر بيع'],
+  sos:['أمر بيع','دفعة '+'مقدمة','توفير المخزون','جاهزية'], dos:['سداد 100%','إذن تسليم','صرف WHS-002','تركيب'],
+  prs:['احتياج','طلب شراء','توقيع الشريكين','عروض موردين'], pos:['طلب معتمد','أمر شراء','دفعة المورد','شحن/استلام'],
+  shipments:['تصنيع','PCoC','شحن بحري','تخليص','استلام'], stock:['استلام WHS-001','فحص QLT-001','إدخال مخزون','صرف WHS-002'],
+  qc:['وارد','فحص','تشغيل وتسليم','بدء الضمان'], srv:['بلاغ','تخصيص فني','كشف وتصنيف','إصلاح','إقفال'],
+  complaints:['تسجيل','تصنيف','إجراء تصحيحي','إقفال ≤ 7 أيام'], petty:['صرف عهدة','فواتير','تسوية','إقفال'],
+  payments:['فاتورة','سند قبض','تأكيد','تحديث الذمم'], ar:['ذمة قائمة','تذكير','تحصيل','إقفال'],
+  products:['اقتراح','دراسة','قرار الشريكين','شراء تجريبي','إدراج'], coa:['شجرة','ربط الوحدات','أرصدة حية','تقارير']
+};
+const flowStrip = key => {
+  const f = FLOW_MAP[key]; if(!f) return '';
+  return `<div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:6px">${
+    f.map((s,i)=>`<span style="background:var(--navy);color:#fff;border-radius:14px;padding:2px 10px;font-size:10.5px;white-space:nowrap">${i+1}. ${s}</span>${i<f.length-1?'<span style="color:var(--red);font-weight:800">←</span>':''}`).join('')
+  }</div>`;
+};
 function helpBar(){
   const h = HELP_MAP()[view]; if(!h) return '';
   let open = true; try{ open = localStorage.getItem('erp:helpOpen')!=='0'; }catch(e){}
@@ -1960,7 +2097,9 @@ function helpBar(){
     <div>📌 <b>ما هذه الصفحة؟</b> ${h.what}</div>
     <div>👤 <b>المسؤول (RACI):</b> ${h.who} — <a href="#" onclick="event.preventDefault();setView('raci')" style="color:var(--red)">المصفوفة الكاملة</a></div>
     <div>➡ <b>الخطوة التالية:</b> ${h.next}</div>
-    <div style="margin-top:4px"><button class="btn sm ghost" onclick="guideAnchor='${h.g}';setView('guide')">📖 افتح القسم في الدليل</button></div>
+    ${flowStrip(view)}
+    <div style="margin-top:6px"><button class="btn sm ghost" onclick="guideAnchor='${h.g}';setView('guide')">📖 افتح القسم في الدليل</button>
+    <button class="btn sm ghost" onclick="guideAnchor='FLOW';setView('guide')">🗺 المخطط الشامل</button></div>
    </div>`:''}</div>`;
 }
 window.toggleHelp = () => { try{ localStorage.setItem('erp:helpOpen', localStorage.getItem('erp:helpOpen')==='0'?'1':'0'); }catch(e){} render(); };
@@ -2007,7 +2146,7 @@ window.lnProd = (i, name, pm) => {
   const p = S.products.find(x=>x.nameAr===name);
   tmpLines[i].product = name;
   tmpLines[i].brand = p?p.brand:'';
-  tmpLines[i].defPrice = p ? (pm==='cost'? +p.cost : +p.price) : '';
+  tmpLines[i].defPrice = p ? (pm==='cost'? (lastBuyLine(name)? +((lastBuyLine(name).line.override!==''&&lastBuyLine(name).line.override!=null)?lastBuyLine(name).line.override:lastBuyLine(name).line.defPrice) : (+p.cost||'')) : +p.price) : '';
   document.getElementById('lb_'+i).textContent = tmpLines[i].brand||'—';
   document.getElementById('lp_'+i).value = fmt(tmpLines[i].defPrice);
   lnRefreshWarn(i, pm);
@@ -2036,7 +2175,7 @@ function renderQuotes(){
   if(row && !tmpLines.length) tmpLines = quoteLines(row.no).map(l=>({...l}));
   const f = (k,def='') => row ? (row[k]??'') : def;
   document.getElementById('main').innerHTML = `
-   ${headHtml('📄 عروض الأسعار — Quotations SLS-001','اختر العميل والمنتجات — الأسعار والإجماليات والضريبة تلقائية / Select customer & products — prices, totals and tax calculated automatically', row?`<button class="btn red sm no-print" onclick="goPrint('quote','${row.no}')">🖨 طباعة العرض</button>`:'')}
+   ${headHtml('📄 عروض الأسعار — Quotations SLS-001','اختر العميل والمنتجات — الأسعار والإجماليات والضريبة تلقائية / Select customer & products — prices, totals and tax calculated automatically', (row?`<button class="btn red sm no-print" onclick="goPrint('quote','${row.no}')">🖨 طباعة / PDF</button> <button class="btn ghost sm no-print" onclick="exportDocWord('quote','${row.no}')">📄 Word</button> `:'')+`<button class="btn ghost sm no-print" onclick="exportArrCSV('quotes',['no','date','customer','status','gross','disc','net','vat','total'],'SLS-001')">⬇ Excel/CSV</button>`)}
    <div class="card"><h3>${row?'تعديل العرض '+esc(row.no):'عرض سعر جديد'}</h3>
     <div class="formgrid">
      <div class="fld"><label>رقم العرض — Quote No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
@@ -2093,7 +2232,7 @@ function renderSOs(){
   const f=(k,d='')=>row?(row[k]??''):d;
   const qopts = S.quotes.filter(q=>['مقبول','مرسل','مفتوح'].includes(q.status)||q.no===f('quoteRef'));
   document.getElementById('main').innerHTML = `
-   ${headHtml('🧾 أوامر البيع — Sales Orders SLS-002','اختر مرجع العرض — العميل والإجمالي والدفعة المقدمة تلقائية / Select quote reference — customer, total and down payment are automatic', row?`<button class="btn red sm no-print" onclick="goPrint('so','${row.no}')">🖨 طباعة الأمر</button>`:'')}
+   ${headHtml('🧾 أوامر البيع — Sales Orders SLS-002','اختر مرجع العرض — العميل والإجمالي والدفعة المقدمة تلقائية / Select quote reference — customer, total and down payment are automatic', (row?`<button class="btn red sm no-print" onclick="goPrint('so','${row.no}')">🖨 طباعة / PDF</button> <button class="btn ghost sm no-print" onclick="exportDocWord('so','${row.no}')">📄 Word</button> `:'')+`<button class="btn ghost sm no-print" onclick="exportArrCSV('sos',['no','date','quoteRef','customer','total','advance','status'],'SLS-002')">⬇ Excel/CSV</button>`)}
    <div class="card"><h3>${row?'تعديل الأمر '+esc(row.no):'أمر بيع جديد'}</h3><div class="formgrid">
     <div class="fld"><label>رقم الأمر — Order No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
     <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
@@ -2133,7 +2272,7 @@ function renderDOs(){
   const row = editId ? S.dos.find(o=>o.id===editId) : null;
   const f=(k,d='')=>row?(row[k]??''):d;
   document.getElementById('main').innerHTML = `
-   ${headHtml('🚚 إذون التسليم — Delivery Orders SLS-003','لا يخرج تسليم نهائي قبل تأشيرة سداد كامل المستحقات / No final delivery without full-payment sign-off', row?`<button class="btn red sm no-print" onclick="goPrint('do','${row.no}')">🖨 طباعة الإذن</button>`:'')}
+   ${headHtml('🚚 إذون التسليم — Delivery Orders SLS-003','لا يخرج تسليم نهائي قبل تأشيرة سداد كامل المستحقات / No final delivery without full-payment sign-off', (row?`<button class="btn red sm no-print" onclick="goPrint('do','${row.no}')">🖨 طباعة / PDF</button> <button class="btn ghost sm no-print" onclick="exportDocWord('do','${row.no}')">📄 Word</button> `:'')+`<button class="btn ghost sm no-print" onclick="exportArrCSV('dos',['no','date','soRef','customer','recv','mob','full','status'],'SLS-003')">⬇ Excel/CSV</button>`)}
    <div class="card"><h3>${row?'تعديل '+esc(row.no):'إذن تسليم جديد'}</h3><div class="formgrid">
     <div class="fld"><label>رقم الإذن — Order No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
     <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
@@ -2200,7 +2339,7 @@ function renderPOs(){
   const f=(k,d='')=>row?(row[k]??''):d;
   const prOK = S.prs.filter(p=>p.status==='معتمد');
   document.getElementById('main').innerHTML = `
-   ${headHtml('🛒 أوامر الشراء — Purchase Orders PUR-002','ينشأ من طلب شراء معتمد فقط — الموردون الموقوفون مستبعدون — البنود بسعر التكلفة / Created from an approved requisition only — suspended suppliers excluded — items at cost price', row?`<button class="btn red sm no-print" onclick="goPrint('po','${row.no}')">🖨 طباعة الأمر</button>`:'')}
+   ${headHtml('🛒 أوامر الشراء — Purchase Orders PUR-002','ينشأ من طلب شراء معتمد فقط — الموردون الموقوفون مستبعدون — البنود بسعر التكلفة / Created from an approved requisition only — suspended suppliers excluded — items at cost price', (row?`<button class="btn red sm no-print" onclick="goPrint('po','${row.no}')">🖨 طباعة / PDF</button> <button class="btn ghost sm no-print" onclick="exportDocWord('po','${row.no}')">📄 Word</button> `:'')+`<button class="btn ghost sm no-print" onclick="exportArrCSV('pos',['no','date','prRef','supplier','country','cur','total','status'],'PUR-002')">⬇ Excel/CSV</button>`)}
    <div class="card"><h3>${row?'تعديل '+esc(row.no):'أمر شراء جديد'}</h3><div class="formgrid">
     <div class="fld"><label>رقم الأمر — Order No.</label><input readonly value="${esc(row?row.no:'— يتولد عند الحفظ —')}"></div>
     <div class="fld"><label>التاريخ — Date *</label><input type="date" id="f_date" value="${esc(f('date',today()))}"></div>
@@ -2260,7 +2399,7 @@ function renderDash(){
   const svOpen = S.srv.filter(s=>s.status!=='مغلق').length;
   const pubPend = (window.pendingIntake||[]).length;
   // مؤشرات مالية إضافية
-  const invValue = S.products.reduce((a,p)=>a+stockQty(p.nameAr)*(+p.cost||0),0);
+  const invValue = S.products.reduce((a,p)=>a+stockQty(p.nameAr)*landedCost(p.nameAr),0);
   const mExp = S.expenses.filter(e=>(e.date||'').startsWith(ym)).reduce((a,e)=>a+(+e.amount||0),0);
   const pettyDue = S.petty.reduce((a,p)=>{const rem=(+p.amount||0)-pettySpent(p.no);return a+(rem>0?rem:0);},0);
   const cq = qOf(today());
@@ -2334,7 +2473,44 @@ window.importBackup = inp => {
 
 /* ═══════════════ الطباعة ═══════════════ */
 let printType='quote', printNo='';
-window.goPrint = (t,no) => { printType=t; printNo=no; setView('print'); };
+/* تصدير CSV حر للمصفوفات المخصصة (عروض/أوامر بيع/إذون/أوامر شراء) */
+window.exportArrCSV = (ent, keys, name) => {
+  const esc2 = v => '"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const lines = [keys.map(esc2).join(';')].concat((S[ent]||[]).map(r=>keys.map(k=>esc2(r[k])).join(';')));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['\ufeff'+lines.join('\n')],{type:'text/csv;charset=utf-8'}));
+  a.download = name+'_'+today()+'.csv'; a.click();
+};
+/* الطباعة تتم من الصفحة الحالية نفسها: نافذة معزولة فورية بلا مغادرة الشاشة */
+window.goPrint = (t,no) => {
+  const h = buildDoc(t,no);
+  if(!h){ printType=t; printNo=no; setView('print'); return; } // احتياط: سجل غير جاهز → مركز الطباعة
+  printType=t; printNo=no;
+  printDocument(h);
+};
+/* تصدير Word: نفس مستند الطباعة بصيغة .doc تُفتح في Word مباشرة */
+window.exportDocWord = (t,no) => {
+  const h = buildDoc(t,no);
+  if(!h) return alert('تعذّر إنشاء المستند');
+  const html = `<html dir="rtl" lang="ar"><head><meta charset="UTF-8"><style>${PRINT_CSS}</style></head><body>${h}</body></html>`;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿'+html],{type:'application/msword'}));
+  a.download = (no||'document')+'.doc'; a.click();
+};
+/* تصدير CSV حر لأي سجل معرَّف في VIEWS */
+window.exportRegCSV = key => {
+  const V = VIEWS[key]; if(!V) return;
+  const esc2 = v => '"'+String(v==null?'':v).replace(/"/g,'""').replace(/<[^>]*>/g,'')+'"';
+  const cols = V.cols.filter(c=>!String(c.k).startsWith('_') || c.l);
+  const lines = [cols.map(c=>esc2(c.l)).join(';')].concat(
+    S[V.ent].map(r=>cols.map(c=>{
+      let v = c.f ? c.f(r[c.k], r) : (r[c.k]??'');
+      return esc2(String(v).replace(/<[^>]*>/g,'').trim());
+    }).join(';')));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'}));
+  a.download = (V.code||key)+'_'+today()+'.csv'; a.click();
+};
 function renderPrint(){
   const types = {quote:['عرض سعر — Quotation SLS-001',S.quotes.map(q=>q.no)], so:['أمر بيع — Sales Order SLS-002',S.sos.map(o=>o.no)], do:['إذن تسليم — Delivery Order SLS-003',S.dos.map(o=>o.no)], srv:['طلب صيانة — Maintenance Request SRV-001',S.srv.map(j=>j.no)], po:['أمر شراء — Purchase Order PUR-002',S.pos.map(p=>p.no)], pr:['طلب شراء — Purchase Requisition PUR-001',S.prs.map(p=>p.no)], ins:['مهمة تركيب — Installation Job INS-001',S.installjobs.map(j=>j.no)], pay:['أمر صرف راتب — Payroll Voucher FIN-002',S.payroll.map(p=>p.no)], payv:['سند قبض دفعة — Payment Receipt Voucher PAY',S.payments.map(p=>p.no)]};
   document.getElementById('main').innerHTML = `
@@ -2342,7 +2518,12 @@ function renderPrint(){
    <div class="card no-print"><div class="formgrid">
     <div class="fld"><label>نوع المستند — Document Type</label><select id="p_type" onchange="printType=this.value;printNo='';renderPrint()">${Object.entries(types).map(([k,[l]])=>`<option value="${k}" ${k===printType?'selected':''}>${l}</option>`).join('')}</select></div>
     <div class="fld"><label>رقم المستند — Document No.</label><select id="p_no" onchange="printNo=this.value;renderPrint()"><option value=""></option>${types[printType][1].map(n=>`<option ${n===printNo?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
-    <div class="fld"><label>&nbsp;</label><button class="btn red" onclick="printCurrentDoc()">🖨 طباعة / حفظ PDF</button></div>
+    <div class="fld"><label>&nbsp;</label><div class="btnrow">
+     <button class="btn red" onclick="printCurrentDoc()">🖨 طباعة / PDF</button>
+     <button class="btn ghost" onclick="if(printNo)exportDocWord(printType,printNo)">📄 Word</button>
+     <button class="btn ghost" onclick="setView(prevView||'dash')">↩ إلغاء</button>
+     <button class="btn ghost" onclick="setView(prevView||'dash')">🚪 خروج</button>
+    </div></div>
    </div>${printType==='do'?`<label style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--navy);cursor:pointer;margin-top:6px">
      <input type="checkbox" ${window.eicrPrint?'checked':''} onchange="window.eicrPrint=this.checked;renderPrint()" style="width:17px;height:17px">
      طباعة تقرير EICR مع الإذن — Print EICR with Delivery Note</label>`:''}</div>
@@ -2366,10 +2547,18 @@ function pHead(code, title, no, date){
   </div>`;
 }
 const pGrid = pairs => `<div class="pgrid">${pairs.map(([k,v])=>`<div class="pi"><div class="k">${k}</div><div class="v">${esc(v)||'—'}</div></div>`).join('')}</div>`;
-function pLines(no, priceLabel){
+function pLines(no, priceLabel, disc){
   const ls = S.lines.filter(l=>l.docNo===no);
+  const d = +disc||0;
+  // صياغة B2B: عند وجود خصم تظهر أعمدة السعر قبل الخصم وبعده والإجمالي قبله وبعده بوضوح جدولي كامل
+  if(d>0){
+    return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الكمية — Qty</th><th>السعر قبل الخصم — List Price</th><th>السعر بعد الخصم — Net Price</th><th>الإجمالي قبل الخصم — Gross</th><th>الإجمالي بعد الخصم — Net Total</th></tr></thead><tbody>
+     ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); const u=+(l.override!==''&&l.override!=null?l.override:l.defPrice)||0; const un=u*(1-d/100); const g=u*(+l.qty||0), n=un*(+l.qty||0);
+      return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,55)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span>${l.brand?`<br><small style="color:var(--steel)">${esc(l.brand)}</small>`:''}</td><td>${l.qty}</td><td>${fmt(u)}</td><td style="color:var(--green);font-weight:700">${fmt(un)}</td><td>${fmt(g)}</td><td><b>${fmt(n)}</b></td></tr>`;}).join('')}
+    </tbody></table>`;
+  }
   return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الماركة — Brand</th><th>الكمية — Quantity</th><th>${priceLabel}</th><th>الإجمالي — Total</th></tr></thead><tbody>
-   ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,30)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
+   ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,55)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
 // tiers: subtotal (فاتح/carbon) — discount (فاتح/steel-blue) — netbeforetax (فضي متوسط/navy 700) — vat (فاتح/steel-blue)
@@ -2447,8 +2636,9 @@ function buildDoc(t, no){
       return `<div style="font-size:11.5px;padding:6px 4px;border-bottom:1px solid var(--light);line-height:1.7"><b style="color:var(--navy)">${i+1}. ${esc(l.product)}:</b> ${esc(t2)}</div>`;
     }).join('') : '';
     return pHead('SLS-001','عرض سعر — Quotation',no,q.date)
+     + `<div style="font-size:12px;line-height:1.9;padding:6px 2px;color:var(--itco-carbon)">تحية طيبة، يسرّنا تقديم عرضنا الفني والمالي التالي وفق متطلباتكم، ونؤكد التزامنا الكامل بمعايير الجودة والمطابقة وخدمة ما بعد البيع — We are pleased to submit our technical & commercial offer as detailed below.</div>`
      + `<div class="psec">بيانات العميل — Customer Details</div>` + pGrid([['رقم المستند — Record No.',no],[' ',' '],['العميل — Customer',q.customer],['الرقم الضريبي — Tax Number',c.vat],['المسؤول — Contact',c.contact],['الجوال — Mobile',c.mobile],['العنوان الوطني — National Address',buildAddr(c)],['الصلاحية — Validity',(q.validity||'')+' يوماً']])
-     + pLines(no,'سعر الوحدة — Unit Price')
+     + pLines(no,'سعر الوحدة — Unit Price', +q.disc||0)
      + pTotals([['المجموع — Subtotal',q.gross,'subtotal'],['الخصم  — Discount '+(q.disc||0)+'%',q.gross-q.net,'discount'],['الصافي قبل الضريبة — Net Before Tax',q.net,'netbeforetax'],['ضريبة القيمة المضافة 15% — VAT 15%',q.vat,'vat'],['الإجمالي شامل الضريبة — Total Incl. Tax',q.total,'final']])
      + alert
      + `<div class="psec">الشروط العامة — General Terms</div>` + pGrid([['شروط الدفع — Payment Terms',q.pay],['مدة التوريد — Supply Duration',q.delivery],['الضمان العام — General Warranty',q.warranty],['المندوب — Representative',q.rep]])
@@ -2630,7 +2820,7 @@ function renderInventory(){
   const rows = S.products.filter(p=>p.nameAr);
   let totVal = 0, totItems = 0;
   const body = rows.map((p,i)=>{
-    const q = stockQty(p.nameAr), val = q * (+p.cost||0);
+    const q = stockQty(p.nameAr), val = q * landedCost(p.nameAr);
     totVal += val; totItems += q;
     const st = (p.min!==''&&q<=+p.min) ? '<span class="tag warn">⚠ منخفض</span>' : '<span class="tag ok">جيد</span>';
     return `<tr><td>${i+1}</td><td>${esc(p.code)}</td><td>${esc(p.nameAr)}</td><td>${esc(p.unit||'')}</td>
@@ -3428,6 +3618,23 @@ window.printPayrollReport = () => {
 
 /* ═══════════════ الموجه والتهيئة ═══════════════ */
 /* ═══════════════ صفحة الأدوار والصلاحيات RACI (ADM-MAN-001 V2.0) ═══════════════ */
+/* شارات RACI الموحدة: الحرف مع شرحه الكامل وبلون ثابت في كل النظام */
+const RACI_DEFS = {
+  'R':{ar:'منفذ',en:'Responsible',bg:'#E6F4EA',fg:'#1F7A3D'},
+  'A':{ar:'مسؤول',en:'Accountable',bg:'#E3EAF5',fg:'#0E2342'},
+  'C':{ar:'مُستشار',en:'Consulted',bg:'#FEF3E2',fg:'#B45309'},
+  'I':{ar:'مُطلَع',en:'Informed',bg:'#EEF1F5',fg:'#51647A'}
+};
+function raciChip(code){
+  const c = String(code||'—').trim();
+  if(c==='—'||c==='') return '<span style="color:var(--silver)">—</span>';
+  return c.split('/').map(t=>{
+    const d = RACI_DEFS[t.trim()];
+    if(!d) return esc(t);
+    return `<span class="tag" style="background:${d.bg};color:${d.fg};font-size:10.5px" title="${t.trim()} — ${d.ar} (${d.en})">${t.trim()} — ${d.ar}</span>`;
+  }).join(' ');
+}
+const raciLegend = () => `<div style="display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px">${Object.entries(RACI_DEFS).map(([k,d])=>`<span class="tag" style="background:${d.bg};color:${d.fg}">${k} — ${d.ar} (${d.en})</span>`).join('')}</div>`;
 window.raciCycle = (ri, ci) => {
   if(!isAdmin()) return alert('تعديل المصفوفة صلاحية الشريكين/المدير');
   const opts = ['A / R','A','R','C','I','—'];
@@ -3441,12 +3648,12 @@ window.raciCycle = (ri, ci) => {
 };
 function renderRaci(){
   document.getElementById('main').innerHTML = `
-   ${headHtml('🗂 الأدوار والصلاحيات — RACI (ADM-MAN-001 V2.0)','R منفّذ · A صاحب القرار · C يُستشار · I يُبلَّغ — الأخضر: صلاحيات منقولة في V2.0 · الوردي: قرار مشترك (استثناء الشراكة 50/50)'+(isAdmin()?' — اضغط أي خلية للتبديل':''))}
-   <div class="card"><div style="overflow-x:auto"><table>
+   ${headHtml('🗂 الأدوار والصلاحيات — RACI (ADM-MAN-001 V2.0)','الأخضر: صلاحيات منقولة في V2.0 · الوردي: قرار مشترك (استثناء الشراكة 50/50)'+(isAdmin()?' — اضغط أي خلية للتبديل':''))}
+   <div class="card">${raciLegend()}<div style="overflow-x:auto"><table>
     <thead><tr><th>العملية — Process</th>${RACI_MEMBERS.map(m=>`<th>${esc(m)}</th>`).join('')}<th>ملاحظات ضبط — Notes</th></tr></thead>
     <tbody>${S.raci.map((r,ri)=>`<tr>${
       `<td style="${r.g?'background:#E6F4EA':r.j?'background:#FDE8E6':''};font-weight:700">${esc(r.p)}${r.g?' <span class="tag ok">V2.0</span>':''}${r.j?' <span class="tag warn">مشترك</span>':''}</td>`}${
-      r.c.map((c,ci)=>`<td style="text-align:center;font-weight:700;${isAdmin()?'cursor:pointer':''};${r.g?'background:#E6F4EA':r.j?'background:#FDE8E6':''}" ${isAdmin()?`onclick="raciCycle(${ri},${ci})"`:''}>${esc(c||'—')}</td>`).join('')}${
+      r.c.map((c,ci)=>`<td style="text-align:center;white-space:nowrap;${isAdmin()?'cursor:pointer':''};${r.g?'background:#E6F4EA':r.j?'background:#FDE8E6':''}" ${isAdmin()?`onclick="raciCycle(${ri},${ci})"`:''}>${raciChip(c)}</td>`).join('')}${
       `<td style="font-size:11px;color:var(--steel)">${esc(r.n||'')}</td>`}</tr>`).join('')}</tbody>
    </table></div></div>
    <div class="card"><h3>📜 سجل الصلاحيات والتغييرات — Change Log</h3>
@@ -3458,6 +3665,35 @@ function renderRaci(){
 
 /* ═══════════════ الدليل التفاعلي المدمج (ADM-MAN-005 V2.0) ═══════════════ */
 let guideAnchor = '';
+/* السيناريو التفاعلي الشامل: من العميل المحتمل حتى الإغلاق والفوترة — اضغط أي مرحلة لتفاصيلها وفتح وحدتها */
+let flowSel = 0;
+const E2E_FLOW = () => [
+ {t:'عميل محتمل', i:'🎯', v:'leads', d:'يصل استفسار (هاتف/واتساب/موقع) ويُسجَّل فوراً في سجل العملاء المحتملين — الرد الأول ≤ '+S.ops.respH+' ساعات عمل.', f:'—'},
+ {t:'تأهيل ومعاينة', i:'🔍', v:'leads', d:'تأهيل العميل (النشاط، الميزانية، جاهزية الموقع) ثم معاينة إلزامية لأفران الدهان وغرف التحضير خلال 3 أيام.', f:'قائمة تحقق الموقع'},
+ {t:'عرض السعر', i:'📄', v:'quotes', d:'إعداد العرض واعتماده وإرساله خلال يومين — الصفقات > '+fmt(S.ops.bigDeal)+' ريال تتحول قيادتها لأسامة.', f:'SLS-001'},
+ {t:'أمر البيع + الدفعة', i:'🧾', v:'sos', d:'عند القبول: أمر بيع وتحصيل الدفعة المقدمة '+S.ops.advPct+'% — لا تجهيز قبل تأكيد المحاسب استلامها.', f:'SLS-002 + سند قبض'},
+ {t:'توفير المخزون', i:'📦', v:'prs', d:'إن لم يتوفر الصنف: طلب شراء (توقيع الشريكين فوق '+fmt(S.ops.prTh)+') ثم أمر شراء (فوق '+fmt(S.ops.poTh)+') — استيراد 60–90 يوماً أو محلي أيام.', f:'PUR-001 / PUR-002'},
+ {t:'سداد 100%', i:'💳', v:'ar', d:'تحصيل المتبقي قبل التسليم — النظام يمنع إذن التسليم قبل اكتمال السداد (قفل محسوب من سجل الدفعات).', f:'سند قبض'},
+ {t:'إذن التسليم', i:'🚚', v:'dos', d:'إصدار الإذن بعد بوابة السداد + إذن صرف من المستودع.', f:'SLS-003 + WHS-002'},
+ {t:'التركيب والتشغيل', i:'🧰', v:'installjobs', d:'تركيب (فرن 3–5 أيام / شاصي 1–2 يوم) ثم تشغيل تجريبي بحضور العميل وتدريب المشغلين.', f:'QLT-001 + محضر تسليم'},
+ {t:'الضمان والفوترة', i:'🧮', v:'payments', d:'وثيقة الضمان تبدأ من محضر التشغيل — الفاتورة مرتبطة بأمر البيع وتنعكس على شجرة الحسابات والتقارير.', f:'WRT + فاتورة'},
+ {t:'ما بعد البيع', i:'🔧', v:'srv', d:'صيانة دورية وطلبات ضمان بإدارة أسامة — إقفال الشكاوى ≤ '+S.ops.complaintDays+' أيام مع إجراء تصحيحي.', f:'SRV-001 / QLT-002'}
+];
+window.flowPick = i => { flowSel = i; guideAnchor='FLOW'; render(); };
+function e2eFlowHTML(){
+  const F = E2E_FLOW();
+  const s = F[Math.min(flowSel, F.length-1)];
+  return `<p style="font-size:12px;color:var(--steel);margin-bottom:8px">اضغط أي مرحلة لعرض تفاصيلها — ثم افتح وحدتها مباشرة. هذا هو مسار الصفقة الكامل من الاستفسار حتى ما بعد البيع.</p>
+   <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-bottom:12px">${
+    F.map((x,i)=>`<span onclick="flowPick(${i})" style="cursor:pointer;background:${i===flowSel?'var(--red)':'var(--navy)'};color:#fff;border-radius:16px;padding:5px 12px;font-size:11.5px;white-space:nowrap;box-shadow:${i===flowSel?'0 2px 8px rgba(218,41,28,.4)':'none'}">${x.i} ${i+1}. ${x.t}</span>${i<F.length-1?'<span style="color:var(--red);font-weight:800;font-size:16px">←</span>':''}`).join('')
+   }</div>
+   <div class="card" style="background:var(--pale);border-right:4px solid var(--red);margin-bottom:0">
+    <h3 style="margin-bottom:6px">${s.i} المرحلة ${flowSel+1}: ${s.t}</h3>
+    <div style="font-size:12.5px;line-height:1.9">${s.d}</div>
+    <div style="font-size:11.5px;color:var(--steel);margin:6px 0">النماذج: ${s.f}</div>
+    <button class="btn sm" onclick="setView('${s.v}')">فتح الوحدة ←</button>
+   </div>`;
+}
 function gSteps(rows){
   return `<div style="overflow-x:auto"><table><thead><tr><th style="width:34px">#</th><th>الخطوة — Step</th><th>المسؤول — R</th><th>المهلة — SLA</th><th>النموذج — Form</th></tr></thead><tbody>${
     rows.map((r,i)=>`<tr><td style="text-align:center;font-weight:700">${i+1}</td><td>${r[0]}</td><td style="text-align:center;white-space:nowrap">${r[1]}</td><td style="text-align:center;white-space:nowrap">${r[2]}</td><td style="text-align:center;white-space:nowrap">${r[3]}</td></tr>`).join('')}</tbody></table></div>`;
@@ -3467,6 +3703,7 @@ function renderGuide(){
   const card = (id, title, inner) => `<div class="card" id="${id}"><h3 style="border-bottom:2px solid var(--red);padding-bottom:6px">${title}</h3>${inner}</div>`;
   document.getElementById('main').innerHTML = `
    ${headHtml('📖 الدليل التفاعلي لنظام التشغيل الداخلي — ADM-MAN-005 V2.0','كل القواعد والإجراءات والنماذج مدمجة داخل النظام — القيم تُقرأ حياً من «قيم التشغيل» فتتحدث تلقائياً / All rules, procedures & forms — values update live from Operating Values')}
+   ${card('FLOW','🗺 مخطط سير العمل الشامل — رحلة الصفقة من البداية للنهاية (تفاعلي)', e2eFlowHTML())}
    ${card('HOME','🏠 القواعد الذهبية — Golden Rules',`<table><thead><tr><th>#</th><th>القاعدة</th><th>ينفذها النظام</th></tr></thead><tbody>
     <tr><td>1</td><td>دفعة مقدمة ${o.advPct}% قبل أي تجهيز — ولا <b>تسليم</b> قبل سداد 100%</td><td><span class="tag ok">بوابة محسوبة في إذن التسليم ✓</span></td></tr>
     <tr><td>2</td><td>طلب شراء > ${fmt(o.prTh)} وأمر شراء > ${fmt(o.poTh)} ريال = توقيع الشريكين معاً</td><td><span class="tag ok">بوابة توقيع مزدوج ✓</span></td></tr>
@@ -3719,7 +3956,7 @@ function coaLinkBalance(key){
   try{
     if(key==='payments') return S.payments.reduce((a,p)=>a+(+p.amount||0),0);
     if(key==='ar')       return receivableQuotes().reduce((a,q)=>a+Math.max(0,quoteRemaining(q)),0);
-    if(key==='stockVal') return S.products.reduce((a,p)=>a+stockQty(p.nameAr)*(+p.cost||0),0);
+    if(key==='stockVal') return S.products.reduce((a,p)=>a+stockQty(p.nameAr)*landedCost(p.nameAr),0);
     if(key==='suppliers'||key==='cogs') return S.pos.filter(p=>p.status!=='ملغي').reduce((a,p)=>a+(+p.total||0),0);
     if(key==='vat')      return S.sos.filter(o=>o.status!=='ملغي').reduce((a,o)=>{const q=S.quotes.find(x=>x.no===o.quoteRef); return a+(q?+q.vat||0:0);},0);
     if(key==='sales')    return S.sos.filter(o=>o.status!=='ملغي').reduce((a,o)=>a+(+o.total||0),0);
