@@ -234,9 +234,15 @@ tr.clickable:hover td{background:#eef3fa}
   .kpi .val{font-size:19px}
   th,td{padding:9px 8px}
   .kbcol{min-width:78vw}
-  #printdoc{padding:16px}
+  #printdoc{padding:16px;overflow-x:auto}
   .doc-header{flex-wrap:wrap;justify-content:center;text-align:center}
   .doc-header-center{order:3;flex-basis:100%}
+  /* أي جدول عريض (سجلات، KPI، RACI، شجرة الحسابات...) يتمرر داخل بطاقته دون كسر الصفحة */
+  .card{overflow-x:auto}
+  .pagehead{gap:6px}
+  .pagehead h2{font-size:16px}
+  .btnrow .btn{padding:9px 12px;font-size:12px}
+  .kb{padding-bottom:12px}
 }
 @media(max-width:420px){
   .formgrid{grid-template-columns:1fr}
@@ -854,8 +860,8 @@ const COA_MAP_LABELS = {
   payroll:'الرواتب — Payroll', expenses:'المصروفات التشغيلية — Operating Expenses', petty:'العهد النثرية — Petty Cash'
 };
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.8';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل — V2.5 (المراحل 3–5) لوحة مؤشرات ADM-MAN-004 محسوبة حياً لكل دور مقابل الأهداف + الدليل التفاعلي ADM-MAN-005 مدمجاً بالكامل (قواعد ذهبية، 6 إجراءات بجداول خطوة/مسؤول/مهلة/نموذج بقيم حية، فهرس النماذج الـ14 بروابط وحداتها، المشاكل الشائعة) + صفحة مصفوفة RACI مع سجل انتقال الصلاحيات وتحرير المدير + شريط مساعدة سياقية في كل صفحة (ما الصفحة؟ من المسؤول؟ الخطوة التالية + رابط للدليل) + لوحة المتابعة الدورية الأسبوعية/الشهرية/الربع سنوية بحالة محفوظة — V2.6 حزمة تجربة الاستخدام: تمرير لأعلى مع كل تنقل + قائمة جانبية ببطاقات ملونة لكل قسم + مفضلة (⭐) بقائمة وصول سريع محفوظة محلياً + طباعة مباشرة من صفحة كل مستند (نافذة معزولة) مع أزرار إلغاء/خروج بمركز الطباعة + تصدير حر لكل النماذج (Word/PDF/Excel-CSV) + شارات RACI ملونة بشرح كامل (R منفذ/A مسؤول/C مُستشار/I مُطلَع) + مخططات تدفق مصغرة بكل قسم + سيناريو تفاعلي شامل لرحلة الصفقة في الدليل + التكلفة الفعلية Landed Cost تلقائياً من فاتورة الشراء والشحنة (حذف حقل التكلفة اليدوي، الضريبة مستردة لا تُحمَّل) + محرر صور المنتج (تكبير/إزاحة/اقتصاص) قبل الحفظ + تكبير صور المنتجات في المستندات المطبوعة + جدول تسعير B2B بعرض السعر (قبل/بعد الخصم للوحدة والإجمالي) مع افتتاحية بيعية احترافية — V2.7 حذف سطر التحية التمهيدي من عرض السعر بناءً على طلب المستخدم — V2.8 مبدأ «الخطوة التالية» Guided Workflow: لافتة بارزة بعد كل حفظ تقود للخطوة المنطقية التالية بتسلسل معتمد لكل نوع مستند (22 مساراً: مبيعات، مشتريات، مخزون، مالية، خدمة) مع زر «تجاهل والعودة للقائمة» + توحيد التباعدات والتوازن البصري لكل المستندات المطبوعة في الملفين (عناوين أقسام 16/8، خلايا 7×9، شبكات وتوقيعات موحدة) وتأكيد خلو جميع المستندات من عبارات التحية */
+const SYS_VERSION = 'V2.9';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل — V2.5 (المراحل 3–5) لوحة مؤشرات ADM-MAN-004 محسوبة حياً لكل دور مقابل الأهداف + الدليل التفاعلي ADM-MAN-005 مدمجاً بالكامل (قواعد ذهبية، 6 إجراءات بجداول خطوة/مسؤول/مهلة/نموذج بقيم حية، فهرس النماذج الـ14 بروابط وحداتها، المشاكل الشائعة) + صفحة مصفوفة RACI مع سجل انتقال الصلاحيات وتحرير المدير + شريط مساعدة سياقية في كل صفحة (ما الصفحة؟ من المسؤول؟ الخطوة التالية + رابط للدليل) + لوحة المتابعة الدورية الأسبوعية/الشهرية/الربع سنوية بحالة محفوظة — V2.6 حزمة تجربة الاستخدام: تمرير لأعلى مع كل تنقل + قائمة جانبية ببطاقات ملونة لكل قسم + مفضلة (⭐) بقائمة وصول سريع محفوظة محلياً + طباعة مباشرة من صفحة كل مستند (نافذة معزولة) مع أزرار إلغاء/خروج بمركز الطباعة + تصدير حر لكل النماذج (Word/PDF/Excel-CSV) + شارات RACI ملونة بشرح كامل (R منفذ/A مسؤول/C مُستشار/I مُطلَع) + مخططات تدفق مصغرة بكل قسم + سيناريو تفاعلي شامل لرحلة الصفقة في الدليل + التكلفة الفعلية Landed Cost تلقائياً من فاتورة الشراء والشحنة (حذف حقل التكلفة اليدوي، الضريبة مستردة لا تُحمَّل) + محرر صور المنتج (تكبير/إزاحة/اقتصاص) قبل الحفظ + تكبير صور المنتجات في المستندات المطبوعة + جدول تسعير B2B بعرض السعر (قبل/بعد الخصم للوحدة والإجمالي) مع افتتاحية بيعية احترافية — V2.7 حذف سطر التحية التمهيدي من عرض السعر بناءً على طلب المستخدم — V2.8 مبدأ «الخطوة التالية» Guided Workflow: لافتة بارزة بعد كل حفظ تقود للخطوة المنطقية التالية بتسلسل معتمد لكل نوع مستند (22 مساراً: مبيعات، مشتريات، مخزون، مالية، خدمة) مع زر «تجاهل والعودة للقائمة» + توحيد التباعدات والتوازن البصري لكل المستندات المطبوعة في الملفين (عناوين أقسام 16/8، خلايا 7×9، شبكات وتوقيعات موحدة) وتأكيد خلو جميع المستندات من عبارات التحية — V2.9 إصلاح قصّ الشعار في نافذة الطباعة على الجوال (الترويسة والتذييل يثبتان عند الطباعة الفعلية فقط ويتحركان مع المحتوى على الشاشة) + توافق كامل مع الجوال: وسم viewport لنافذة الطباعة، التفاف الترويسة وتصغير الشعار والقر، جداول تتقلص بعرض الشاشة دون قص أو تمرير أفقي (إلغاء nowrap للرؤوس)، شبكة بيانات بعمود واحد، توقيعات متراصة عمودياً + تمرير أفقي لأي جدول عريض داخل بطاقات التطبيق نفسه */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -2782,13 +2788,13 @@ const PRINT_CSS = `
   --itco-navy:#0E2342;--itco-carbon:#0A0F16;--itco-steel-blue:#51647A;--itco-silver:#B9C2CC;--itco-white:#F2F4F7;--itco-red:#DA291C;--itco-red-dark:#8F1B12;
   --grad-primary:linear-gradient(135deg,#0E2342 0%,#0A0F16 100%);--grad-metal:linear-gradient(135deg,#B9C2CC 0%,#8494A8 55%,#51647A 100%);--grad-accent:linear-gradient(135deg,#DA291C 0%,#8F1B12 100%)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
-body{font-family:'Tajawal','Cairo',sans-serif;color:var(--itco-carbon);font-size:14px;line-height:1.6;background:#fff;padding-top:100px;padding-bottom:32px}
+body{font-family:'Tajawal','Cairo',sans-serif;color:var(--itco-carbon);font-size:14px;line-height:1.6;background:#fff;padding:12px}
 table{width:100%;border-collapse:collapse;font-size:12.5px;margin:0 0 10px}
 th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;padding:7px 9px;text-align:right;font-size:11.5px;white-space:nowrap}
 td{border:1px solid var(--itco-silver);padding:7px 9px;vertical-align:middle;background:var(--itco-white)}
 tr:nth-child(even) td{background:#EEF1F5}
 .psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:6px 12px;margin:16px 0 8px;letter-spacing:.2px}
-.doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#FFFFFF;color:var(--itco-navy);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
+.doc-print-header{background:#FFFFFF;color:var(--itco-navy);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
 .doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;gap:10px;flex-wrap:wrap}
 .doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
 .doc-header-logo{max-height:60px;max-width:110px;object-fit:contain;border:none!important;box-shadow:none!important;outline:none!important;background:transparent!important;padding:0!important;margin:0!important}
@@ -2811,7 +2817,7 @@ tr:nth-child(even) td{background:#EEF1F5}
 .approvals-block .sig .h{background:transparent;color:var(--itco-steel-blue);font-weight:700;text-align:right;border-bottom:1px solid var(--itco-silver)}
 .approvals-block .sig .b{color:var(--itco-carbon)}
 .pfoot{text-align:center;color:var(--itco-steel-blue);font-size:10.5px;margin-top:14px;border-top:1px solid var(--itco-silver);padding-top:8px}
-.doc-footer{display:block;position:fixed;bottom:0;left:0;right:0;width:100%;direction:rtl;font-size:9px;color:var(--itco-steel-blue);border-top:2px solid var(--itco-red);padding-top:4px;text-align:center;background:#fff}
+.doc-footer{display:block;direction:rtl;font-size:9px;color:var(--itco-steel-blue);border-top:2px solid var(--itco-red);padding-top:4px;margin-top:14px;text-align:center;background:#fff}
 .doc-footer div+div{margin-top:2px}
 .eicr{margin-top:14px;page-break-before:always}
 .eicr-info{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px}
@@ -2829,7 +2835,30 @@ img{max-width:100%}
 [class*="alert"],[class*="warn"],[class*="warning"],[class*="notice"],[data-no-print="true"]{display:none!important}
 .line-item-row,.signatures-block,.approvals-block,.terms-block{page-break-inside:avoid}
 @page{size:A4;margin:12mm 10mm}
-@media print{ body{background:#fff!important} #side,.no-print,button:not(.print-btn){display:none!important} }
+@media print{
+ body{background:#fff!important;padding:100px 0 32px}
+ .doc-print-header{position:fixed;top:0;left:0;right:0;width:100%}
+ .doc-footer{position:fixed;bottom:0;left:0;right:0;width:100%;margin-top:0}
+ #side,.no-print,button:not(.print-btn){display:none!important}
+}
+/* تجاوب الجوال داخل نافذة الطباعة: الترويسة تلتف والنصوص تتقلص والجداول تنضغط دون قص */
+@media screen and (max-width:640px){
+ body{font-size:12px;padding:8px}
+ .doc-header{flex-wrap:wrap;justify-content:center;text-align:center;gap:6px}
+ .doc-header-center{order:3;flex-basis:100%;font-size:13.5px}
+ .doc-header-names span{font-size:12px}
+ .doc-header-logo{max-height:46px;max-width:90px}
+ .doc-header-left,.doc-header-qr{width:56px;height:56px}
+ th,td{padding:5px 5px;font-size:10px}
+ th{white-space:normal!important}
+ td{word-break:break-word}
+ .imgbox{width:34px!important;height:34px!important}
+ .pgrid{grid-template-columns:1fr}
+ .pgrid .pi .k{width:110px;min-width:110px}
+ .sigs{flex-direction:column}
+ .doc-meta-line{line-height:1.8}
+ .eicr-blank{min-width:60px!important}
+}
 `;
 // يفتح نافذة معزولة تحتوي فقط على محتوى المستند (بلا شريط جانبي ولا عناصر واجهة التطبيق ولا رابط النظام) ثم يطبعها ويغلقها تلقائياً
 function printDocument(docHtml){
@@ -2839,6 +2868,7 @@ function printDocument(docHtml){
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>طباعة مستند — Print Document</title>
 <style>${PRINT_CSS}</style>
 </head>
