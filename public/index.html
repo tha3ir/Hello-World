@@ -89,16 +89,16 @@ tr.clickable:hover td{background:#eef3fa}
 .doc-header-qr{width:75px;height:75px;object-fit:contain;background:#fff;border-radius:4px}
 .doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-steel-blue);text-align:center;margin-top:4px}
 .doc-meta-line b{color:var(--itco-navy)}
-.psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver)}
+.psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:6px 12px;margin:16px 0 8px;letter-spacing:.2px}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver);margin:0 0 10px}
 .pgrid .pi{display:flex;border:1px solid var(--itco-silver);background:var(--itco-white)}
-.pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
-.pgrid .pi .v{background:var(--itco-white);padding:6px 8px;font-weight:700;color:var(--itco-carbon);font-size:12px;flex:1}
-#printdoc table,.pdblock table{margin-top:0}
+.pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:7px 10px;width:160px;min-width:160px;line-height:1.5}
+.pgrid .pi .v{background:var(--itco-white);padding:7px 10px;font-weight:700;color:var(--itco-carbon);font-size:12px;flex:1}
+#printdoc table,.pdblock table{margin:0 0 10px}
 #printdoc th,.pdblock th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700}
-#printdoc td,.pdblock td{border:1px solid var(--itco-silver);background:var(--itco-white)}
+#printdoc td,.pdblock td{border:1px solid var(--itco-silver);background:var(--itco-white);padding:7px 9px}
 #printdoc tr:nth-child(even) td,.pdblock tr:nth-child(even) td{background:#EEF1F5}
-.sigs{display:flex;gap:0;margin-top:18px}
+.sigs{display:flex;gap:0;margin:20px 0 6px}
 .sig{flex:1;border:1px solid var(--itco-silver)}
 .sig .h{background:var(--itco-navy);color:var(--itco-white);text-align:center;font-size:11.5px;font-weight:700;padding:5px}
 .sig .b{padding:10px;font-size:11.5px;color:var(--itco-carbon);line-height:2.1}
@@ -854,8 +854,8 @@ const COA_MAP_LABELS = {
   payroll:'الرواتب — Payroll', expenses:'المصروفات التشغيلية — Operating Expenses', petty:'العهد النثرية — Petty Cash'
 };
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.7';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل — V2.5 (المراحل 3–5) لوحة مؤشرات ADM-MAN-004 محسوبة حياً لكل دور مقابل الأهداف + الدليل التفاعلي ADM-MAN-005 مدمجاً بالكامل (قواعد ذهبية، 6 إجراءات بجداول خطوة/مسؤول/مهلة/نموذج بقيم حية، فهرس النماذج الـ14 بروابط وحداتها، المشاكل الشائعة) + صفحة مصفوفة RACI مع سجل انتقال الصلاحيات وتحرير المدير + شريط مساعدة سياقية في كل صفحة (ما الصفحة؟ من المسؤول؟ الخطوة التالية + رابط للدليل) + لوحة المتابعة الدورية الأسبوعية/الشهرية/الربع سنوية بحالة محفوظة — V2.6 حزمة تجربة الاستخدام: تمرير لأعلى مع كل تنقل + قائمة جانبية ببطاقات ملونة لكل قسم + مفضلة (⭐) بقائمة وصول سريع محفوظة محلياً + طباعة مباشرة من صفحة كل مستند (نافذة معزولة) مع أزرار إلغاء/خروج بمركز الطباعة + تصدير حر لكل النماذج (Word/PDF/Excel-CSV) + شارات RACI ملونة بشرح كامل (R منفذ/A مسؤول/C مُستشار/I مُطلَع) + مخططات تدفق مصغرة بكل قسم + سيناريو تفاعلي شامل لرحلة الصفقة في الدليل + التكلفة الفعلية Landed Cost تلقائياً من فاتورة الشراء والشحنة (حذف حقل التكلفة اليدوي، الضريبة مستردة لا تُحمَّل) + محرر صور المنتج (تكبير/إزاحة/اقتصاص) قبل الحفظ + تكبير صور المنتجات في المستندات المطبوعة + جدول تسعير B2B بعرض السعر (قبل/بعد الخصم للوحدة والإجمالي) مع افتتاحية بيعية احترافية — V2.7 حذف سطر التحية التمهيدي من عرض السعر بناءً على طلب المستخدم */
+const SYS_VERSION = 'V2.8';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل — V2.5 (المراحل 3–5) لوحة مؤشرات ADM-MAN-004 محسوبة حياً لكل دور مقابل الأهداف + الدليل التفاعلي ADM-MAN-005 مدمجاً بالكامل (قواعد ذهبية، 6 إجراءات بجداول خطوة/مسؤول/مهلة/نموذج بقيم حية، فهرس النماذج الـ14 بروابط وحداتها، المشاكل الشائعة) + صفحة مصفوفة RACI مع سجل انتقال الصلاحيات وتحرير المدير + شريط مساعدة سياقية في كل صفحة (ما الصفحة؟ من المسؤول؟ الخطوة التالية + رابط للدليل) + لوحة المتابعة الدورية الأسبوعية/الشهرية/الربع سنوية بحالة محفوظة — V2.6 حزمة تجربة الاستخدام: تمرير لأعلى مع كل تنقل + قائمة جانبية ببطاقات ملونة لكل قسم + مفضلة (⭐) بقائمة وصول سريع محفوظة محلياً + طباعة مباشرة من صفحة كل مستند (نافذة معزولة) مع أزرار إلغاء/خروج بمركز الطباعة + تصدير حر لكل النماذج (Word/PDF/Excel-CSV) + شارات RACI ملونة بشرح كامل (R منفذ/A مسؤول/C مُستشار/I مُطلَع) + مخططات تدفق مصغرة بكل قسم + سيناريو تفاعلي شامل لرحلة الصفقة في الدليل + التكلفة الفعلية Landed Cost تلقائياً من فاتورة الشراء والشحنة (حذف حقل التكلفة اليدوي، الضريبة مستردة لا تُحمَّل) + محرر صور المنتج (تكبير/إزاحة/اقتصاص) قبل الحفظ + تكبير صور المنتجات في المستندات المطبوعة + جدول تسعير B2B بعرض السعر (قبل/بعد الخصم للوحدة والإجمالي) مع افتتاحية بيعية احترافية — V2.7 حذف سطر التحية التمهيدي من عرض السعر بناءً على طلب المستخدم — V2.8 مبدأ «الخطوة التالية» Guided Workflow: لافتة بارزة بعد كل حفظ تقود للخطوة المنطقية التالية بتسلسل معتمد لكل نوع مستند (22 مساراً: مبيعات، مشتريات، مخزون، مالية، خدمة) مع زر «تجاهل والعودة للقائمة» + توحيد التباعدات والتوازن البصري لكل المستندات المطبوعة في الملفين (عناوين أقسام 16/8، خلايا 7×9، شبكات وتوقيعات موحدة) وتأكيد خلو جميع المستندات من عبارات التحية */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -2033,7 +2033,7 @@ window.saveRegister = key => {
   if(editId){ const i=S[V.ent].findIndex(x=>x.id===editId); S[V.ent][i]=r; }
   else S[V.ent].push(r);
   logAudit(editId?'تعديل':'إضافة', V.title, r.no||r.code||r.name||r.id, '');
-  editId=null; persist(); render();
+  editId=null; markNextStep(); persist(); render();
 };
 /* ═══ المساعدة السياقية (ADM-MAN-005 مدمجاً): ما الصفحة؟ من المسؤول RACI؟ ما الخطوة التالية؟ ═══ */
 function HELP_MAP(){ const o=S.ops; return {
@@ -2086,6 +2086,48 @@ const flowStrip = key => {
     f.map((s,i)=>`<span style="background:var(--navy);color:#fff;border-radius:14px;padding:2px 10px;font-size:10.5px;white-space:nowrap">${i+1}. ${s}</span>${i<f.length-1?'<span style="color:var(--red);font-weight:800">←</span>':''}`).join('')
   }</div>`;
 };
+/* ═══ مبدأ «الخطوة التالية» Guided Workflow: بعد حفظ أي سجل تظهر لافتة بارزة تقود للخطوة المنطقية التالية ═══
+   التسلسل المعتمد: عميل محتمل → عرض سعر → أمر بيع → دفعة مقدمة → توفر المخزون/الصرف → إذن التسليم → الفاتورة/التحصيل
+   والمشتريات: طلب شراء → أمر شراء → شحنة → استلام → فحص فني → إدخال مخزون — والخدمة: صيانة → إقفال بشكوى/إجراء تصحيحي */
+const NEXT_STEP = {
+  leads:      {v:'quotes',   l:'إعداد عرض السعر — SLS-001',            d:'العميل المحتمل مؤهل؟ الخطوة التالية إعداد العرض خلال يومين'},
+  opps:       {v:'quotes',   l:'إعداد عرض السعر — SLS-001',            d:'حوّل الصفقة إلى عرض سعر رسمي'},
+  quotes:     {v:'sos',      l:'إصدار أمر البيع — SLS-002',            d:'عند قبول العرض: أمر البيع وتحصيل الدفعة المقدمة'},
+  sos:        {v:'payments', l:'تسجيل الدفعة المقدمة — سند قبض',       d:'لا تجهيز قبل تأكيد المحاسب استلام الدفعة'},
+  payments:   {v:'stock',    l:'توفر المخزون / إذن الصرف — WHS',       d:'تحقق من توفر الأصناف أو أطلق شراء، ثم إذن الصرف'},
+  stock:      {v:'dos',      l:'إذن التسليم — SLS-003',                d:'بعد الصرف: إذن التسليم (بوابة سداد 100%)'},
+  dos:        {v:'payments', l:'الفاتورة / تحصيل المتبقي — سند قبض',   d:'أقفل التحصيل واربط السند بأمر البيع'},
+  prs:        {v:'pos',      l:'إصدار أمر الشراء — PUR-002',           d:'من طلب معتمد فقط — توقيع الشريكين فوق العتبة'},
+  pos:        {v:'shipments',l:'فتح سجل الشحنة — LOG-001',             d:'تتبع التصنيع وPCoC والشحن أسبوعياً'},
+  shipments:  {v:'stock',    l:'استلام البضاعة — WHS-001',             d:'مطابقة الكميات قبل توقيع أي مستند للناقل'},
+  qc:         {v:'dos',      l:'إذن التسليم — SLS-003',                d:'بعد الفحص: جدولة التسليم والتركيب'},
+  srv:        {v:'complaints',l:'الإقفال بإجراء تصحيحي — QLT-002',     d:'أقفل الطلب خلال المهلة بإجراء يمنع التكرار'},
+  complaints: {v:'kpi',      l:'مراجعة مؤشرات الأداء — KPIs',          d:'تحقق من أثر الإقفال على مؤشر الشكاوى'},
+  petty:      {v:'expenses', l:'تسجيل فواتير العهدة — المصروفات',      d:'كل فاتورة تُسجَّل مرتبطة برقم العهدة للتسوية'},
+  expenses:   {v:'petty',    l:'متابعة تسوية العهدة — FIN-001',        d:'تأكد من إقفال العهدة خلال المهلة'},
+  installjobs:{v:'qc',       l:'محضر التشغيل والتسليم — QLT-001',      d:'التشغيل التجريبي بحضور العميل = بدء الضمان'},
+  payroll:    {v:'payments', l:'سندات الصرف والتحصيل',                 d:'أكمل الدورة المالية الشهرية'},
+  customers:  {v:'quotes',   l:'إعداد عرض سعر للعميل',                 d:'العميل جاهز — أنشئ أول عرض'},
+  products:   {v:'quotes',   l:'إدراج المنتج في عرض سعر',              d:'المنتج معتمد؟ أدرجه في العروض'},
+  suppliers:  {v:'evals',    l:'تقييم المورد — PUR-003',               d:'موردان معتمدان لكل صنف على الأقل'},
+  evals:      {v:'prs',      l:'طلب شراء — PUR-001',                   d:'المورد معتمد — ابدأ دورة الشراء'}
+};
+let nextHint = null; // {from: view} تُضبط بعد كل حفظ ناجح
+function markNextStep(){ nextHint = {from: view}; }
+window.nextGo = () => { const n = NEXT_STEP[(nextHint||{}).from]; nextHint=null; if(n) setView(n.v); };
+window.nextDismiss = () => { nextHint=null; render(); };
+function nextBanner(){
+  if(!nextHint || nextHint.from!==view) return '';
+  const n = NEXT_STEP[view]; if(!n) return '';
+  if(!canView(n.v)) return '';
+  return `<div class="card no-print" style="background:#E6F4EA;border:1.5px solid var(--green);border-right:6px solid var(--green);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;margin-bottom:12px">
+    <div style="font-size:13px;line-height:1.8">✅ <b>تم الحفظ بنجاح.</b> الخطوة التالية في سير العمل:<br>
+     <span style="color:var(--steel);font-size:11.5px">${esc(n.d)}</span></div>
+    <div class="btnrow" style="margin-top:0">
+     <button class="btn" style="background:var(--green)" onclick="nextGo()">⬅ ${esc(n.l)}</button>
+     <button class="btn ghost sm" onclick="nextDismiss()">تجاهل والعودة للقائمة</button>
+    </div></div>`;
+}
 function helpBar(){
   const h = HELP_MAP()[view]; if(!h) return '';
   let open = true; try{ open = localStorage.getItem('erp:helpOpen')!=='0'; }catch(e){}
@@ -2103,7 +2145,7 @@ function helpBar(){
    </div>`:''}</div>`;
 }
 window.toggleHelp = () => { try{ localStorage.setItem('erp:helpOpen', localStorage.getItem('erp:helpOpen')==='0'?'1':'0'); }catch(e){} render(); };
-const headHtml = (t, sub, actions='') => `<div class="pagehead"><h2>${t}</h2><div style="display:flex;align-items:center;gap:10px">${actions}<span id="savest" class="savestate">✓ محفوظ تلقائياً</span></div></div><div class="pagesub">${sub}</div><div class="redline"></div>${helpBar()}`;
+const headHtml = (t, sub, actions='') => `<div class="pagehead"><h2>${t}</h2><div style="display:flex;align-items:center;gap:10px">${actions}<span id="savest" class="savestate">✓ محفوظ تلقائياً</span></div></div><div class="pagesub">${sub}</div><div class="redline"></div>${nextBanner()}${helpBar()}`;
 
 /* ═══════════════ محرر بنود المستندات ═══════════════ */
 let tmpLines = [];
@@ -2221,7 +2263,7 @@ window.saveQuote = () => {
   S.lines = S.lines.filter(l=>l.docNo!==row.no).concat(valid.map(l=>({id:l.id||uid(),docType:'SLS-001',docNo:row.no,product:l.product,brand:l.brand,qty:+l.qty,defPrice:l.defPrice,override:l.override||'',supplyType:l.supplyType||'من المخزون',extStatus:l.extStatus||''})));
   if(editId){const i=S.quotes.findIndex(q=>q.id===editId);S.quotes[i]=row;}else S.quotes.push(row);
   row._u=today(); logAudit(editId?'تعديل':'إضافة','عرض سعر',row.no,'الإجمالي '+fmt(row.total));
-  editId=null; tmpLines=[]; persist(); render();
+  editId=null; tmpLines=[]; markNextStep(); persist(); render();
 };
 window.delQuote = id => { const q=S.quotes.find(x=>x.id===id); if(!confirm('حذف العرض وبنوده؟'))return;
   S.quotes=S.quotes.filter(x=>x.id!==id); S.lines=S.lines.filter(l=>l.docNo!==q.no); logAudit('حذف','عرض سعر',q.no,''); persist(); render(); };
@@ -2265,7 +2307,7 @@ window.saveSO = () => {
     payRef:g('f_payRef'),fin:g('f_fin'),src:g('f_src'),srcRef:g('f_srcRef'),status:g('f_status')});
   if(editId){const i=S.sos.findIndex(x=>x.id===editId);S.sos[i]=row;}else S.sos.push(row);
   row._u=today(); logAudit(editId?'تعديل':'إضافة','أمر بيع',row.no,'');
-  editId=null; persist(); render();
+  editId=null; markNextStep(); persist(); render();
 };
 
 function renderDOs(){
@@ -2329,7 +2371,7 @@ window.saveDO = () => {
   row._u=today();
   logAudit(editId?'تعديل':'إضافة','إذن تسليم',row.no, payException?('⚠ استثناء سداد: متبقٍ '+fmt(rem)+' — '+payException.note):'');
   if(payException) logAudit('استثناء تسليم قبل اكتمال السداد','إذن تسليم',row.no,'متبقٍ '+fmt(rem)+' — '+payException.note);
-  editId=null; persist(); render();
+  editId=null; markNextStep(); persist(); render();
 };
 
 /* ═══════════════ أوامر الشراء ═══════════════ */
@@ -2380,7 +2422,7 @@ window.savePO = () => {
   S.lines = S.lines.filter(l=>l.docNo!==row.no).concat(valid.map(l=>({id:l.id||uid(),docType:'PUR-002',docNo:row.no,product:l.product,brand:l.brand,qty:+l.qty,defPrice:l.defPrice,override:l.override||''})));
   if(editId){const i=S.pos.findIndex(x=>x.id===editId);S.pos[i]=row;}else S.pos.push(row);
   row._u=today(); logAudit(editId?'تعديل':'إضافة','أمر شراء',row.no,'الإجمالي '+fmt(row.total));
-  editId=null; tmpLines=[]; persist(); render();
+  editId=null; tmpLines=[]; markNextStep(); persist(); render();
 };
 window.delPO = id => { const p=S.pos.find(x=>x.id===id); if(!confirm('حذف الأمر وبنوده؟'))return;
   S.pos=S.pos.filter(x=>x.id!==id); S.lines=S.lines.filter(l=>l.docNo!==p.no); logAudit('حذف','أمر شراء',p.no,''); persist(); render(); };
@@ -2552,12 +2594,12 @@ function pLines(no, priceLabel, disc){
   const d = +disc||0;
   // صياغة B2B: عند وجود خصم تظهر أعمدة السعر قبل الخصم وبعده والإجمالي قبله وبعده بوضوح جدولي كامل
   if(d>0){
-    return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الكمية — Qty</th><th>السعر قبل الخصم — List Price</th><th>السعر بعد الخصم — Net Price</th><th>الإجمالي قبل الخصم — Gross</th><th>الإجمالي بعد الخصم — Net Total</th></tr></thead><tbody>
+    return `<table><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الكمية — Qty</th><th>السعر قبل الخصم — List Price</th><th>السعر بعد الخصم — Net Price</th><th>الإجمالي قبل الخصم — Gross</th><th>الإجمالي بعد الخصم — Net Total</th></tr></thead><tbody>
      ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); const u=+(l.override!==''&&l.override!=null?l.override:l.defPrice)||0; const un=u*(1-d/100); const g=u*(+l.qty||0), n=un*(+l.qty||0);
       return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,55)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span>${l.brand?`<br><small style="color:var(--steel)">${esc(l.brand)}</small>`:''}</td><td>${l.qty}</td><td>${fmt(u)}</td><td style="color:var(--green);font-weight:700">${fmt(un)}</td><td>${fmt(g)}</td><td><b>${fmt(n)}</b></td></tr>`;}).join('')}
     </tbody></table>`;
   }
-  return `<table style="margin-top:6px"><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الماركة — Brand</th><th>الكمية — Quantity</th><th>${priceLabel}</th><th>الإجمالي — Total</th></tr></thead><tbody>
+  return `<table><thead><tr><th>#</th><th>صورة — Image</th><th>الوصف — Description</th><th>الماركة — Brand</th><th>الكمية — Quantity</th><th>${priceLabel}</th><th>الإجمالي — Total</th></tr></thead><tbody>
    ${ls.map((l,i)=>{const p=S.products.find(x=>x.nameAr===l.product); return `<tr class="line-item-row"><td>${i+1}</td><td>${imgTag(p&&p.img,55)}</td><td><span dir="auto">${esc(p?prodLabel(p):l.product)}</span></td><td>${esc(l.brand)}</td><td>${l.qty}</td><td>${fmt(l.override!==''&&l.override!=null?l.override:l.defPrice)}</td><td><b>${fmt(lineTotal(l))}</b></td></tr>`;}).join('')}
   </tbody></table>`;
 }
@@ -2740,12 +2782,12 @@ const PRINT_CSS = `
   --itco-navy:#0E2342;--itco-carbon:#0A0F16;--itco-steel-blue:#51647A;--itco-silver:#B9C2CC;--itco-white:#F2F4F7;--itco-red:#DA291C;--itco-red-dark:#8F1B12;
   --grad-primary:linear-gradient(135deg,#0E2342 0%,#0A0F16 100%);--grad-metal:linear-gradient(135deg,#B9C2CC 0%,#8494A8 55%,#51647A 100%);--grad-accent:linear-gradient(135deg,#DA291C 0%,#8F1B12 100%)}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
-body{font-family:'Tajawal','Cairo',sans-serif;color:var(--itco-carbon);font-size:14px;background:#fff;padding-top:100px;padding-bottom:30px}
-table{width:100%;border-collapse:collapse;font-size:12.5px}
-th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;padding:7px 8px;text-align:right;font-size:11.5px;white-space:nowrap}
-td{border:1px solid var(--itco-silver);padding:6px 8px;vertical-align:middle;background:var(--itco-white)}
+body{font-family:'Tajawal','Cairo',sans-serif;color:var(--itco-carbon);font-size:14px;line-height:1.6;background:#fff;padding-top:100px;padding-bottom:32px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:0 0 10px}
+th{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;padding:7px 9px;text-align:right;font-size:11.5px;white-space:nowrap}
+td{border:1px solid var(--itco-silver);padding:7px 9px;vertical-align:middle;background:var(--itco-white)}
 tr:nth-child(even) td{background:#EEF1F5}
-.psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:5px 10px;margin-top:12px}
+.psec{background:var(--itco-navy);color:var(--itco-white);font-family:'Cairo',sans-serif;font-weight:700;font-size:12px;padding:6px 12px;margin:16px 0 8px;letter-spacing:.2px}
 .doc-print-header{position:fixed;top:0;left:0;right:0;width:100%;background:#FFFFFF;color:var(--itco-navy);border-bottom:3px solid var(--itco-red);padding:8px 12px 6px;margin-bottom:8px}
 .doc-header{display:flex;justify-content:space-between;align-items:center;direction:rtl;width:100%;gap:10px;flex-wrap:wrap}
 .doc-header-right{display:flex;flex-direction:row;align-items:center;gap:8px}
@@ -2757,11 +2799,11 @@ tr:nth-child(even) td{background:#EEF1F5}
 .doc-header-qr{width:75px;height:75px;object-fit:contain;background:#fff;border-radius:4px}
 .doc-meta-line{font-family:'Cairo',sans-serif;font-size:9px;color:var(--itco-steel-blue);text-align:center;margin-top:4px}
 .doc-meta-line b{color:var(--itco-navy)}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));border:1px solid var(--itco-silver);margin:0 0 10px}
 .pgrid .pi{display:flex;border:1px solid var(--itco-silver);background:var(--itco-white)}
-.pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:6px 8px;width:160px;min-width:160px;line-height:1.4}
-.pgrid .pi .v{background:var(--itco-white);padding:6px 8px;font-weight:700;color:var(--itco-carbon);font-size:12px;flex:1}
-.sigs{display:flex;gap:0;margin-top:18px}
+.pgrid .pi .k{background:var(--itco-silver);color:var(--itco-carbon);font-weight:700;font-size:10.5px;padding:7px 10px;width:160px;min-width:160px;line-height:1.5}
+.pgrid .pi .v{background:var(--itco-white);padding:7px 10px;font-weight:700;color:var(--itco-carbon);font-size:12px;flex:1}
+.sigs{display:flex;gap:0;margin:20px 0 6px}
 .sig{flex:1;border:1px solid var(--itco-silver)}
 .sig .h{background:var(--itco-navy);color:var(--itco-white);text-align:center;font-size:11.5px;font-weight:700;padding:5px}
 .sig .b{padding:10px;font-size:11.5px;color:var(--itco-carbon);line-height:2.1}
@@ -2974,7 +3016,7 @@ window.saveOpp = () => {
     campaign:g('op_campaign'),owner:g('op_owner'),_u:today()});
   if(editId){const i=S.opps.findIndex(x=>x.id===editId);S.opps[i]=row;}else S.opps.push(row);
   logAudit(editId?'تعديل':'إضافة','صفقة',row.no,row.stage);
-  editId=null; persist(); render();
+  editId=null; markNextStep(); persist(); render();
 };
 window.delOpp = id => { const o=S.opps.find(x=>x.id===id); if(!confirm('حذف الصفقة؟'))return;
   S.opps=S.opps.filter(x=>x.id!==id); logAudit('حذف','صفقة',o.no,''); editId=null; persist(); render(); };
@@ -3528,7 +3570,7 @@ window.saveUser = async () => {
   if(editId){
     const i = S.users.findIndex(x=>x.id===editId);
     S.users[i] = {...S.users[i], ...f};
-    editId=null; persist(); render(); return;
+    editId=null; markNextStep(); persist(); render(); return;
   }
   // مستخدم جديد: أنشئ حساب فايربيس دون التأثير على جلسة المدير
   const pass = document.getElementById('u_pass').value;
