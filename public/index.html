@@ -781,10 +781,58 @@ tr.clickable:hover td{background:#eef3fa}
 <script>
 /* ═══════════════ النواة: الحالة والتخزين ═══════════════ */
 const ENT = ['products','customers','suppliers','employees','quotes','lines','sos','dos','prs','pos','stock','qc','srv','evals','complaints','shipments','petty','custody','expenses','users','installjobs','payroll',
-             'leads','contacts','opps','activities','campaigns','tickets','payments'];
+             'leads','contacts','opps','activities','campaigns','tickets','payments','coa'];
+/* ═══ قيم التشغيل والأهداف (ADM-MAN-004 + العتبات المالية) — قابلة للتعديل من الإعدادات دون كود ═══ */
+const OPS_DEFAULTS = {
+  prTh:5000, poTh:50000, bigDeal:50000, reserve:115000, pettyTh:1000,
+  advPct:50, respH:4, convPct:25, complaintDays:7, settleDays:7, reportDay:10,
+  ovens:3, chassis:1, leadsT:20, quotesT:8, meetingsT:6, refsT:5,
+  ftf:85, invAcc:98, onTime:90, bigClosePct:30, revT:'', bigDealValT:''
+};
+const OPS_LABELS = {
+  prTh:'عتبة توقيع الشريكين لطلب الشراء (ريال) — PR Joint-Sign Threshold', poTh:'عتبة توقيع الشريكين لأمر الشراء (ريال) — PO Joint-Sign Threshold',
+  bigDeal:'عتبة الصفقات الكبرى (ريال) — Big Deal Threshold', reserve:'حد الاحتياطي النقدي الأدنى (ريال) — Minimum Cash Reserve',
+  pettyTh:'عتبة تنبيه العهدة النقدية (ريال) — Petty Cash Alert Threshold', advPct:'نسبة الدفعة المقدمة % — Advance Payment %',
+  respH:'زمن الاستجابة الأولى (ساعات عمل) — First Response (hours)', convPct:'هدف تحويل العروض % — Quote Conversion Target %',
+  complaintDays:'مهلة إقفال الشكوى (أيام) — Complaint Closure (days)', settleDays:'مهلة تسوية العهدة (أيام) — Custody Settlement (days)',
+  reportDay:'يوم التقرير الشهري (كحد أقصى) — Monthly Report Day', ovens:'هدف أفران الدهان شهرياً — Paint Booths/Month Target',
+  chassis:'هدف أجهزة الشاصي شهرياً — Chassis Pullers/Month Target', leadsT:'هدف العملاء المحتملين شهرياً — Leads/Month Target',
+  quotesT:'هدف العروض الصادرة شهرياً — Quotes/Month Target', meetingsT:'هدف اجتماعات العملاء المؤسسيين شهرياً — Corporate Meetings Target',
+  refsT:'تركيبات مرجعية (أول 6 أشهر) — Reference Installs (6 mo)', ftf:'الإصلاح من الزيارة الأولى % — First-Time Fix %',
+  invAcc:'دقة الجرد % — Inventory Accuracy %', onTime:'الالتزام بالمواعيد % — On-Time Delivery %',
+  bigClosePct:'إغلاق الصفقات الكبرى المؤهلة % — Big-Deal Close Rate %', revT:'هدف الإيراد الشهري (ريال) — يُثبَّت من قائمة الأسعار', bigDealValT:'هدف قيمة الصفقات الكبرى شهرياً (ريال) — يُثبَّت من الأسعار'
+};
+/* ═══ شجرة الحسابات المبسطة (Chart of Accounts) + ربط وحدات النظام بها ═══ */
+const COA_SEED = [
+ ['1000','الأصول','Assets','أصول',''],
+ ['1100','النقد وما في حكمه','Cash & Equivalents','أصول','1000'],
+ ['1200','الذمم المدينة (عملاء)','Accounts Receivable','أصول','1000'],
+ ['1300','المخزون','Inventory','أصول','1000'],
+ ['2000','الخصوم','Liabilities','خصوم',''],
+ ['2100','الذمم الدائنة (موردون)','Accounts Payable','خصوم','2000'],
+ ['2200','ضريبة القيمة المضافة','VAT Payable','خصوم','2000'],
+ ['3000','حقوق الملكية','Equity','حقوق ملكية',''],
+ ['4000','الإيرادات','Revenue','إيرادات',''],
+ ['4100','مبيعات المعدات','Equipment Sales','إيرادات','4000'],
+ ['4200','إيرادات الصيانة والخدمة','Service Revenue','إيرادات','4000'],
+ ['5000','المصروفات','Expenses','مصروفات',''],
+ ['5100','تكلفة البضاعة المباعة','Cost of Goods Sold','مصروفات','5000'],
+ ['5200','الرواتب والأجور','Salaries & Wages','مصروفات','5000'],
+ ['5300','مصروفات تشغيلية','Operating Expenses','مصروفات','5000'],
+ ['5400','مصروفات نثرية','Petty Expenses','مصروفات','5000']
+];
+const COA_TYPES = ['أصول','خصوم','حقوق ملكية','إيرادات','مصروفات'];
+const COA_MAP_DEFAULTS = { payments:'1100', ar:'1200', stockVal:'1300', suppliers:'2100', vat:'2200', sales:'4100', service:'4200', cogs:'5100', payroll:'5200', expenses:'5300', petty:'5400' };
+const COA_MAP_LABELS = {
+  payments:'سندات القبض (الدفعات المحصّلة) — Payments Received', ar:'الذمم المدينة — Accounts Receivable',
+  stockVal:'قيمة المخزون بالتكلفة — Inventory Value', suppliers:'مشتريات الموردين (أوامر الشراء) — Supplier POs',
+  vat:'ضريبة القيمة المضافة — VAT', sales:'إيراد المبيعات (أوامر البيع) — Sales Revenue',
+  service:'إيراد الصيانة والخدمة — Service Revenue', cogs:'تكلفة المشتريات — Purchases at Cost',
+  payroll:'الرواتب — Payroll', expenses:'المصروفات التشغيلية — Operating Expenses', petty:'العهد النثرية — Petty Cash'
+};
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.2';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) */
+const SYS_VERSION = 'V2.3';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -804,6 +852,12 @@ async function loadState(){
   if(!S.notifRead) S.notifRead = {};
   if(!S.categories || !S.categories.length)
     S.categories = ['أفران دهان','غرف تحضير','روافع','سحب شاصي','معدات مغاسل','تغيير زيوت','إطارات','تكييف','محطات وقود','عدد يدوية','أخرى'];
+  // قيم التشغيل: دمج غير مدمِّر — أي مفتاح جديد يأخذ قيمته الافتراضية والقيم المحفوظة تبقى
+  S.ops = Object.assign({}, OPS_DEFAULTS, S.ops || {});
+  // شجرة الحسابات: تُزرع مرة واحدة إن كانت فارغة، وخريطة الربط تُكمَّل بالافتراضي
+  if(!S.coa || !S.coa.length)
+    S.coa = COA_SEED.map(([code,nameAr,nameEn,type,parent])=>({id:uid(), code, nameAr, nameEn, type, parent, active:true}));
+  S.coaMap = Object.assign({}, COA_MAP_DEFAULTS, S.coaMap || {});
   if(!S.products.length && !S._seeded){ seed(); S._seeded = true; persist(); }
   seedAdmins();
   // تحميل الصور المصغّرة المشار إليها في الحالة
@@ -819,8 +873,8 @@ function seedAdmins(){
   if(!S.users) S.users = [];
   SEED_ADMINS.forEach(a=>{
     let u = S.users.find(x=>x.uid===a.uid || (x.email||'').toLowerCase()===a.email.toLowerCase());
-    if(!u){ S.users.push({id:uid(), uid:a.uid, email:a.email, name:a.name, admin:true, readOnly:false, approveManager:true, views:['all'], photo:'', enabled:true}); }
-    else { u.uid = u.uid || a.uid; u.admin = true; u.enabled = (u.enabled!==false); }
+    if(!u){ S.users.push({id:uid(), uid:a.uid, email:a.email, name:a.name, admin:true, partner:true, readOnly:false, approveManager:true, views:['all'], photo:'', enabled:true}); }
+    else { u.uid = u.uid || a.uid; u.admin = true; u.partner = true; u.enabled = (u.enabled!==false); }
   });
 }
 function persist(){
@@ -1450,12 +1504,12 @@ const NAVDEF = [
  ['المشتريات والمخزون', [['prs','📝 طلبات الشراء — Purchase Requisitions PUR-001'],['pos','🛒 أوامر الشراء — Purchase Orders'],['stock','🏗️ حركات المخزون — Stock Movements WHS'],['inventory','📋 جرد المخزون — Inventory Count'],['external','🌐 الطلبات الخارجية — External Orders'],['shipments','🚢 الشحنات — Shipments LOG-001'],['evals','⭐ تقييم الموردين — Supplier Evaluation PUR-003']]],
  ['الجودة والخدمة', [['qc','🔍 الفحص الفني — Technical Inspection QLT-001'],['srv','🔧 الصيانة — Maintenance SRV-001'],['complaints','📮 الشكاوى — Complaints QLT-002']]],
  ['التركيب والرواتب', [['installjobs','🧰 حسابات فريق التركيب — Installation Team Accounts'],['payroll','💰 الرواتب — Payroll FIN-002']]],
- ['المالية والإدارة', [['payments','💳 الدفعات — Payments'],['ar','📕 الذمم المدينة — Accounts Receivable'],['petty','💵 العهد النقدية — Petty Cash FIN-001'],['expenses','💸 المصروفات — Expenses'],['vat','🧾 تقرير الضريبة — VAT Report'],['custody','🔑 العهد الداخلية — Internal Custody ADM-001']]],
+ ['المالية والإدارة', [['payments','💳 الدفعات — Payments'],['ar','📕 الذمم المدينة — Accounts Receivable'],['petty','💵 العهد النقدية — Petty Cash FIN-001'],['expenses','💸 المصروفات — Expenses'],['vat','🧾 تقرير الضريبة — VAT Report'],['custody','🔑 العهد الداخلية — Internal Custody ADM-001'],['coa','🌳 شجرة الحسابات — Chart of Accounts']]],
  ['التقارير', [['reports','📊 مركز التقارير — Reports Center'],['audit','🕵️ سجل التدقيق — Audit Log']]],
- ['الإعدادات', [['company','⚙️ بيانات الشركة — Company Profile'],['users','👤 المستخدمون والصلاحيات — Users & Permissions'],['account','🔑 حسابي — My Account']]],
+ ['الإعدادات', [['company','⚙️ بيانات الشركة — Company Profile'],['ops','🎛 قيم التشغيل والأهداف — Operating Values'],['users','👤 المستخدمون والصلاحيات — Users & Permissions'],['account','🔑 حسابي — My Account']]],
  ['المخرجات', [['print','🖨️ طباعة المستندات — Print Documents']]],
 ];
-const ADMIN_ONLY_VIEWS = ['users','company','audit'];
+const ADMIN_ONLY_VIEWS = ['users','company','audit','ops'];
 // اسم النظام = اسم الشركة المسجَّلة (يتحدّث فور تعديل بيانات الشركة) — نص افتراضي قبل تعبئتها
 function companyDisplayName(){
   const n = (S.company && String(S.company.name||'').trim()) || '';
@@ -2988,13 +3042,19 @@ const PERM_VIEWS = [
   ['installjobs','حسابات فريق التركيب — Installation Team Accounts'],['payroll','الرواتب — Payroll'],
   ['payments','الدفعات — Payments'],['ar','الذمم المدينة — Accounts Receivable'],
   ['petty','العهد النقدية — Petty Cash'],['expenses','المصروفات — Expenses'],['vat','تقرير الضريبة — VAT Report'],['custody','العهد الداخلية — Internal Custody'],
+  ['coa','شجرة الحسابات — Chart of Accounts'],
   ['reports','مركز التقارير — Reports Center'],['print','طباعة المستندات — Print Documents']
 ];
 /* أدوار جاهزة تُعبّئ الصلاحيات تلقائياً */
+/* الأدوار الأربعة وفق الهيكل التنظيمي ADM-MAN-002 ومصفوفة RACI (ADM-MAN-001 V2.0)
+   R = شاشات تنفيذ · C/I = شاشات اطلاع — الشريكان admin بكل الشاشات وعلم partner للتوقيع المشترك */
 const ROLE_PRESETS = {
   'مدير عام': {admin:true, views:['all']},
+  'شريك — عمليات ومبيعات': {admin:true, views:['all'], partner:true},
+  'شريك — تطوير أعمال وخدمة عملاء': {admin:true, views:['all'], partner:true},
+  'فني تركيب': {admin:false, views:['stock','inventory','dos','srv','qc','complaints','installjobs','products','shipments','print','search']},
+  'محاسب': {admin:false, views:['payments','ar','expenses','petty','vat','payroll','reports','coa','customers','quotes','sos','dos','evals','print']},
   'مبيعات': {admin:false, views:['crmdash','leads','opps','contacts','activities','campaigns','tickets','customers','quotes','sos','dos','products','search','print']},
-  'محاسب': {admin:false, views:['payments','ar','expenses','petty','vat','payroll','reports','customers','quotes','sos','print']},
   'مخزن ومشتريات': {admin:false, views:['products','stock','inventory','prs','pos','external','shipments','suppliers','evals','qc','print']},
   'مخصص': null
 };
@@ -3032,6 +3092,7 @@ function renderUsers(){
      <label style="font-weight:700"><input type="checkbox" id="u_admin" ${u.admin?'checked':''} onchange="document.getElementById('permbox').style.display=this.checked?'none':'block'"> مدير (صلاحية كاملة)</label>
      <label style="font-weight:700"><input type="checkbox" id="u_ro" ${u.readOnly?'checked':''}> استعراض فقط (بدون تعديل)</label>
      <label style="font-weight:700"><input type="checkbox" id="u_mgr" ${u.approveManager?'checked':''}> صلاحية اعتماد المدير</label>
+     <label style="font-weight:700"><input type="checkbox" id="u_partner" ${u.partner?'checked':''}> شريك (توقيع مشترك للعتبات المالية)</label>
     </div>
     <div id="permbox" class="card" style="background:var(--pale);display:${checkAll?'none':'block'}"><h3>الشاشات المسموح بها</h3>
      <div style="display:flex;flex-wrap:wrap;gap:8px 16px">
@@ -3049,6 +3110,7 @@ window.applyRolePreset = role => {
   const p = ROLE_PRESETS[role];
   if(!p) return; // «مخصص» أو فارغ — لا تغيير
   document.getElementById('u_admin').checked = p.admin;
+  document.getElementById('u_partner').checked = !!p.partner;
   document.getElementById('permbox').style.display = p.admin ? 'none' : 'block';
   document.querySelectorAll('.permchk').forEach(c=>{ c.checked = p.views.includes('all') || p.views.includes(c.value); });
 };
@@ -3064,6 +3126,7 @@ function readUserForm(){
     role: document.getElementById('u_role').value,
     admin, readOnly: document.getElementById('u_ro').checked,
     approveManager: admin || document.getElementById('u_mgr').checked,
+    partner: document.getElementById('u_partner').checked,
     views
   };
 }
@@ -3171,9 +3234,208 @@ window.printPayrollReport = () => {
 };
 
 /* ═══════════════ الموجه والتهيئة ═══════════════ */
+/* ═══════════════ شجرة الحسابات المبسطة — Chart of Accounts ═══════════════ */
+const coaByCode = code => S.coa.find(a=>a.code===code);
+function coaLevel(a){ let n=0, p=a; while(p && p.parent && n<6){ p=coaByCode(p.parent); n++; } return n; }
+function coaSorted(){ return [...S.coa].sort((x,y)=>String(x.code).localeCompare(String(y.code),'en',{numeric:true})); }
+/* الرصيد الحي لكل رابط وحدة → يُحتسب من سجلات النظام الفعلية لا من إدخال يدوي */
+function coaLinkBalance(key){
+  try{
+    if(key==='payments') return S.payments.reduce((a,p)=>a+(+p.amount||0),0);
+    if(key==='ar')       return receivableQuotes().reduce((a,q)=>a+Math.max(0,quoteRemaining(q)),0);
+    if(key==='stockVal') return S.products.reduce((a,p)=>a+stockQty(p.nameAr)*(+p.cost||0),0);
+    if(key==='suppliers'||key==='cogs') return S.pos.filter(p=>p.status!=='ملغي').reduce((a,p)=>a+(+p.total||0),0);
+    if(key==='vat')      return S.sos.filter(o=>o.status!=='ملغي').reduce((a,o)=>{const q=S.quotes.find(x=>x.no===o.quoteRef); return a+(q?+q.vat||0:0);},0);
+    if(key==='sales')    return S.sos.filter(o=>o.status!=='ملغي').reduce((a,o)=>a+(+o.total||0),0);
+    if(key==='payroll')  return S.payroll.reduce((a,p)=>a+(p.net!=null?+p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0))),0);
+    if(key==='expenses') return S.expenses.reduce((a,e)=>a+(+e.amount||0),0);
+    if(key==='petty')    return S.petty.reduce((a,e)=>a+(+e.amount||0),0);
+  }catch(e){}
+  return null;
+}
+function renderCoa(){
+  const editing = editId ? S.coa.find(a=>a.id===editId) : null;
+  const a = editing || {};
+  const parents = coaSorted().filter(x=>x.id!==editId);
+  const mapRev = {}; Object.entries(S.coaMap).forEach(([k,c])=>{ if(c){ (mapRev[c]=mapRev[c]||[]).push(k); } });
+  const rows = coaSorted().map(x=>{
+    const lvl = coaLevel(x);
+    const links = (mapRev[x.code]||[]);
+    const bal = links.length ? links.map(k=>coaLinkBalance(k)).filter(v=>v!=null).reduce((s,v)=>s+v,0) : null;
+    return `<tr class="${x.active===false?'':''}">
+      <td style="font-family:'Cairo';font-weight:700;color:var(--navy)">${esc(x.code)}</td>
+      <td style="padding-right:${8+lvl*22}px">${lvl?'└ ':''}<b>${esc(x.nameAr)}</b><br><small style="color:var(--steel)">${esc(x.nameEn||'')}</small></td>
+      <td><span class="tag info">${esc(x.type)}</span></td>
+      <td>${esc(x.parent||'—')}</td>
+      <td>${links.length?links.map(k=>`<span class="tag ok" title="${esc(COA_MAP_LABELS[k]||k)}">${esc((COA_MAP_LABELS[k]||k).split(' — ')[0])}</span>`).join(' '):'—'}</td>
+      <td>${bal!=null?('<b>'+fmt(bal)+'</b>'):'—'}</td>
+      <td>${x.active===false?'<span class="tag warn">موقوف</span>':'<span class="tag ok">نشط</span>'}</td>
+      <td class="no-print"><button class="btn sm ghost" onclick="editId='${x.id}';render();scrollTo(0,0)">✏</button>
+        <button class="btn sm ${x.active===false?'':'red'}" onclick="toggleCoa('${x.id}')">${x.active===false?'تفعيل':'إيقاف'}</button></td></tr>`;
+  }).join('');
+  document.getElementById('main').innerHTML = `
+   ${headHtml('🌳 شجرة الحسابات — Chart of Accounts','شجرة مبسطة تربط سجلات النظام المالية بحساباتها — قابلة للتصدير والتعديل والاستيراد، وتعديلها يعيد ضبط ارتباطات الوحدات تلقائياً / Simplified tree linking system records to accounts — exportable, editable, re-importable')}
+   <div class="card"><h3>${editing?'تعديل حساب':'حساب جديد'}</h3><div class="formgrid">
+    <div class="fld"><label>رقم الحساب — Account Code *</label><input id="c_code" value="${esc(a.code||'')}" placeholder="مثال: 5310"></div>
+    <div class="fld"><label>الاسم عربي — Name (Ar) *</label><input id="c_nameAr" value="${esc(a.nameAr||'')}"></div>
+    <div class="fld"><label>الاسم إنجليزي — Name (En)</label><input id="c_nameEn" value="${esc(a.nameEn||'')}"></div>
+    <div class="fld"><label>النوع — Type *</label><select id="c_type">${COA_TYPES.map(t=>`<option ${t===a.type?'selected':''}>${t}</option>`).join('')}</select></div>
+    <div class="fld"><label>الحساب الأب — Parent Account</label><select id="c_parent"><option value=""></option>${parents.map(p=>`<option value="${esc(p.code)}" ${p.code===a.parent?'selected':''}>${esc(p.code)} — ${esc(p.nameAr)}</option>`).join('')}</select></div>
+   </div><div class="btnrow">
+    <button class="btn" onclick="saveCoa()">${editing?'حفظ التعديل':'＋ إضافة الحساب'}</button>
+    ${editing?`<button class="btn ghost" onclick="editId=null;render()">إلغاء</button>`:''}
+   </div></div>
+   <div class="card"><h3>الشجرة (${S.coa.length} حساباً)</h3>
+    <div class="btnrow no-print" style="margin-bottom:8px">
+     <button class="btn ghost sm" onclick="exportCoaJSON()">⬇ تصدير النموذج JSON</button>
+     <button class="btn ghost sm" onclick="exportCoaCSV()">⬇ تصدير CSV</button>
+     <label class="btn ghost sm" style="cursor:pointer">⬆ استيراد نموذج (JSON/CSV)<input type="file" accept=".json,.csv" style="display:none" onchange="importCoaFile(this)"></label>
+    </div>
+    <div style="overflow-x:auto"><table><thead><tr><th>الرقم — Code</th><th>الحساب — Account</th><th>النوع — Type</th><th>الأب — Parent</th><th>الوحدات المرتبطة — Linked Modules</th><th>الرصيد الحي — Live Balance</th><th>الحالة — Status</th><th class="no-print"></th></tr></thead><tbody>${rows}</tbody></table></div></div>
+   <div class="card"><h3>🔗 ربط وحدات النظام بالحسابات — Module → Account Mapping</h3>
+    <p style="font-size:12px;color:var(--steel);margin-bottom:10px">كل سجل مالي في النظام يتبع الحساب المحدد هنا. عدّل الربط فتتعدل التقارير فوراً — وعند استيراد شجرة جديدة تُعاد مطابقة الارتباطات تلقائياً (أي ربط لحساب غير موجود يُفرَّغ ويُنبَّه عليه).</p>
+    <div class="formgrid">
+    ${Object.keys(COA_MAP_LABELS).map(k=>`<div class="fld"><label>${esc(COA_MAP_LABELS[k])}</label>
+      <select onchange="setCoaMap('${k}',this.value)"><option value=""></option>${coaSorted().filter(x=>x.active!==false).map(x=>`<option value="${esc(x.code)}" ${S.coaMap[k]===x.code?'selected':''}>${esc(x.code)} — ${esc(x.nameAr)}</option>`).join('')}</select>
+      <small style="color:var(--steel)">${coaLinkBalance(k)!=null?('الرصيد الحي: <b>'+fmt(coaLinkBalance(k))+'</b>'):'يُحتسب لاحقاً'}</small></div>`).join('')}
+    </div></div>`;
+}
+window.saveCoa = () => {
+  if(!canEdit()) return alert('صلاحية استعراض فقط');
+  const code = document.getElementById('c_code').value.trim();
+  const nameAr = document.getElementById('c_nameAr').value.trim();
+  if(!code || !nameAr) return alert('رقم الحساب والاسم العربي مطلوبان');
+  const dup = S.coa.find(x=>x.code===code && x.id!==editId);
+  if(dup) return alert('رقم الحساب مستخدم مسبقاً: '+dup.nameAr);
+  const parent = document.getElementById('c_parent').value;
+  if(parent===code) return alert('لا يمكن أن يكون الحساب أباً لنفسه');
+  const rec = { code, nameAr, nameEn:document.getElementById('c_nameEn').value.trim(), type:document.getElementById('c_type').value, parent, active:true };
+  if(editId){
+    const i = S.coa.findIndex(x=>x.id===editId);
+    const oldCode = S.coa[i].code;
+    S.coa[i] = {...S.coa[i], ...rec};
+    if(oldCode!==code){ // تعديل الرقم يسحب معه ارتباطات الوحدات والأبناء تلقائياً
+      S.coa.forEach(x=>{ if(x.parent===oldCode) x.parent=code; });
+      Object.keys(S.coaMap).forEach(k=>{ if(S.coaMap[k]===oldCode) S.coaMap[k]=code; });
+    }
+    logAudit('تعديل حساب','شجرة الحسابات',code,nameAr); editId=null;
+  } else {
+    S.coa.push({id:uid(), ...rec});
+    logAudit('إضافة حساب','شجرة الحسابات',code,nameAr);
+  }
+  persist(); render();
+};
+window.toggleCoa = id => {
+  if(!canEdit()) return alert('صلاحية استعراض فقط');
+  const a = S.coa.find(x=>x.id===id); if(!a) return;
+  a.active = a.active===false;
+  logAudit(a.active?'تفعيل حساب':'إيقاف حساب','شجرة الحسابات',a.code,a.nameAr);
+  persist(); render();
+};
+window.setCoaMap = (key, code) => {
+  if(!canEdit()) return alert('صلاحية استعراض فقط');
+  S.coaMap[key] = code;
+  logAudit('تعديل ربط حساب','شجرة الحسابات',code||'—',COA_MAP_LABELS[key]||key);
+  persist(); render();
+};
+window.exportCoaJSON = () => {
+  const data = { app:'ITCO-MiniERP', module:'chart-of-accounts', version:SYS_VERSION, exported:new Date().toISOString(),
+    accounts:S.coa.map(({code,nameAr,nameEn,type,parent,active})=>({code,nameAr,nameEn,type,parent,active:active!==false})), map:S.coaMap };
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
+  a.download = 'ITCO_chart_of_accounts_'+today()+'.json'; a.click();
+};
+window.exportCoaCSV = () => {
+  const esc2 = v => '"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const lines = ['code;nameAr;nameEn;type;parent;active'].concat(
+    coaSorted().map(x=>[x.code,x.nameAr,x.nameEn||'',x.type,x.parent||'',x.active!==false?'1':'0'].map(esc2).join(';')));
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob(['﻿'+lines.join('\n')],{type:'text/csv;charset=utf-8'}));
+  a.download = 'ITCO_chart_of_accounts_'+today()+'.csv'; a.click();
+};
+window.importCoaFile = inp => {
+  if(!canEdit()) return alert('صلاحية استعراض فقط');
+  const f = inp.files[0]; if(!f) return; inp.value='';
+  const rd = new FileReader();
+  rd.onload = () => { try{
+    let accounts = null, map = null;
+    if(/\.json$/i.test(f.name)){
+      const j = JSON.parse(rd.result);
+      if(!j || j.module!=='chart-of-accounts' || !Array.isArray(j.accounts)) return alert('الملف ليس نموذج شجرة حسابات صادراً من هذا النظام');
+      accounts = j.accounts; map = j.map||null;
+    } else {
+      const rows = String(rd.result).replace(/^﻿/,'').split(/\r?\n/).filter(l=>l.trim());
+      const parse = l => { const out=[]; let cur='', q=false;
+        for(let i=0;i<l.length;i++){ const ch=l[i];
+          if(q){ if(ch==='"'){ if(l[i+1]==='"'){cur+='"';i++;} else q=false; } else cur+=ch; }
+          else { if(ch==='"') q=true; else if(ch===';'){ out.push(cur); cur=''; } else cur+=ch; } }
+        out.push(cur); return out; };
+      const head = parse(rows[0]).map(h=>h.trim());
+      const ix = k => head.indexOf(k);
+      if(ix('code')<0 || ix('nameAr')<0 || ix('type')<0) return alert('ترويسة CSV يجب أن تشمل: code;nameAr;nameEn;type;parent;active');
+      accounts = rows.slice(1).map(parse).map(c=>({ code:(c[ix('code')]||'').trim(), nameAr:(c[ix('nameAr')]||'').trim(),
+        nameEn:(c[ix('nameEn')]||'').trim(), type:(c[ix('type')]||'').trim(), parent:(c[ix('parent')]||'').trim(),
+        active:(c[ix('active')]||'1').trim()!=='0' }));
+    }
+    // تحقق: أرقام صالحة وغير مكررة، أنواع معروفة، آباء موجودون داخل الملف
+    accounts = accounts.filter(x=>x.code && x.nameAr);
+    const codes = accounts.map(x=>x.code);
+    if(!codes.length) return alert('لا حسابات صالحة في الملف');
+    if(new Set(codes).size !== codes.length) return alert('الملف يحتوي أرقام حسابات مكررة');
+    const badType = accounts.find(x=>!COA_TYPES.includes(x.type));
+    if(badType) return alert('نوع حساب غير معروف: «'+badType.type+'» — الأنواع: '+COA_TYPES.join(' / '));
+    const badParent = accounts.find(x=>x.parent && !codes.includes(x.parent));
+    if(badParent) return alert('حساب أب غير موجود في الملف: '+badParent.parent+' (للحساب '+badParent.code+')');
+    if(!confirm('استبدال الشجرة الحالية ('+S.coa.length+' حساباً) بمحتوى الملف ('+accounts.length+' حساباً)؟ الارتباطات ستُعاد مطابقتها تلقائياً.')) return;
+    S.coa = accounts.map(x=>({id:uid(), ...x}));
+    if(map && typeof map==='object') Object.keys(COA_MAP_DEFAULTS).forEach(k=>{ if(map[k]!==undefined) S.coaMap[k]=map[k]; });
+    // إعادة مطابقة الارتباطات: أي ربط لحساب لم يعد موجوداً يُفرَّغ ويُنبَّه عليه
+    const cleared = [];
+    Object.keys(S.coaMap).forEach(k=>{ if(S.coaMap[k] && !codes.includes(S.coaMap[k])){ cleared.push(COA_MAP_LABELS[k]||k); S.coaMap[k]=''; } });
+    logAudit('استيراد شجرة حسابات','شجرة الحسابات',String(accounts.length)+' حساب',(f&&f.name)||'');
+    persist(); render();
+    alert('تم الاستيراد: '+accounts.length+' حساباً.'+(cleared.length?('\n⚠ ارتباطات أُفرغت لعدم وجود حسابها وتحتاج إعادة ربط:\n— '+cleared.join('\n— ')):' كل الارتباطات سليمة.'));
+  }catch(e){ alert('تعذر قراءة الملف: '+e.message); } };
+  rd.readAsText(f);
+};
+
+/* ═══════════════ قيم التشغيل والأهداف — Operating Values (ADM-MAN-004) ═══════════════ */
+const OPS_GROUPS = [
+  ['💰 العتبات المالية — Financial Thresholds', ['prTh','poTh','bigDeal','reserve','pettyTh','advPct']],
+  ['⏱ القواعد الزمنية — Time Rules', ['respH','complaintDays','settleDays','reportDay']],
+  ['🎯 الأهداف الشهرية — Monthly Targets', ['ovens','chassis','leadsT','quotesT','meetingsT','refsT','revT','bigDealValT']],
+  ['📈 النسب المستهدفة — Target Percentages', ['convPct','ftf','invAcc','onTime','bigClosePct']]
+];
+function renderOps(){
+  document.getElementById('main').innerHTML = `
+   ${headHtml('🎛 قيم التشغيل والأهداف — Operating Values','كل عتبات النظام وأهداف ADM-MAN-004 في مكان واحد — تعديلها هنا يسري فوراً على القواعد واللوحات دون أي تعديل كود / All thresholds and KPI targets — editable without code changes')}
+   ${OPS_GROUPS.map(([title,keys])=>`<div class="card"><h3>${title}</h3><div class="formgrid">
+     ${keys.map(k=>`<div class="fld"><label>${esc(OPS_LABELS[k]||k)}</label><input id="ops_${k}" type="number" step="any" value="${esc(S.ops[k])}" placeholder="${k==='revT'||k==='bigDealValT'?'يُثبَّت لاحقاً':''}"></div>`).join('')}
+   </div></div>`).join('')}
+   <div class="btnrow"><button class="btn red" onclick="saveOps()">💾 حفظ كل القيم</button>
+    <button class="btn ghost" onclick="if(confirm('إرجاع كل القيم للإعداد الافتراضي المعتمد؟')){S.ops={...OPS_DEFAULTS};logAudit('إرجاع قيم التشغيل للافتراضي','الإعدادات','','');persist();render();}">↺ الافتراضي المعتمد</button></div>
+   <p style="font-size:11.5px;color:var(--steel);margin-top:8px">المرجع: ADM-MAN-004 (سجل مؤشرات الأداء) + عتبات ADM-MAN-002 — الحقول الفارغة (هدف الإيراد وقيمة الصفقات الكبرى) تُثبَّت من قائمة الأسعار النهائية كما ورد في السجل.</p>`;
+}
+window.saveOps = () => {
+  const bad = [];
+  OPS_GROUPS.forEach(([,keys])=>keys.forEach(k=>{
+    const el = document.getElementById('ops_'+k); if(!el) return;
+    const raw = el.value.trim();
+    if(raw===''){ S.ops[k]=''; return; }
+    const n = Number(raw);
+    if(isNaN(n) || n<0){ bad.push(OPS_LABELS[k]||k); return; }
+    S.ops[k] = n;
+  }));
+  if(bad.length) return alert('قيم غير صالحة في:\n— '+bad.join('\n— '));
+  logAudit('تحديث قيم التشغيل والأهداف','الإعدادات','','');
+  persist(); render(); alert('✔ حُفظت قيم التشغيل — تسري فوراً على قواعد النظام ولوحاته');
+};
+
 function render(){
   renderNav();
   if(view==='dash') return renderDash();
+  if(view==='coa') return canView('coa')?renderCoa():renderDash();
+  if(view==='ops') return isAdmin()?renderOps():renderDash();
   if(view==='company') return isAdmin()?renderCompany():renderDash();
   if(view==='users') return isAdmin()?renderUsers():renderDash();
   if(view==='audit') return isAdmin()?renderAudit():renderDash();
