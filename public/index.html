@@ -831,8 +831,8 @@ const COA_MAP_LABELS = {
   payroll:'الرواتب — Payroll', expenses:'المصروفات التشغيلية — Operating Expenses', petty:'العهد النثرية — Petty Cash'
 };
 /* رقم الإصدار — يُحدَّث يدوياً مع كل تعديل يُنشَر على النظام (سجل مختصر أدناه) */
-const SYS_VERSION = 'V2.3';
-/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) */
+const SYS_VERSION = 'V2.4';
+/* V1.0 الإصدار الأساسي — V1.1 واجهة جوال (قائمة منزلقة) — V1.2 روابط موافقة العميل — V1.3 اسم النظام = اسم الشركة + عرض العميل مطابق للطباعة/PDF حرفياً — V1.4 كل المسميات ثنائية اللغة (عربي/إنجليزي) خصوصاً المستندات المطبوعة — V1.5 نموذج عام #public-request لتقديم شكاوى/طلبات صيانة بلا حساب مع استيعاب تلقائي في complaints/srv — V1.6 تنبيه حيّ (toast + صوت) فور وصول طلب عميل جديد — V1.7 تفعيل Firebase App Check (reCAPTCHA v3) + فهارس Firestore مركّبة — V1.8 إخفاء تنبيهات الاعتماد عند الطباعة + ترويسة موحّدة (شعار+اسم+QR السجل التجاري) لكل المستندات + تعيين الشكاوى/الصيانة لموظف مع جرس تنبيه — V1.9 تقرير EICR لإذن التسليم + رقم المستند أول صف + تذييل موحّد لكل المستندات — V2.0 طباعة معزولة في نافذة مستقلة بلا عناصر واجهة التطبيق + إزالة أي رابط للنظام من المطبوعات + ترويسة وتذييل يتكرران أعلى/أسفل كل صفحة + عرض موحّد لخلايا العناوين + منع انقطاع صفوف البنود والتوقيعات عبر الصفحات — V2.1 إصلاح ألوان الطباعة وفق الهوية البصرية الرسمية لشركة ITCO (تدرّج Navy→Carbon للترويسة، فاصل أحمر إشاري، رؤوس جداول كحلية بخط Cairo، تدرّج للإجمالي النهائي، إطار فضي للاعتمادات الإلكترونية) + إصلاح خلل عدم ظهور الألوان عند الطباعة (color-adjust:exact) — V2.2 هيدر أبيض بنص كحلي/فولاذي بدل التدرّج الداكن + حذف عنوان «البنود» من عرض السعر (الجدول يبقى) + تدرّج ألوان تفصيلي لصفوف الإجماليات (فاتح للمجموع/الخصم/الضريبة، فضي متوسط للصافي قبل الضريبة، كحلي مصمت للإجمالي النهائي فقط) — V2.3 (المرحلة 1 من دمج الطبقة التنظيمية) شجرة حسابات مبسطة مرتبطة بسجلات النظام مع تصدير/استيراد النموذج وإعادة مطابقة الارتباطات تلقائياً + صفحة قيم التشغيل والأهداف (عتبات ADM-MAN-002 وأهداف ADM-MAN-004 قابلة للتعديل دون كود) + أدوار RACI الأربعة (شريكان بعلم توقيع مشترك، فني تركيب، محاسب) — V2.4 (المرحلة 2) بوابات الإنفاذ التنظيمية: توقيع الشريكين الفعلي لطلبات الشراء فوق العتبة (لا اعتماد قبل توقيعَي الشريكين) وأوامر الشراء (لا إرسال قبلهما)، قفل التسليم المحسوب من سجل الدفعات (لا إذن قبل سداد 100% مع مسار استثناء موثق للشريكين)، بوابة المنتج الجديد ADM-PRC-001 (منتج جديد لا يدخل البيع/الشراء قبل قرار الشريكين المشترك)، تصعيد العهد المتأخرة، تنبيه الاحتياطي النقدي في اللوحة والإشعارات، مهلة إقفال الشكاوى — كل العتبات من قيم التشغيل القابلة للتعديل */
 let S = {counters:{}, notifRead:{}, categories:[], company:{name:'', nameEn:'', cr:'', vat:'', address:'', phone:'', email:'', website:'', logo:''}};
 ENT.forEach(e => S[e] = []);
 /* الشريكان المؤسّسان (حسابات فايربيس) — مديرون بصلاحية كاملة */
@@ -970,6 +970,23 @@ function computeNotifs(){
   (window.pendingIntake||[]).forEach(it=>N.push({id:'pub_'+it.id, pr:'high', type:'طلب عميل خارجي',
     msg:`${it.type==='srv'?'طلب صيانة':'شكوى'} جديد من ${it.customerName||'عميل'} — ${it.mobile||''}`,
     view: it.type==='srv'?'srv':'complaints'}));
+  /* ═══ قواعد الإنفاذ التنظيمية (ADM-MAN-002 / FIN-PRC-001 / QLT-002) ═══ */
+  S.petty.filter(p=>p.status!=='مسوّاة' && daysSince(p.date)>(+S.ops.settleDays||7))
+    .forEach(p=>N.push({id:'pt_'+p.no, pr:'high', type:'عهدة متأخرة',
+      msg:`العهدة ${p.no} (${p.to||'—'}) بلا تسوية منذ ${daysSince(p.date)} يوماً (المهلة ${S.ops.settleDays} أيام) — تصعيد للمشرف ثم الشريكين`, view:'petty'}));
+  S.prs.filter(r=>jointNeeded('pr',r) && psigCount(r)<2 && !['مرفوض','ملغي'].includes(r.status))
+    .forEach(r=>N.push({id:'jspr_'+r.no, pr:'high', type:'توقيع مشترك',
+      msg:`طلب الشراء ${r.no} (${fmt(r.est)} ريال) يتجاوز عتبة ${fmt(S.ops.prTh)} ويحتاج توقيع الشريكين (${psigCount(r)}/2)`, view:'prs'}));
+  S.pos.filter(r=>jointNeeded('po',r) && psigCount(r)<2 && !['ملغي','مستلم'].includes(r.status))
+    .forEach(r=>N.push({id:'jspo_'+r.no, pr:'high', type:'توقيع مشترك',
+      msg:`أمر الشراء ${r.no} (${fmt(r.total)} ريال) يتجاوز عتبة ${fmt(S.ops.poTh)} ويحتاج توقيع الشريكين (${psigCount(r)}/2)`, view:'pos'}));
+  S.complaints.filter(c=>c.status!=='مغلقة' && daysSince(c.date)>(+S.ops.complaintDays||7))
+    .forEach(c=>N.push({id:'cq_'+c.no, pr:'high', type:'شكوى متأخرة',
+      msg:`الشكوى ${c.no} (${c.customer||'—'}) تجاوزت مهلة الإقفال ${S.ops.complaintDays} أيام (مفتوحة منذ ${daysSince(c.date)} يوماً)`, view:'complaints'}));
+  const _cash = cashPosition();
+  if(_cash < (+S.ops.reserve||0))
+    N.push({id:'cash_low', pr:'high', type:'احتياطي نقدي',
+      msg:`الرصيد النقدي التقديري ${fmt(_cash)} ريال دون حد الاحتياطي ${fmt(S.ops.reserve)} — تصعيد فوري للشريكين وتجميد المصروفات غير التشغيلية (FIN-PRC-001)`, view:'dash'});
   return N;
 }
 const unreadNotifs = () => computeNotifs().filter(n=>!S.notifRead[n.id]).length;
@@ -1174,6 +1191,8 @@ const inQ = (d,y,q) => d && d.slice(0,4)==String(y) && qOf(d)===q;
 
 /* ═══════════════ تعريف الشاشات (Schema) ═══════════════ */
 const optProducts = () => S.products.map(p=>p.nameAr);
+/* منتجات مسموح تداولها في البيع والشراء: تستبعد المنتجات الجديدة بانتظار القرار المشترك ADM-PRC-001 */
+const optProductsSale = () => S.products.filter(p=>p.npdOk!==false).map(p=>p.nameAr);
 const optCustomers = () => S.customers.map(c=>c.name);
 const optEmployees = () => S.employees.map(e=>e.name);
 const optSupOK = () => supOK().map(s=>s.name);
@@ -1195,6 +1214,7 @@ const VIEWS = {
   cols:[
    {k:'img',l:'الصورة — Image',f:(v)=>imgTag(v,140)},
    {k:'code',l:'الرمز — Code'},{k:'nameAr',l:'المنتج — Product',f:(v,r)=>`<span dir="auto">${esc(prodLabel(r))}</span>`},{k:'cat',l:'الفئة — Category'},
+   {k:'_npd',l:'قرار ADM-PRC-001',f:(v,r)=> r.npdOk===false?`<span class="tag warn">⚠ بانتظار قرار الشريكين (${psigCount(r)}/2)</span>`:'<span class="tag ok">معتمد ✓</span>'},
    {k:'cost',l:'التكلفة — Cost',f:fmt},{k:'price',l:'البيع — Sale',f:fmt},
    {k:'_margin',l:'الهامش — Margin',f:(v,r)=> r.cost>0? ((r.price-r.cost)/r.cost*100).toFixed(0)+'%':'—'},
    {k:'_stock',l:'الرصيد — Balance',f:(v,r)=>fmt(stockQty(r.nameAr))},
@@ -1243,7 +1263,7 @@ const VIEWS = {
    {k:'desc',l:'وصف الاحتياج — Requirement Description',t:'text'},{k:'est',l:'التكلفة التقديرية — Estimated Cost',t:'num'},
    {k:'supplier',l:'المورد المقترح — Suggested Supplier',t:'sel',o:optSupOK},{k:'status',l:'الحالة — Status',t:'sel',o:['قيد المراجعة','معتمد','مرفوض','ملغي']},{k:'notes',l:'ملاحظات — Notes',t:'text'}],
   cols:[{k:'no',l:'الرقم — Number'},{k:'date',l:'التاريخ — Date'},{k:'requester',l:'الطالب — Requester'},{k:'desc',l:'الوصف — Description'},{k:'est',l:'التقدير — Estimate',f:fmt},
-   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> +r.est>5000?'<span class="tag warn">⚠ توقيع الشريكين</span>':''},
+   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> jointNeeded('pr',r)?(psigCount(r)>=2?'<span class="tag ok">✍ الشريكان وقّعا ✓</span>':`<span class="tag warn">⚠ توقيع الشريكين (${psigCount(r)}/2)</span>`):''},
    {k:'_ap',l:'الاعتماد — Approval',f:(v,r)=>apprBadge(r)},
    {k:'status',l:'الحالة — Status',f:v=>tagStatus(v)}],
   approvals:true, docType:'pr',
@@ -1330,7 +1350,8 @@ const VIEWS = {
    {k:'amount',l:'مبلغ العهدة — Custody Amount',t:'num',req:1},{k:'purpose',l:'الغرض — Purpose',t:'text'},{k:'ref',l:'المرجع المرتبط — Related Reference',t:'text'},
    {k:'status',l:'الحالة — Status',t:'sel',o:['معلقة','مسوّاة']}],
   cols:[{k:'no',l:'الإذن — Order No.'},{k:'date',l:'التاريخ — Date'},{k:'to',l:'المستلم — Recipient'},{k:'amount',l:'العهدة — Custody',f:fmt},
-   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> +r.amount>1000?'<span class="tag warn">⚠ يتجاوز السقف → PUR-001</span>':''},
+   {k:'_a',l:'تنبيه — Alert',f:(v,r)=> +r.amount>(+S.ops.pettyTh||1000)?'<span class="tag warn">⚠ يتجاوز السقف → PUR-001</span>':''},
+   {k:'_esc',l:'التصعيد — Escalation',f:(v,r)=>{ if(r.status==='مسوّاة') return '<span class="tag ok">مسوّاة ✓</span>'; const d=daysSince(r.date); return d>(+S.ops.settleDays||7)?`<span class="tag warn">⚠ تصعيد — ${d} يوماً بلا تسوية</span>`:`<span class="tag info">${d} من ${S.ops.settleDays} أيام</span>`; }},
    {k:'_spent',l:'فواتير مقدمة — Invoices Submitted',f:(v,r)=>fmt(pettySpent(r.no))},
    {k:'_vat',l:'ضرائب مدفوعة ضمنها — Taxes Included',f:(v,r)=>fmt(pettyVatPaid(r.no))},
    {k:'_rem',l:'متبقٍ في ذمته — Outstanding on Account',f:(v,r)=>{const rem=(+r.amount||0)-pettySpent(r.no);return rem>0?`<span class="tag warn"><b>${fmt(rem)}</b></span>`:rem<0?`<span class="tag mid">له ${fmt(-rem)}</span>`:'<span class="tag ok">صفر ✓</span>';}},
@@ -1803,6 +1824,8 @@ function renderRegister(key){
     <div class="formgrid">${formHtml}</div>
     ${V.note?`<div class="alertbox" style="background:var(--light);color:var(--steel);border-right-color:var(--steel)">ℹ ${V.note}</div>`:''}
     ${(V.approvals && row)?approvalsBox(key, row):''}
+    ${(key==='prs' && row && jointNeeded('pr',row))?jointSignBox('pr','prs',row):''}
+    ${(key==='products' && row && row.npdOk===false)?jointSignBox('npd','products',row):''}
     ${(V.attach && row)?attBox(V.ent, row):''}
     ${(V.share && row)?shareBoxHTML(V.ent, row):''}
     ${(V.assign && row)?assignBox(key, row):''}
@@ -1849,6 +1872,13 @@ window.saveRegister = key => {
   }
   r._u = today(); // آخر تحديث — يُستخدم لاكتشاف الركود
   if(V.beforeSave) V.beforeSave(r);
+  // بوابة التوقيع المشترك: طلب شراء فوق العتبة لا يُعتمد قبل توقيع الشريكين معاً (ADM-MAN-002)
+  if(key==='prs' && r.status==='معتمد' && jointNeeded('pr',r) && psigCount(r)<2){
+    r.status = 'قيد المراجعة';
+    alert('⛔ الطلب يتجاوز عتبة '+fmt(S.ops.prTh)+' ريال — لا يُعتمد قبل توقيع الشريكين معاً ('+psigCount(r)+'/2).\nاحفظ السجل ثم وقّعا من بطاقة «التوقيع المشترك»، وسيقبل النظام الاعتماد بعدها.');
+  }
+  // بوابة المنتج الجديد ADM-PRC-001: أي منتج جديد يبدأ بانتظار القرار المشترك — لا يظهر في البيع/الشراء قبله
+  if(key==='products' && !editId && r.npdOk===undefined) r.npdOk = false;
   if(editId){ const i=S[V.ent].findIndex(x=>x.id===editId); S[V.ent][i]=r; }
   else S[V.ent].push(r);
   logAudit(editId?'تعديل':'إضافة', V.title, r.no||r.code||r.name||r.id, '');
@@ -1871,7 +1901,7 @@ function linesHTML(priceMode){
     const w = isQuote ? lnWarnMsg(l) : '';
     return `<tr>
     <td style="width:26px">${i+1}</td>
-    <td style="min-width:190px"><select onchange="lnProd(${i},this.value,'${priceMode}')"><option value=""></option>${optProducts().map(p=>`<option ${p===l.product?'selected':''}>${esc(p)}</option>`).join('')}</select>
+    <td style="min-width:190px"><select onchange="lnProd(${i},this.value,'${priceMode}')"><option value=""></option>${optProductsSale().map(p=>`<option ${p===l.product?'selected':''}>${esc(p)}</option>`).join('')}</select>
       <div id="lw_${i}" style="color:var(--amber);font-size:10.5px;font-weight:700">${esc(w)}</div></td>
     <td id="lb_${i}" style="width:90px">${esc(l.brand||'—')}</td>
     <td style="width:70px"><input type="number" min="0" value="${l.qty??''}" oninput="lnSet(${i},'qty',this.value,'${priceMode}')"></td>
@@ -1912,8 +1942,8 @@ function recalcDoc(){
   set('t_gross',g); set('t_disc',d); set('t_net',net); set('t_vat',vat); set('t_total',tot);
   const al = document.getElementById('docalert');
   if(al){
-    const limit = al.dataset.limit==='po' ? tot>50000 : (tot>20000 || disc>5);
-    const msg = al.dataset.limit==='po' ? '⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR 50,000: requires signatures from both partners' : '⚠ يتطلب اعتماد المدير العام (الإجمالي > 20,000 أو الخصم > 5%)';
+    const limit = al.dataset.limit==='po' ? tot>(+S.ops.poTh||50000) : (tot>20000 || disc>5);
+    const msg = al.dataset.limit==='po' ? '⚠ يتجاوز '+fmt(S.ops.poTh)+' ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR '+fmt(S.ops.poTh)+': requires both partners\' signatures' : '⚠ يتطلب اعتماد المدير العام (الإجمالي > 20,000 أو الخصم > 5%)';
     al.style.display = limit?'block':'none'; al.textContent = msg;
   }
   return {g,d,net,vat,tot};
@@ -2059,12 +2089,27 @@ window.saveDO = () => {
   if(!g('f_soRef')) return alert('اختر مرجع أمر البيع');
   if(g('f_full')!=='نعم'){ document.getElementById('doalert').style.display='block'; return; }
   const o = S.sos.find(x=>x.no===g('f_soRef'));
+  // قفل السداد المحسوب: لا إذن تسليم قبل سداد 100% فعلياً من سجل الدفعات — لا تأشيرة يدوية فقط (SLS-PRC-001)
+  const q = o && S.quotes.find(x=>x.no===o.quoteRef);
+  const rem = q ? quoteRemaining(q) : 0;
+  let payException = null;
+  if(rem > 0){
+    if(!isPartner())
+      return alert('⛔ سجل الدفعات يُظهر متبقياً '+fmt(rem)+' ريال على '+q.no+' — لا إذن تسليم قبل سداد 100%.\nالاستثناء الوحيد بموافقة الشريكين معاً كتابةً بأجل موثق (يوثقه أحد الشريكين من حسابه).');
+    const note = prompt('⚠ متبقٍ غير مسدد: '+fmt(rem)+' ريال على '+q.no+'.\nالسياسة: لا تسليم قبل سداد 100% — الاستثناء يتطلب موافقة الشريكين معاً كتابةً بأجل موثق يتابعه المحاسب يومياً.\nلتوثيق الاستثناء أدخل مرجع الموافقة الكتابية والأجل المتفق عليه:');
+    if(!note || !note.trim()) return;
+    payException = { by:curName(), at:new Date().toLocaleString('en-GB',{hour12:false}).replace(',',''), note:note.trim(), remaining:rem };
+  }
   const c = S.customers.find(x=>x.name===o.customer);
   const row = editId ? {...S.dos.find(x=>x.id===editId)} : {id:uid(), no: nextNo('SLS3')};
   Object.assign(row,{date:g('f_date'),soRef:g('f_soRef'),customer:o.customer,address:c?buildAddr(c):'',full:g('f_full'),
     recv:g('f_recv'),mob:g('f_mob'),status:g('f_status'),rel:g('f_rel'),terms:g('f_terms')});
+  if(payException){ row.payException = payException; }
+  else if(rem<=0){ delete row.payException; }
   if(editId){const i=S.dos.findIndex(x=>x.id===editId);S.dos[i]=row;}else S.dos.push(row);
-  row._u=today(); logAudit(editId?'تعديل':'إضافة','إذن تسليم',row.no,'');
+  row._u=today();
+  logAudit(editId?'تعديل':'إضافة','إذن تسليم',row.no, payException?('⚠ استثناء سداد: متبقٍ '+fmt(rem)+' — '+payException.note):'');
+  if(payException) logAudit('استثناء تسليم قبل اكتمال السداد','إذن تسليم',row.no,'متبقٍ '+fmt(rem)+' — '+payException.note);
   editId=null; persist(); render();
 };
 
@@ -2083,15 +2128,16 @@ function renderPOs(){
     <div class="fld"><label>المورد — Supplier *</label><select id="f_supplier"><option value=""></option>${optSupOK().map(s=>`<option ${s===f('supplier')?'selected':''}>${esc(s)}</option>`).join('')}</select></div>
     <div class="fld"><label>العملة — Currency</label><select id="f_cur">${['SAR','USD','EUR','CNY','TRY'].map(s=>`<option ${s===f('cur','SAR')?'selected':''}>${s}</option>`).join('')}</select></div>
     <div class="fld"><label>Incoterms</label><select id="f_inc">${['','EXW','FOB','CIF','CFR','DAP'].map(s=>`<option ${s===f('inc')?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="fld"><label>الحالة — Status</label><select id="f_status">${['مرسل','مؤكد PI','قيد التصنيع','مشحون','مستلم','ملغي'].map(s=>`<option ${s===f('status','مرسل')?'selected':''}>${s}</option>`).join('')}</select></div>
+    <div class="fld"><label>الحالة — Status</label><select id="f_status">${['بانتظار توقيع الشريكين','مرسل','مؤكد PI','قيد التصنيع','مشحون','مستلم','ملغي'].map(s=>`<option ${s===f('status','مرسل')?'selected':''}>${s}</option>`).join('')}</select></div>
    </div>
    <h3>بنود الأمر (بسعر التكلفة)</h3><div id="linesbox">${linesHTML('cost')}</div>
    <div class="totrow"><span>الإجمالي: <b id="t_total" style="color:var(--red)">0</b></span><span style="display:none"><b id="t_gross"></b><b id="t_disc"></b><b id="t_net"></b><b id="t_vat"></b></span></div>
    <div id="docalert" class="alertbox" data-limit="po" style="display:none"></div>
    ${row?approvalsBox('pos', row):''}
+   ${(row && jointNeeded('po',row))?jointSignBox('po','pos',row):''}
    <div class="btnrow"><button class="btn" onclick="savePO()">${row?'حفظ':'حفظ الأمر'}</button>${row?`<button class="btn ghost" onclick="editId=null;tmpLines=[];render()">إلغاء</button>`:''}</div></div>
    <div class="card"><h3>سجل أوامر الشراء (${S.pos.length})</h3><div style="overflow-x:auto"><table><thead><tr><th>الرقم — Number</th><th>التاريخ — Date</th><th>طلب الشراء — Purchase Requisition</th><th>المورد — Supplier</th><th>الإجمالي — Total</th><th>تنبيه — Alert</th><th>الحالة — Status</th><th class="no-print"></th></tr></thead><tbody>
-   ${S.pos.length?[...S.pos].reverse().map(p=>`<tr class="clickable" onclick="editId='${p.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(p.no)}</b></td><td>${esc(p.date)}</td><td>${esc(p.prRef)}</td><td>${esc(p.supplier)}</td><td>${fmt(p.total)}</td><td>${p.total>50000?'<span class="tag warn">⚠ الشريكان</span>':''}</td><td>${tagStatus(p.status)}</td>
+   ${S.pos.length?[...S.pos].reverse().map(p=>`<tr class="clickable" onclick="editId='${p.id}';tmpLines=[];render();scrollTo(0,0)"><td><b>${esc(p.no)}</b></td><td>${esc(p.date)}</td><td>${esc(p.prRef)}</td><td>${esc(p.supplier)}</td><td>${fmt(p.total)}</td><td>${jointNeeded('po',p)?(psigCount(p)>=2?'<span class="tag ok">✍ الشريكان ✓</span>':`<span class="tag warn">⚠ الشريكان (${psigCount(p)}/2)</span>`):''}</td><td>${tagStatus(p.status)}</td>
    <td class="no-print"><button class="btn sm ghost" onclick="event.stopPropagation();goPrint('po','${p.no}')">🖨</button> <button class="btn sm red" onclick="event.stopPropagation();delPO('${p.id}')">حذف</button></td></tr>`).join(''):`<tr><td colspan="8" class="empty">لا أوامر بعد — يتطلب طلب شراء «معتمد» أولاً</td></tr>`}</tbody></table></div></div>`;
   setTimeout(recalcDoc, 0);
 }
@@ -2105,6 +2151,13 @@ window.savePO = () => {
   const sup = S.suppliers.find(s=>s.name===g('f_supplier'));
   const row = editId ? {...S.pos.find(x=>x.id===editId)} : {id:uid(), no: nextNo('PO')};
   Object.assign(row,{date:g('f_date'),prRef:g('f_prRef'),supplier:g('f_supplier'),country:sup?sup.country:'',cur:g('f_cur'),inc:g('f_inc'),status:g('f_status'),total:t.g});
+  // بوابة التوقيع المشترك: أمر فوق العتبة لا يتقدم عن «بانتظار توقيع الشريكين» قبل التوقيعين (ADM-MAN-002)
+  if(jointNeeded('po',row) && psigCount(row)<2 && !['ملغي'].includes(row.status)){
+    if(row.status!=='بانتظار توقيع الشريكين'){
+      row.status = 'بانتظار توقيع الشريكين';
+      alert('⛔ الأمر يتجاوز عتبة '+fmt(S.ops.poTh)+' ريال — لا يُرسل للمورد قبل توقيع الشريكين معاً ('+psigCount(row)+'/2).\nاحفظ ثم وقّعا من بطاقة «التوقيع المشترك».');
+    }
+  }
   S.lines = S.lines.filter(l=>l.docNo!==row.no).concat(valid.map(l=>({id:l.id||uid(),docType:'PUR-002',docNo:row.no,product:l.product,brand:l.brand,qty:+l.qty,defPrice:l.defPrice,override:l.override||''})));
   if(editId){const i=S.pos.findIndex(x=>x.id===editId);S.pos[i]=row;}else S.pos.push(row);
   row._u=today(); logAudit(editId?'تعديل':'إضافة','أمر شراء',row.no,'الإجمالي '+fmt(row.total));
@@ -2140,8 +2193,13 @@ function renderDash(){
     if(S.sos.some(o=>o.quoteRef===l.docNo && o.status!=='ملغي')) sold[l.product]=(sold[l.product]||0)+(+l.qty||0);
   });
   const top5 = Object.entries(sold).sort((a,b)=>b[1]-a[1]).slice(0,5);
+  const _cash = cashPosition();
+  const cashAlert = _cash < (+S.ops.reserve||0)
+    ? `<div class="alertbox">🚨 الرصيد النقدي التقديري <b>${fmt(_cash)}</b> ريال دون حد الاحتياطي <b>${fmt(S.ops.reserve)}</b> — تصعيد فوري للشريكين وتجميد المصروفات غير التشغيلية ولا أمر شراء جديد قبل وضوح المسار (FIN-PRC-001)</div>`
+    : '';
   document.getElementById('main').innerHTML = `
    ${headHtml('📊 لوحة التحكم — Dashboard','كل الأرقام محسوبة لحظياً من السجلات / All figures are calculated live from the records')}
+   ${cashAlert}
    <div class="kpis">
     <div class="kpi"><div class="lbl">مبيعات الشهر الحالي — Current Month Sales</div><div class="val">${fmt(mSales)}</div></div>
     <div class="kpi"><div class="lbl">مبيعات السنة — Yearly Sales</div><div class="val">${fmt(ySales)}</div></div>
@@ -2358,7 +2416,7 @@ function buildDoc(t, no){
   if(t==='po'){
     const p = S.pos.find(x=>x.no===no); if(!p) return '';
     const s = S.suppliers.find(x=>x.name===p.supplier)||{};
-    const alert = p.total>50000?`<div class="alertbox">⚠ يتجاوز 50,000 ريال — يتطلب توقيع الشريكين معاً — Exceeds SAR 50,000: requires signatures from both partners</div>`:'';
+    const alert = jointNeeded('po',p)?`<div class="alertbox">⚠ يتجاوز ${fmt(S.ops.poTh)} ريال — يتطلب توقيع الشريكين معاً (${psigCount(p)}/2) — Exceeds SAR ${fmt(S.ops.poTh)}: requires both partners' signatures</div>`:'';
     return pHead('PUR-002','أمر شراء — Purchase Order',no,p.date)
      + pGrid([['رقم المستند — Record No.',no],['المورد — Supplier',p.supplier],['مرجع طلب الشراء — Purchase Requisition Reference',p.prRef],['الدولة — Country',p.country],['شروط الدفع — Payment Terms',s.terms],['العملة — Currency',p.cur],['Incoterms',p.inc]])
      + `<div class="psec">الأصناف — Items (بسعر التكلفة — at cost)</div>` + pLines(no,'سعر التكلفة — Unit Cost')
@@ -2370,7 +2428,7 @@ function buildDoc(t, no){
   }
   if(t==='pr'){
     const p = S.prs.find(x=>x.no===no); if(!p) return '';
-    const alert = +p.est>5000?`<div class="alertbox">⚠ يتجاوز 5,000 ريال — يتطلب توقيع الشريكين — Exceeds SAR 5,000: requires signatures from both partners</div>`:'';
+    const alert = jointNeeded('pr',p)?`<div class="alertbox">⚠ يتجاوز ${fmt(S.ops.prTh)} ريال — يتطلب توقيع الشريكين (${psigCount(p)}/2) — Exceeds SAR ${fmt(S.ops.prTh)}: requires both partners' signatures</div>`:'';
     return pHead('PUR-001','طلب شراء — Purchase Requisition',no,p.date)
      + pGrid([['رقم المستند — Record No.',no],['الطالب — Requester',p.requester],['السبب — Reason',p.reason],['مرجع أمر البيع — Sales Order Reference',p.soRef],['المورد المقترح — Suggested Supplier',p.supplier],['الحالة — Status',p.status]])
      + `<div class="psec">وصف الاحتياج — Requirement Description</div>` + pGrid([['الوصف — Description',p.desc],['التكلفة التقديرية — Estimated Cost',fmt(p.est)]])
@@ -2981,6 +3039,60 @@ window.approve = (key, id, role) => {
   logAudit(undo?'إلغاء اعتماد':'اعتماد إلكتروني', role==='manager'?'اعتماد مدير':'اعتماد مندوب', rec.no||rec.id, '');
   persist(); render();
 };
+
+/* ═══════════════ التوقيع المشترك للشريكين (ADM-MAN-002: عتبات 5,000/50,000 + قرار المنتج الجديد ADM-PRC-001) ═══════════════ */
+const isPartner = () => { const u=currentUser(); return !!(u && u.partner); };
+const partnerUsers = () => S.users.filter(u=>u.partner && u.enabled!==false);
+const psigCount = rec => Object.values(rec.psig||{}).filter(s=>s&&s.by).length;
+function jointNeeded(kind, rec){
+  if(kind==='pr') return (+rec.est||0) > (+S.ops.prTh||5000);
+  if(kind==='po') return (+rec.total||0) > (+S.ops.poTh||50000);
+  if(kind==='npd') return rec.npdOk===false;
+  return false;
+}
+const JOINT_TITLES = {
+  pr:'توقيع الشريكين المشترك — يتجاوز عتبة طلب الشراء',
+  po:'توقيع الشريكين المشترك — يتجاوز عتبة أمر الشراء',
+  npd:'قرار المنتج الجديد المشترك ADM-PRC-001 — لا شراء ولا بيع قبل موافقة الشريكين معاً'
+};
+function jointSignBox(kind, ent, rec){
+  const sigs = rec.psig||{};
+  const me = currentUser()||{};
+  const rows = partnerUsers().map(p=>{
+    const s = sigs[p.uid];
+    return `<div style="font-size:12.5px">${s&&s.by?`✔ <b>${esc(p.name)}</b>: وقّع (${esc(s.at||'')})`:`◻ <b>${esc(p.name)}</b>: <span style="color:var(--steel)">بانتظار التوقيع</span>`}</div>`;
+  }).join('');
+  const myBtn = isPartner()
+    ? `<button class="btn sm ${sigs[me.uid]&&sigs[me.uid].by?'ghost':'red'}" onclick="psign('${ent}','${rec.id}','${kind}')">${sigs[me.uid]&&sigs[me.uid].by?'سحب توقيعي':'✍ توقيعي كشريك'}</button>`
+    : `<span class="tag info">التوقيع للشريكين حصراً</span>`;
+  const done = psigCount(rec)>=2;
+  return `<div class="card" data-no-print="true" style="margin-top:10px;background:${done?'#e6f4ea':'#fdecea'};border-color:${done?'var(--green)':'var(--red)'}">
+    <h3>${done?'✔':'⚠'} ${esc(JOINT_TITLES[kind]||'التوقيع المشترك')} (${psigCount(rec)}/2)</h3>
+    ${rows}<div class="btnrow" style="margin-top:8px">${myBtn}</div></div>`;
+}
+window.psign = (ent, id, kind) => {
+  if(!isPartner()) return alert('التوقيع المشترك صلاحية الشريكين حصراً');
+  const rec = (S[ent]||[]).find(r=>r.id===id); if(!rec) return;
+  const me = currentUser();
+  if(!rec.psig) rec.psig = {};
+  const undo = rec.psig[me.uid] && rec.psig[me.uid].by;
+  if(undo) delete rec.psig[me.uid];
+  else rec.psig[me.uid] = { by: curName(), at: new Date().toLocaleString('en-GB',{hour12:false}).replace(',','') };
+  if(kind==='npd'){
+    rec.npdOk = psigCount(rec)>=2;
+    if(rec.npdOk) logAudit('اعتماد منتج جديد (قرار مشترك ADM-PRC-001)','المنتجات',rec.code||rec.nameAr,'');
+  }
+  logAudit(undo?'سحب توقيع شريك':'توقيع شريك', kind==='npd'?'قرار منتج جديد':(kind==='pr'?'طلب شراء':'أمر شراء'), rec.no||rec.code||rec.id, '');
+  persist(); render();
+};
+/* الرصيد النقدي التقديري من سجلات النظام: المقبوضات − المصروفات − صافي الرواتب − المتبقي بذمم العهد */
+function cashPosition(){
+  const inflow = S.payments.reduce((a,p)=>a+(+p.amount||0),0);
+  const exp = S.expenses.reduce((a,e)=>a+(+e.amount||0),0);
+  const pay = S.payroll.reduce((a,p)=>a+(p.net!=null?+p.net:((+p.base||0)+(+p.additions||0)-(+p.deductions||0))),0);
+  const pettyOut = S.petty.reduce((a,p)=>a+Math.max(0,(+p.amount||0)-pettySpent(p.no)),0);
+  return inflow - exp - pay - pettyOut;
+}
 
 /* ═══════════════ صفحة بيانات الشركة ═══════════════ */
 function renderCompany(){
