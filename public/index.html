@@ -280,12 +280,8 @@ tr.clickable:hover td{background:#eef3fa}
   let firestoreReady = false;
   let db = null;
 
+  // ملاحظة: تسجيل الدخول الآن على Neon (لا Firebase). نُبقي التهيئة خفيفة دون App Check.
   const firebaseApp = initializeApp(FIREBASE_CONFIG);
-  // App Check (reCAPTCHA v3) — يُفعَّل فوراً بعد تهيئة التطبيق وقبل أي اتصال بـ Firestore/Auth، بلا حجب لتحميل الصفحة
-  initializeAppCheck(firebaseApp, {
-    provider: new ReCaptchaV3Provider('6LcHHE0tAAAAA9Hqqiy6D6a7NDDnYRhhhmrmDDl'),
-    isTokenAutoRefreshEnabled: true
-  });
   const auth = getAuth(firebaseApp);
 
   async function getDb(){
@@ -396,27 +392,47 @@ tr.clickable:hover td{background:#eef3fa}
     }
   };
 
-  /* ═══ واجهة إدارة المستخدمين والاعتماد ═══ */
-  let secondaryApp = null;
+  /* ═══ واجهة المصادقة والمستخدمين — على Neon Postgres عبر /api/auth ═══ */
+  const TOKEN_KEY = 'erp:token';
   window.authApi = {
-    current(){ const u = auth.currentUser; return u ? { uid: u.uid, email: u.email } : null; },
-    // إنشاء مستخدم دون التأثير على جلسة المدير (تطبيق ثانوي منفصل)
-    async createUser(email, password){
-      if(!secondaryApp) secondaryApp = initializeApp(FIREBASE_CONFIG, 'secondary-' + Date.now());
-      const secAuth = getAuth(secondaryApp);
-      const cred = await createUserWithEmailAndPassword(secAuth, email, password);
-      const uid = cred.user.uid;
-      await signOut(secAuth);
-      return uid;
+    token(){ try{ return localStorage.getItem(TOKEN_KEY); }catch(e){ return null; } },
+    setToken(t){ try{ t ? localStorage.setItem(TOKEN_KEY, t) : localStorage.removeItem(TOKEN_KEY); }catch(e){} },
+    async _post(payload){
+      const r = await fetch('/api/auth', {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      });
+      let j = {}; try{ j = await r.json(); }catch(_){}
+      if(!r.ok){ const e = new Error(j.error || 'error'); e.code = j.error; throw e; }
+      return j;
     },
-    async sendReset(email){ await sendPasswordResetEmail(auth, email); },
+    current(){ return window.authUser || null; },
+    async login(email, password){
+      const j = await this._post({ action:'login', email, password });
+      this.setToken(j.token); return j.user;
+    },
+    // التفعيل الأول لحساب مالك (البريد معروف مسبقاً)
+    async setup(email, password){
+      const j = await this._post({ action:'setup', email, password });
+      this.setToken(j.token); return j.user;
+    },
+    async me(){
+      const t = this.token(); if(!t) return null;
+      try{ const j = await this._post({ action:'me', token:t }); return j.user; }
+      catch(e){ this.setToken(null); return null; }
+    },
+    // إنشاء مستخدم دون التأثير على جلسة المدير
+    async createUser(email, password){
+      const j = await this._post({ action:'createUser', token:this.token(), email, password });
+      return j.uid;
+    },
     async changeMyPassword(currentPass, newPass){
-      const u = auth.currentUser;
-      if(!u) throw new Error('غير مسجّل الدخول');
-      const cred = EmailAuthProvider.credential(u.email, currentPass);
-      await reauthenticateWithCredential(u, cred);
-      await updatePassword(u, newPass);
-    }
+      await this._post({ action:'changePassword', token:this.token(), oldPassword:currentPass, newPassword:newPass });
+    },
+    // إعادة تعيين كلمة مرور مستخدم آخر (بدل رابط الإيميل)
+    async resetUser(email, password){
+      await this._post({ action:'resetUser', token:this.token(), email, password });
+    },
+    logout(){ this.setToken(null); window.authUser = null; }
   };
 
   /* ═══ روابط موافقة العميل: مجموعة publicShares (الرمز الطويل هو السر — لا قوائم) ═══ */
@@ -737,16 +753,45 @@ tr.clickable:hover td{background:#eef3fa}
     appEl.style.display = 'none';
     renderShareView(shareParam);
   } else {
-    function doLogin(){
+    function enterApp(user){
+      window.authUser = { uid: user.uid, email: user.email };
+      loginOverlay.style.display = 'none';
+      appEl.style.display = 'flex';
+      window.dispatchEvent(new Event('erp-auth-ready'));
+    }
+    function showLogin(){
+      window.authUser = null;
+      loginOverlay.style.display = 'flex';
+      appEl.style.display = 'none';
+      passEl.value = '';
+    }
+
+    async function doLogin(){
       errEl.textContent = '';
+      const email = emailEl.value.trim(), password = passEl.value;
+      if(!email || !password){ errEl.textContent = 'أدخل البريد وكلمة المرور'; return; }
       loginBtn.disabled = true; loginBtn.textContent = 'جارِ الدخول...';
-      signInWithEmailAndPassword(auth, emailEl.value.trim(), passEl.value)
-        .catch(() => { errEl.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة'; })
-        .finally(() => { loginBtn.disabled = false; loginBtn.textContent = 'دخول'; });
+      try{
+        let user;
+        try{
+          user = await window.authApi.login(email, password);
+        }catch(e){
+          // تفعيل أول مرة لحساب مالك: إن لم يوجد الحساب بعد، تُصبح كلمة المرور المُدخلة هي كلمته
+          if(e.code === 'invalid'){
+            try{ user = await window.authApi.setup(email, password); }
+            catch(e2){ throw e; }
+          } else { throw e; }
+        }
+        enterApp(user);
+      }catch(e){
+        errEl.textContent = 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+      }finally{
+        loginBtn.disabled = false; loginBtn.textContent = 'دخول';
+      }
     }
     loginBtn.addEventListener('click', doLogin);
     passEl.addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
-    signOutBtn.addEventListener('click', () => signOut(auth));
+    signOutBtn.addEventListener('click', () => { window.authApi.logout(); showLogin(); });
 
     function doReset(){
       errEl.textContent = '';
@@ -757,48 +802,18 @@ tr.clickable:hover td{background:#eef3fa}
         emailEl.focus();
         return;
       }
-      forgotBtn.disabled = true;
       resetMsgEl.style.color = 'var(--steel)';
-      resetMsgEl.textContent = 'جارِ الإرسال...';
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          resetMsgEl.style.color = 'var(--green)';
-          resetMsgEl.textContent = '✔ تم إرسال رابط إعادة التعيين إلى ' + email + ' — تحقّق من بريدك (وصندوق الرسائل غير المرغوبة).';
-        })
-        .catch(() => {
-          /* لا نكشف إن كان البريد مسجّلاً أم لا (حماية الخصوصية) */
-          resetMsgEl.style.color = 'var(--green)';
-          resetMsgEl.textContent = '✔ إن كان هذا البريد مسجّلاً، فسيصله رابط إعادة التعيين خلال لحظات.';
-        })
-        .finally(() => { forgotBtn.disabled = false; });
+      resetMsgEl.textContent = 'لأول دخول لحساب المالك: اكتب كلمة المرور التي تريدها في الحقل أعلاه واضغط «دخول» لتفعيل الحساب. لإعادة تعيين كلمة مرور منسيّة: اطلب من المدير أو الشريك الآخر إعادة تعيينها من صفحة «المستخدمون».';
     }
     forgotBtn.addEventListener('click', doReset);
 
-    onAuthStateChanged(auth, (user) => {
-      if(user){
-        window.authUser = { uid: user.uid, email: user.email };
-        loginOverlay.style.display = 'none';
-        appEl.style.display = 'flex';
-        window.dispatchEvent(new Event('erp-auth-ready'));
-        if(!window._intakeWatching){
-          window._intakeWatching = true;
-          window.pendingIntake = [];
-          window.intake.watch(list => {
-            window.pendingIntake = list;
-            try{
-              const v = (typeof window.getView==='function') ? window.getView() : null;
-              if(['complaints','srv','dash','notifs'].includes(v) && typeof render==='function') render();
-              else if(typeof renderNav==='function') renderNav();
-            }catch(e){}
-          });
-        }
-      } else {
-        window.authUser = null;
-        loginOverlay.style.display = 'flex';
-        appEl.style.display = 'none';
-        passEl.value = '';
-      }
-    });
+    // استعادة الجلسة عند فتح الصفحة (رمز محفوظ في المتصفح)
+    (async function initAuth(){
+      try{
+        const user = await window.authApi.me();
+        if(user) enterApp(user); else showLogin();
+      }catch(e){ showLogin(); }
+    })();
   }
 </script>
 
@@ -3637,9 +3652,16 @@ window.editUserRow = id => { editId=id; render(); window.scrollTo(0,0); };
 window.toggleUser = id => { const u=S.users.find(x=>x.id===id); if(!u||u.admin) return; u.enabled = u.enabled===false; persist(); render(); };
 window.resetUserPass = async id => {
   const u = S.users.find(x=>x.id===id); if(!u) return;
-  if(!confirm('إرسال رابط إعادة تعيين كلمة المرور إلى '+u.email+'؟')) return;
-  try{ await window.authApi.sendReset(u.email); alert('تم إرسال رابط إعادة التعيين إلى '+u.email); }
-  catch(e){ alert('تعذّر الإرسال: '+e.message); }
+  const pass = prompt('اكتب كلمة مرور جديدة للمستخدم '+u.email+' (6 أحرف على الأقل):');
+  if(pass===null) return;
+  if(pass.length < 6){ alert('كلمة المرور يجب أن تكون 6 أحرف على الأقل'); return; }
+  try{
+    await window.authApi.resetUser(u.email, pass);
+    alert('✔ تم تعيين كلمة مرور جديدة للمستخدم '+u.email+'\nكلمة المرور: '+pass+'\nسلّمها له ويمكنه تغييرها من «حسابي».');
+  }catch(e){
+    const m = e.code==='not-found' ? 'لا يوجد حساب دخول لهذا المستخدم بعد' : e.message;
+    alert('تعذّر إعادة التعيين: '+m);
+  }
 };
 window.saveUser = async () => {
   const msg = document.getElementById('u_msg');
@@ -3662,7 +3684,7 @@ window.saveUser = async () => {
     msg.innerHTML = `<div class="alertbox" style="background:#e6f4ea;color:var(--green);border-right-color:var(--green)">✔ تم إنشاء المستخدم <b>${esc(f.email)}</b> — كلمة المرور المؤقتة: <b>${esc(pass)}</b> (سلّمها للمستخدم، ويمكنه تغييرها من «حسابي»).</div>`;
     setTimeout(()=>{ render(); }, 4000);
   }catch(e){
-    const m = e.code==='auth/email-already-in-use' ? 'هذا البريد مستخدم مسبقاً' : (e.code==='auth/invalid-email'?'بريد غير صالح':e.message);
+    const m = (e.code==='email-already-in-use'||e.code==='auth/email-already-in-use') ? 'هذا البريد مستخدم مسبقاً' : ((e.code==='invalid-email'||e.code==='auth/invalid-email')?'بريد غير صالح':(e.code==='weak'?'كلمة المرور 6 أحرف على الأقل':e.message));
     msg.innerHTML = `<span style="color:var(--red)">تعذّر الإنشاء: ${esc(m)}</span>`;
   }
 };
@@ -3708,7 +3730,7 @@ window.changeMyPass = async () => {
     msg.innerHTML='<span style="color:var(--green)">✔ تم تغيير كلمة المرور بنجاح</span>';
     document.getElementById('cp_old').value=document.getElementById('cp_new').value=document.getElementById('cp_new2').value='';
   }catch(e){
-    const m = (e.code==='auth/wrong-password'||e.code==='auth/invalid-credential')?'كلمة المرور الحالية غير صحيحة':e.message;
+    const m = (e.code==='wrong-password'||e.code==='auth/wrong-password'||e.code==='auth/invalid-credential')?'كلمة المرور الحالية غير صحيحة':e.message;
     msg.innerHTML='<span style="color:var(--red)">تعذّر التغيير: '+esc(m)+'</span>';
   }
 };
