@@ -297,17 +297,36 @@ tr.clickable:hover td{background:#eef3fa}
     return db;
   }
 
+  // التخزين الدائم: Neon Postgres عبر /api/state، مع localStorage كطبقة أمان فورية دون إنترنت
+  const LOCAL_KEY = 'erp:state';
   async function getCloudState(){
-    const _db = await getDb();
-    const ref = doc(_db, ERP_DOC_PATH.collection, ERP_DOC_PATH.id);
-    const snap = await getDoc(ref);
-    return snap.exists() ? snap.data() : null;
+    // 1) جرّب السحابة (Neon) أولاً — تعطي أحدث نسخة عبر كل الأجهزة
+    try{
+      const r = await fetch('/api/state', { cache: 'no-store' });
+      if(r.ok){
+        const j = await r.json();
+        if(j && typeof j.value === 'string'){
+          try{ localStorage.setItem(LOCAL_KEY, j.value); }catch(_){}
+          return { value: j.value };
+        }
+      }
+    }catch(e){ /* لا إنترنت أو الخدمة غير متاحة — نسقط للنسخة المحلية */ }
+    // 2) احتياطي محلي
+    try{ const v = localStorage.getItem(LOCAL_KEY); if(v) return { value: v }; }catch(e){}
+    return null;
   }
 
   async function saveCloudState(value){
-    const _db = await getDb();
-    const ref = doc(_db, ERP_DOC_PATH.collection, ERP_DOC_PATH.id);
-    await setDoc(ref, { value, updatedAt: serverTimestamp() });
+    // 1) احفظ محلياً فوراً (سريع وآمن حتى دون إنترنت)
+    try{ localStorage.setItem(LOCAL_KEY, value); }catch(e){}
+    // 2) ارفع نسخة دائمة إلى Neon
+    try{
+      await fetch('/api/state', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ value })
+      });
+    }catch(e){ /* فشل الرفع — النسخة المحلية محفوظة على الأقل */ }
     return true;
   }
 
